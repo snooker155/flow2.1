@@ -1,0 +1,216 @@
+<template name="customers_info">
+    <div class="wrapper wrapper-content animated fadeInUp" style="padding-bottom:0px; padding-top:10px;">
+    {{>world}}
+    <!-- <div class="wrapper wrapper-content animated fadeInUp"> -->
+        <div class="row">
+                    <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-success pull-right">Periodically</span>
+                                <h5>Money</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{total_money}}</h1>
+                                <!-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> -->
+                                <small>Total money</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-success pull-right">Periodically</span>
+                                <h5>Income</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{total_income}}</h1>
+                                <!-- <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div> -->
+                                <small>Total income</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-success pull-right">Periodically</span>
+                                <h5>Conservatism</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{total_conservatism}}</h1>
+                                <!-- <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div> -->
+                                <small>Total conservatism</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <span class="label label-success pull-right">Periodically</span>
+                                <h5>User activity</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{total_user_activity}} %</h1>
+                                <!-- <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div> -->
+                                <small>Total user activity</small>
+                            </div>
+                        </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart1' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart2' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart3' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart4' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart5' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Test</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                {{> chartCanvas id='pie_chart6' height="140"}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>User project list</h5>
+                                                <div class="ibox-tools">
+                                                    <a class="collapse-link">
+                                                        <i class="fa fa-chevron-up"></i>
+                                                    </a>
+                                                    <a class="close-link">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <table class="table table-hover no-margins">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                        <th>User</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td><small>Pending...</small></td>
+                                                        <td><i class="fa fa-clock-o"></i> 11:20pm</td>
+                                                        <td>Samantha</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 24% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="label label-warning">Canceled</span> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 10:40am</td>
+                                                        <td>Monica</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><small>Pending...</small> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 01:30pm</td>
+                                                        <td>John</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 54% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><small>Pending...</small> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 02:20pm</td>
+                                                        <td>Agnes</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 12% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><small>Pending...</small> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 09:40pm</td>
+                                                        <td>Janet</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 22% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="label label-primary">Completed</span> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 04:10am</td>
+                                                        <td>Amelia</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><small>Pending...</small> </td>
+                                                        <td><i class="fa fa-clock-o"></i> 12:08am</td>
+                                                        <td>Damian</td>
+                                                        <td class="text-navy"> <i class="fa fa-level-up"></i> 23% </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                               <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Ratio of conservatism and income</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div id="scatter_digramm" class="ct-perfect-fourth">
+                                            
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+   <!--  </div> -->
+   </div>
+</template>

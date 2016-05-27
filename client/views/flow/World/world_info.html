@@ -1,0 +1,227 @@
+<template name="world_info">
+    <div class="wrapper wrapper-content animated fadeInUp" style="padding-bottom:0px; padding-top:10px;">
+    {{>world}}
+  <!-- <div class="wrapper wrapper-content animated fadeInUp"> -->
+    <div class="row">
+            <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="row m-t-sm">
+                                <div class="col-lg-12">
+                                    <h3>Market shares: <strong>{{selected_region.region_full_name}}</strong></h3>
+                                    <div class="hr-line-dashed"></div>
+                                    {{#if players}}
+                                        {{#each players}}
+                                            <h5>{{player.username}}</h5>
+                                            <div class="progress progress-mini">
+                                                <div style="width: {{player_share}}%; background-color:{{player_color}};" aria-valuemax="100" aria-valuemin="0" aria-valuenow="35" role="progressbar" class="progress-bar progress-bar-primary">
+                                                    <span class="sr-only">{{player_share}}% Complete (success)</span>
+                                                </div>
+                                            </div>
+                                        {{/each}}
+                                    {{else}}
+                                        <h3>No players on the map.</h3>
+                                    {{/if}}
+
+                                    <!-- <h5>Player #1</h5>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 35%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="43" role="progressbar" class="progress-bar progress-bar-success">
+                                            <span class="sr-only">35% Complete (success)</span>
+                                        </div>
+                                    </div>
+
+                                    <h5>Player #2</h5>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 43%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="43" role="progressbar" class="progress-bar">
+                                            <span class="sr-only">43% Complete (success)</span>
+                                        </div>
+                                    </div>
+
+                                    <h5>Player #3</h5>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 50%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" role="progressbar" class="progress-bar progress-bar-warning">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+
+                                    <h5>Player #4</h5>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 75%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="75" role="progressbar" class="progress-bar progress-bar-danger">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="row m-t-sm">
+                                <div class="col-lg-12">
+                                    <h3>Regions</h3>
+                                    <table class="table table-stripped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Region</th>
+                                                <th>Data</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each regions}}
+                                                <tr>
+                                                    <td>{{region.region_id}}</td>
+                                                    <td>{{region.region_full_name}}</td>
+                                                    <td>
+                                                        {{>peity chart="pie" data=region_fullness_array fill=colours}}
+                                                    </td>
+                                                    <td class="text-navy"> {{region_fullness}}% </td>
+                                                </tr>
+                                            {{/each}}
+                                            <!-- <tr>
+                                                <td>1</td>
+                                                <td>Europe</td>
+                                                <td><span class="pie" style="display: none;">0.52,1.041</span><svg class="peity" height="16" width="16"><path d="M 8 8 L 8 0 A 8 8 0 0 1 14.933563796318165 11.990700825968545 Z" fill="#1ab394"></path><path d="M 8 8 L 14.933563796318165 11.990700825968545 A 8 8 0 1 1 7.999999999999998 0 Z" fill="#d7d7d7"></path></svg></td>
+                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-5">
+                <!-- <div class="ibox">
+                    <div class="ibox-content"> -->
+                        <div id="sunburst">
+                            <!-- <form>
+                                <label><input type="radio" name="mode" value="size"> Size</label>
+                                <label><input type="radio" name="mode" value="count" checked> Count</label>
+                            </form> -->
+                        </div>
+    <!--                 </div>
+                </div> -->
+            </div>
+
+            {{>region_info selected_region=selected_region}}
+            
+        </div>
+    <!-- </div> -->
+    </div>
+</template>
+
+
+
+
+
+
+
+<template name="region_info">
+    <div class="col-lg-3">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="text-align: center;"><strong>{{selected_region.region_full_name}}</strong></h1>
+                <h4 style="text-align: center;">{{selected_region.region_name}}</h4>
+                <div class="row m-t-lg">
+                    <div class="col-md-6 text-center">
+                        <h5><strong>{{selected_region.region_people}}</strong> Population</h5>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h5><strong>{{selected_region.level_of_conservatism}}</strong> Conservatism</h5>
+                    </div>
+                </div>
+                <div class="row m-t-lg" style="margin-top:0;">
+                    <div class="col-md-6 text-center">
+                        <h5><strong>$ {{selected_region.base_profit_rate}}</strong> Base Profit</h5>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h5><strong>$ {{selected_region.base_price_rate}}</strong> Base Price</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+            <table class="table" style="margin-top:20px;">
+              <tbody>
+                <tr>
+                  <td><strong>Market</strong></td>
+                  <td>
+                    <div class="font-bold text-danger">{{selected_region.region_market}}% <i class="fa fa-level-down"></i></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Demand</strong></td>
+                  <td>
+                    <div class="font-bold text-danger">{{selected_region.region_demand}}% <i class="fa fa-level-down"></i></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Trend</strong></td>
+                  <td>
+                    <span class="label label-info">{{selected_region.region_trend}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Preferences</strong></td>
+                  <td>
+                    <span class="label label-info">{{selected_region.region_pref}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Internet using</td>
+                  <td>
+                    <span class="label label-primary">High</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Infrastructure</td>
+                  <td>
+                    <span class="label label-danger">Low</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Intellectual property rights</td>
+                  <td>
+                    <span class="label label-danger">Low</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Invest climate</td>
+                  <td>
+                    <span class="label label-danger">Low</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Taxes</td>
+                  <td>
+                    <span class="label label-warning">Medium</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Economic regulations</td>
+                  <td>
+                    <span class="label label-danger">High</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Burocracy</td>
+                  <td>
+                    <span class="label label-danger">High</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Unemployment</td>
+                  <td>
+                    <span class="label label-warning">Medium</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</template>

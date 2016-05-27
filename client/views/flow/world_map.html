@@ -1,0 +1,138 @@
+<template name="world_map">
+
+
+        <div class="row" id="world_map">
+            <div class="col-lg-3" style="padding-left:25px; padding-top:10px;">
+                <h3 style="color:white;">Market shares</h3>
+                {{>region region=selected_region}}
+
+                <h3>Products</h3>
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Customers</th>
+                      <th>Income</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each products}}
+                      <tr>
+                        <td style="color: {{product_color}}">{{product_name}}</td>
+                        <td>{{product_customers}}</td>
+                        <td>{{product_income}}</td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+
+                <h3>People</h3>
+                <strong>Avg. income: </strong>{{avg_income}}
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Group</th>
+                      <th>People</th>
+                      <th>Avg. income</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each people}}
+                      <tr>
+                        <td>{{people_group}}</td>
+                        <td>{{people_count}}</td>
+                        <td>{{people_average_income}}</td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+
+
+                <h3>Popularity</h3>
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Prop</th>
+                      <th>Count</th>
+                      <th>Needed 1</th>
+                      <th>Needed 2</th>
+                      <th>Needed 3</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each prop_pop}}
+                      <tr>
+                        <td>{{prop_name}}</td>
+                        <td>{{prop_count}}</td>
+                        <td>{{prop_needed_1}}</td>
+                        <td>{{prop_needed_2}}</td>
+                        <td>{{prop_needed_3}}</td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+        
+
+
+            </div>
+            <div class="col-lg-9">
+                    <div id="map">
+                        
+                    </div>
+            </div>
+        </div>
+
+
+</template>
+
+
+
+
+
+
+<template name="region">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Region: <strong id="regionHolderValue">{{region.region_name}}</strong></h4>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td style="width:50%">
+                        People: <strong id="shareHolderValue">{{region.region_people_number}}</strong>
+                    </td>
+                    <td style="width:50%">
+                        <div class="stat-percent font-bold text-{{demand_type}}">{{region.region_demand}}<i class="fa fa-level-{{arrow_demand_type}}"></i></div><strong>Demand: </strong>
+                    </td>
+                 </tr>
+                <tr>
+                    <td style="width:50%">
+                        Conserv: <strong id="shareHolderValue">{{region.level_of_conservatism}}</strong>
+                    </td>
+                    <td style="width:50%">
+                        <div class="stat-percent font-bold text-{{market_type}}">{{region.region_market}}<i class="fa fa-level-{{arrow_market_type}}"></i></div><strong>Market: </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        Base Price: <strong id="shareHolderValue">{{region.base_price_rate}}</strong>
+                    </td>
+                    <td style="width:50%">
+                        Base Profit: <strong id="shareHolderValue">{{region.base_profit_rate}}</strong>
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="width:50%">
+                        Pref: <strong id="shareHolderValue">{{region.region_pref}}</strong>
+                    </td>
+                    <td style="width:50%">
+                        <strong>Trend: </strong> <span class="label label-{{trend_type}}" style="float:right">{{region.region_trend}}</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>

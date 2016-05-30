@@ -200,7 +200,7 @@ Template.world_map.onRendered(function(){
 
 Template.world_map.helpers({
 
-	selected_region: function(){
+	selected_region(){
 		var game = Games.findOne({});
 		if(selected_region.get()){
 			return game.regions[selected_region.get()];
@@ -257,10 +257,10 @@ Template.world_map.helpers({
 		var self = this;
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			var customers = game.regions[selected_region.get()].region_people;
+			var customers = game.customers;
 			var count = 0;
 			customers.forEach(function (customer) {
-				if(customer.customer_product && customer.customer_activity == 1){
+				if(customer.customer_product && customer.customer_activity == 1 && customer.cusotmer_region == selected_region.get()){
 					if(customer.customer_product._id == self._id){
 						count++;
 					}
@@ -269,16 +269,14 @@ Template.world_map.helpers({
 			return count;
 		}else{
 			var count = 0;
-			for(var region in game.regions){
-				var customers = game.regions[region].region_people;
-				customers.forEach(function (customer) {
-					if(customer.customer_product && customer.customer_activity == 1){
-						if(customer.customer_product._id == self._id){
-							count++;
-						}
+			var customers = game.customers;
+			customers.forEach(function (customer) {
+				if(customer.customer_product && customer.customer_activity == 1){
+					if(customer.customer_product._id == self._id){
+						count++;
 					}
-				});
-			}
+				}
+			});
 			return count;
 		}
 	},
@@ -287,10 +285,10 @@ Template.world_map.helpers({
 		var self = this;
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			var customers = game.regions[selected_region.get()].region_people;
+			var customers = game.customers;
 			var count = 0;
 			customers.forEach(function (customer) {
-				if(customer.customer_product && customer.customer_activity == 1){
+				if(customer.customer_product && customer.customer_activity == 1 && customer.cusotmer_region == selected_region.get()){
 					if(customer.customer_product._id == self._id){
 						count++;
 					}
@@ -299,16 +297,14 @@ Template.world_map.helpers({
 			return count * self.product_price;
 		}else{
 			var count = 0;
-			for(var region in game.regions){
-				var customers = game.regions[region].region_people;
-				customers.forEach(function (customer) {
-					if(customer.customer_product && customer.customer_activity == 1){
-						if(customer.customer_product._id == self._id){
-							count++;
-						}
+			var customers = game.customers;
+			customers.forEach(function (customer) {
+				if(customer.customer_product && customer.customer_activity == 1){
+					if(customer.customer_product._id == self._id){
+						count++;
 					}
-				});
-			}
+				}
+			});
 			return count * self.product_price;
 		}
 	},
@@ -318,20 +314,20 @@ Template.world_map.helpers({
 		var total_customers = 0;
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			var customers = game.regions[selected_region.get()].region_people;
+			var customers = game.customers;
+			customers.forEach(function (customer) {
+				if(customer.cusotmer_region == selected_region.get()){
+					total_income += customer.customer_income;
+					total_customers++;
+				}
+			});
+			return parseFloat((total_income / total_customers).toFixed(2));
+		}else{
+			var customers = game.customers;
 			customers.forEach(function (customer) {
 				total_income += customer.customer_income;
 				total_customers++;
 			});
-			return parseFloat((total_income / total_customers).toFixed(2));
-		}else{
-			for(var region in game.regions){
-				var customers = game.regions[region].region_people;
-				customers.forEach(function (customer) {
-					total_income += customer.customer_income;
-					total_customers++;
-				});
-			}
 			return parseFloat((total_income / total_customers).toFixed(2));
 		}
 	},
@@ -341,7 +337,20 @@ Template.world_map.helpers({
 		var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			game.regions[selected_region.get()].region_people.forEach(function (customer) {
+			game.customers.forEach(function (customer) {
+				if(customer.getIncomeGroup() == "rich" && customer.cusotmer_region == selected_region.get()){
+					count_rich++;
+					avg_income_rich += customer.customer_income;
+				}else if(customer.getIncomeGroup() == "middle" && customer.cusotmer_region == selected_region.get()){
+					count_middle++;
+					avg_income_middle += customer.customer_income;
+				}else if(customer.getIncomeGroup() == "poor" && customer.cusotmer_region == selected_region.get()){
+					count_poor++;
+					avg_income_poor += customer.customer_income;
+				}
+			});
+		}else{
+			game.customers.forEach(function (customer) {
 				if(customer.getIncomeGroup() == "rich"){
 					count_rich++;
 					avg_income_rich += customer.customer_income;
@@ -353,21 +362,6 @@ Template.world_map.helpers({
 					avg_income_poor += customer.customer_income;
 				}
 			});
-		}else{
-			for(var region in game.regions){
-				game.regions[region].region_people.forEach(function (customer) {
-					if(customer.getIncomeGroup() == "rich"){
-						count_rich++;
-						avg_income_rich += customer.customer_income;
-					}else if(customer.getIncomeGroup() == "middle"){
-						count_middle++;
-						avg_income_middle += customer.customer_income;
-					}else if(customer.getIncomeGroup() == "poor"){
-						count_poor++;
-						avg_income_poor += customer.customer_income;
-					}
-				});
-			}
 		}
 		var people = [{
 			people_group: "rich",
@@ -400,7 +394,33 @@ Template.world_map.helpers({
 		var customers_count = 0;
 		var i = 1;
 		if(selected_region.get()){
-			game.regions[selected_region.get()].region_people.forEach(function (customer) {
+			game.customers.forEach(function (customer) {
+				if(customer.cusotmer_region == selected_region.get()){
+					i = 1;
+					customer.needed.forEach(function (need) {
+						count_prop_1 += need.prop["prop_1"];
+						count_prop_2 += need.prop["prop_2"];
+						count_prop_3 += need.prop["prop_3"];
+						if(i == 1){
+							count_prop_1_needed_1 += need.prop["prop_1"];
+							count_prop_2_needed_1 += need.prop["prop_2"];
+							count_prop_3_needed_1 += need.prop["prop_3"];
+						}else if(i == 2){
+							count_prop_1_needed_2 += need.prop["prop_1"];
+							count_prop_2_needed_2 += need.prop["prop_2"];
+							count_prop_3_needed_2 += need.prop["prop_3"];
+						}else if(i == 3){
+							count_prop_1_needed_3 += need.prop["prop_1"];
+							count_prop_2_needed_3 += need.prop["prop_2"];
+							count_prop_3_needed_3 += need.prop["prop_3"];
+						}
+						i++;
+					});
+					customers_count++;
+				}
+			});
+		}else{
+			game.customers.forEach(function (customer) {
 				i = 1;
 				customer.needed.forEach(function (need) {
 					count_prop_1 += need.prop["prop_1"];
@@ -423,32 +443,6 @@ Template.world_map.helpers({
 				});
 				customers_count++;
 			});
-		}else{
-			for(var region in game.regions){
-				game.regions[region].region_people.forEach(function (customer) {
-					i = 1;
-					customer.needed.forEach(function (need) {
-						count_prop_1 += need.prop["prop_1"];
-						count_prop_2 += need.prop["prop_2"];
-						count_prop_3 += need.prop["prop_3"];
-						if(i == 1){
-							count_prop_1_needed_1 += need.prop["prop_1"];
-							count_prop_2_needed_1 += need.prop["prop_2"];
-							count_prop_3_needed_1 += need.prop["prop_3"];
-						}else if(i == 2){
-							count_prop_1_needed_2 += need.prop["prop_1"];
-							count_prop_2_needed_2 += need.prop["prop_2"];
-							count_prop_3_needed_2 += need.prop["prop_3"];
-						}else if(i == 3){
-							count_prop_1_needed_3 += need.prop["prop_1"];
-							count_prop_2_needed_3 += need.prop["prop_2"];
-							count_prop_3_needed_3 += need.prop["prop_3"];
-						}
-						i++;
-					});
-					customers_count++;
-				});
-			}
 		}
 		var prop = [{
 			prop_name: "prop_1",

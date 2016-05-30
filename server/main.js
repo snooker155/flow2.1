@@ -240,6 +240,7 @@ Meteor.startup(() => {
 
     var regions = {};
     var products = [];
+    var customers = [];
 
     var market = 0;
 
@@ -259,7 +260,6 @@ Meteor.startup(() => {
 
 
     Regions.find().forEach(function (region) {
-  		var region_people = [];
   		var level_of_conservatism = 0,
   			new_level_of_conservatism = 0
   			customer_income = 0,
@@ -273,9 +273,9 @@ Meteor.startup(() => {
 	    	new_customer_income = 10 + Math.floor(Math.random() * 20);
 	    	customer_income += new_customer_income;
 
-	     	region_people.push({
+	     	customers.push({
 				customer_id: i,
-				customer_region: region.region_name,
+				customer_region: region.region_id,
 				customer_pref: region.region_pref,
 				//customer_money: 2000 + Math.floor((Math.random() * 500) + 100),
 				customer_conservatism: new_level_of_conservatism,
@@ -326,7 +326,6 @@ Meteor.startup(() => {
      		region_pref: region.region_pref,
      		region_trend: region.region_trend,
 			region_people_number: region.region_people_number,
-			region_people: region_people,
 			//region_market: region.region_market,
 			region_market: market,
 			region_demand: customer_income,
@@ -341,6 +340,7 @@ Meteor.startup(() => {
 	var game_id = Games.insert({
     	game_name: "test",
      	regions: regions,
+     	customers: customers,
      	products: products,
      	status: "process",
      	time_period: 0,

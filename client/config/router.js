@@ -14,7 +14,8 @@ Router.configure({
 Router.route('/', {
 
   action: function () {
-    this.render('gameScreen');
+    //this.render('gameScreen');
+    this.render('outer');
     this.layout('gameLayout');
   },
 

@@ -18,11 +18,11 @@ rect {
     stroke-width: 1px;
 }*/
 
-.regions.selected {
+/*.regions.selected {
     fill: #fff;
     stroke: lightblue;
     transition: all 0.2s ease;
-}
+}*/
 
 .regions.selected:hover {
     fill: lightblue;

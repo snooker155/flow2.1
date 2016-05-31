@@ -12,6 +12,7 @@
                   <thead>
                     <tr>
                       <th>Product</th>
+                      <th>Price</th>
                       <th>Customers</th>
                       <th>Income</th>
                     </tr>
@@ -20,6 +21,7 @@
                     {{#each products}}
                       <tr>
                         <td style="color: {{product_color}}">{{product_name}}</td>
+                        <td>{{product_price}}</td>
                         <td>{{product_customers}}</td>
                         <td>{{product_income}}</td>
                       </tr>
@@ -28,7 +30,9 @@
                 </table>
 
                 <h3>People</h3>
-                <strong>Avg. income: </strong>{{avg_income}}
+                <strong>Avg. income: </strong>{{avg_income}} //
+                <strong>Total: </strong>{{total_people_number}} //
+                <strong>Active: </strong>{{active_people_number}}
 
                 <table class="table">
                   <thead>
@@ -36,6 +40,7 @@
                       <th>Group</th>
                       <th>People</th>
                       <th>Avg. income</th>
+                      <th>Active</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -44,6 +49,7 @@
                         <td>{{people_group}}</td>
                         <td>{{people_count}}</td>
                         <td>{{people_average_income}}</td>
+                        <td>{{people_active_number}}</td>
                       </tr>
                     {{/each}}
                   </tbody>

@@ -18,16 +18,18 @@ rect {
     stroke-width: 1px;
 }*/
 
-/*.regions.selected {
-    fill: #fff;
+.regions.selected {
+    /*fill: #fff;*/
+    opacity: 1;
     stroke: lightblue;
     transition: all 0.2s ease;
-}*/
+}
 
 .regions.selected:hover {
-    fill: lightblue;
+    /*fill: lightblue;*/
+    opacity: 0.8;
     stroke: #d9edf7;
-    stroke-width: 1px;
+    stroke-width: 1.5px;
 }
 
 a {

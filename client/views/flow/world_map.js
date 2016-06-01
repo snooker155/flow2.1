@@ -103,37 +103,82 @@ Template.world_map.onRendered(function(){
         }
     ];
 
-    var game = Games.findOne({});
-    //var total_number = game.customers.length;
-    var color;
+    Tracker.autorun(function () {
+    	var game = Games.findOne({});
 
-    sets.forEach(function (set) {
-    	var prod1_people_number = 0, prod2_people_number = 0, prod3_people_number = 0, prod4_people_number = 0;
+	    sets.forEach(function (set) {
+	    	var products = [];
+	    	var inactive_count = 0;
+	    	var notselected_count = 0;
+	    	
+	    	game.products.forEach(function (product) {
+	    		var count = 0;
+				game.customers.forEach(function (customer) {
+					if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
+						if(customer.customer_region == set.id){
+							count++;
+						}
+					}
+				});
+				products.push({
+					product: product,
+					customer_number: count,
+				});
+	    	});
 
-		game.customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == 1 && customer.customer_region == set.id){
-				prod1_people_number++;
-			}else if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == 2 && customer.customer_region == set.id){
-				prod2_people_number++;
-			}else if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == 3 && customer.customer_region == set.id){
-				prod3_people_number++;
-			}else if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == 4 && customer.customer_region == set.id){
-				prod4_people_number++;
+	    	game.customers.forEach(function (customer) {
+				if(customer.customer_activity == 0){
+					if(customer.customer_region == set.id){
+						inactive_count++;
+					}
+				}else if(customer.customer_activity == 1 && !customer.customer_product){
+					if(customer.customer_region == set.id){
+						notselected_count++;
+					}
+				}
+			});
+
+	    	if(inactive_count > 0){
+				products.push({
+					product: "Inactive",
+					customer_number: inactive_count,
+				});
+			}else if(notselected_count > 0){
+				products.push({
+					product: "Notselected",
+					customer_number: notselected_count,
+				});
 			}
-		});
 
-		var max = Math.max(prod1_people_number, prod2_people_number, prod3_people_number, prod4_people_number);
-		game.products.forEach(function (product) {
-			if(product.product_id == max && max != 0){
-				color = product.product_color;
-			}
-		});
 
-		set.color = color;	
+
+	    	var max_product = _.max(products, function(product){return product.customer_number});
+
+	    	//console.log(max_product);
+
+	    	if(max_product.product == "Inactive"){
+	    		set.color = "red";
+	    	}else if(max_product.product == "Notselected"){
+	    		set.color = "#fff";
+	    	}else{
+	    		set.color = max_product.product.product_color;		
+	    	}
+
+			var paths = svg.selectAll("path");
+	    	paths[0].forEach(function (path) {
+	    		//console.log(d3.select(path).attr('data_id'));
+	    		if(d3.select(path).attr('data_id') == set.id){
+	    			d3.select(path).attr('fill', set.color);
+	    		}
+	    	});
+	    });
+
     });
 
+ 
+
     function click(d){
-    	selected_region.set(d3.select(this).attr('data-id'));
+    	selected_region.set(d3.select(this).attr('data_id'));
     }
 
 
@@ -174,7 +219,7 @@ Template.world_map.onRendered(function(){
                    	.on("click", click)
                     .on("dblclick", dblclick)
                     .attr({'data-name': sets[i].name})
-                    .attr({'data-id': sets[i].id})
+                    .attr({'data_id': sets[i].id})
                     .attr("fill", sets[i].color)
                     .on('mouseover', function () {
                         var region = d3.select(this);
@@ -341,7 +386,17 @@ Template.world_map.helpers({
 	},
 
 	total_people_number(){
-		return Games.findOne({}).customers.length;
+		if(selected_region.get()){
+			var count = 0;
+			Games.findOne({}).customers.forEach(function (customer) {
+				if(customer.customer_region == selected_region.get()){
+					count++;
+				}
+			});
+			return count;
+		}else{
+			return Games.findOne({}).customers.length;
+		}
 	},
 
 	people(){

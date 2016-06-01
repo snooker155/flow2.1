@@ -396,6 +396,7 @@ Meteor.startup(() => {
 
 
 
+
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -404,7 +405,7 @@ Meteor.startup(() => {
 
 	   	game.customers.forEach(function (customer) {
 
-	   		//customer.makeRelations();
+	   		customer.makeRelations();
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
 
@@ -436,7 +437,7 @@ Meteor.startup(() => {
 
 	   	console.log("-------------------------------   END   ----------------------------------");
 
-	}, 30000);
+	}, 10000);
 
 
 });

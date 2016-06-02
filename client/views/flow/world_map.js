@@ -1,7 +1,78 @@
 
 var selected_region = new ReactiveVar(null);
 
-var game = Games.findOne({});
+
+function getGradientData(game, region_id){
+	var products = [];
+	var inactive_count = 0;
+	var notselected_count = 0;
+	var region_customer_number = game.getRegionCustomerNumber(region_id);
+	var increment = 0;
+	game.products.forEach(function (product) {
+	  	var count = 0;
+		game.customers.forEach(function (customer) {
+			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
+				if(customer.customer_region == region_id){
+					count++;
+				}
+			}
+		});
+		
+		if(count > 0){
+			increment += parseFloat((count / region_customer_number * 100).toFixed(2));
+			products.push({
+				color: product.product_color,
+				offset: increment + "%",
+			});
+		}
+	});
+
+	game.customers.forEach(function (customer) {
+		if(customer.customer_activity == 0){
+			if(customer.customer_region == region_id){
+				inactive_count++;
+			}
+		}else if(customer.customer_activity == 1 && !customer.customer_product){
+			if(customer.customer_region == region_id){
+				notselected_count++;
+			}
+		}
+	});
+
+	if(inactive_count > 0){
+		increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
+		products.push({
+			color: "red",
+			offset: increment + "%",
+		});
+	}
+
+	if(notselected_count > 0){
+		increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
+		products.push({
+			color: "#fff",
+			offset: increment + "%",
+		});
+	}
+
+
+
+	// var max_product = _.max(products, function(product){return product.customer_number});
+
+	// //console.log(max_product);
+
+	// if(max_product.product == "Inactive"){
+	//     set.color = "red";
+	// }else if(max_product.product == "Notselected"){
+	//     set.color = "#fff";
+	// }else{
+	//     set.color = max_product.product.product_color;		
+	// }
+	console.log(products);
+	
+
+	return products;
+};
 
 
 Template.world_map.onCreated(function() {
@@ -17,6 +88,8 @@ Template.world_map.onCreated(function() {
 Template.world_map.onRendered(function(){
 
 	selected_region.set(null);
+
+	var game = Games.findOne({});
 
 	d3.select(window).on("resize", resize);
 
@@ -107,71 +180,29 @@ Template.world_map.onRendered(function(){
     	var game = Games.findOne({});
 
 	    sets.forEach(function (set) {
-	    	var products = [];
-	    	var inactive_count = 0;
-	    	var notselected_count = 0;
-	    	
-	    	game.products.forEach(function (product) {
-	    		var count = 0;
-				game.customers.forEach(function (customer) {
-					if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
-						if(customer.customer_region == set.id){
-							count++;
-						}
-					}
-				});
-				products.push({
-					product: product,
-					customer_number: count,
-				});
-	    	});
 
-	    	game.customers.forEach(function (customer) {
-				if(customer.customer_activity == 0){
-					if(customer.customer_region == set.id){
-						inactive_count++;
-					}
-				}else if(customer.customer_activity == 1 && !customer.customer_product){
-					if(customer.customer_region == set.id){
-						notselected_count++;
-					}
+			var linearGradients = svg.selectAll("linearGradient");
+			//console.log(linearGradients);
+			linearGradients[0].forEach(function (linearGradient) {
+				//console.log(linearGradient);
+				//console.log(d3.select(linearGradient).selectAll("stop"));
+				if(linearGradient.id == "gradient_"+set.id){
+					//console.log(d3.select(linearGradient))
+					d3.select(linearGradient).selectAll("stop")
+				      .data(getGradientData(game, set.id))
+				    .enter().append("stop")
+				      .attr("offset", function(d) { return d.offset; })
+				      .attr("stop-color", function(d) { return d.color; });
 				}
 			});
 
-	    	if(inactive_count > 0){
-				products.push({
-					product: "Inactive",
-					customer_number: inactive_count,
-				});
-			}else if(notselected_count > 0){
-				products.push({
-					product: "Notselected",
-					customer_number: notselected_count,
-				});
-			}
-
-
-
-	    	var max_product = _.max(products, function(product){return product.customer_number});
-
-	    	//console.log(max_product);
-
-	    	if(max_product.product == "Inactive"){
-	    		set.color = "red";
-	    	}else if(max_product.product == "Notselected"){
-	    		set.color = "#fff";
-	    	}else{
-	    		set.color = max_product.product.product_color;		
-	    	}
-
 			var paths = svg.selectAll("path");
-	    	paths[0].forEach(function (path) {
-	    		//console.log(d3.select(path).attr('data_id'));
-	    		if(d3.select(path).attr('data_id') == set.id){
-	    			d3.select(path).attr('fill', set.color);
-	    		}
-	    	});
-	    });
+			paths[0].forEach(function (path) {
+				if(path.data_id == set.id){
+					d3.select(path).attr("fill", "url(#gradient_"+set.id+")");
+				}
+			});
+		});
 
     });
 
@@ -210,24 +241,85 @@ Template.world_map.onRendered(function(){
         //         //.attr("class", "border")
         //         .attr("d", path);
 
+
+		// var gradient = svg.append("defs")
+		// 	  .append("linearGradient")
+		// 	    .attr("id", "gradient")
+		// 	    .attr("x1", "0%")
+		// 	    .attr("y1", "0%")
+		// 	    .attr("x2", "100%")
+		// 	    .attr("y2", "100%")
+		// 	    .attr("spreadMethod", "pad");
+
+		// gradient.append("stop")
+		//     .attr("offset", "0%")
+		//     .attr("stop-color", "#0c0")
+		//     .attr("stop-opacity", 1);
+
+		// gradient.append("stop")
+		//     .attr("offset", "100%")
+		//     .attr("stop-color", "#c00")
+		//     .attr("stop-opacity", 1);
+
+
+		// svg.append("defs").append("linearGradient")
+		//       .attr("id", "gradient")
+		//       .attr("x1", "0")
+		// 	  .attr("y1", "0")
+		// 	  .attr("x2", "0")
+		// 	  .attr("y2", "1")
+		//       .attr("spreadMethod", "pad")
+		//     .selectAll("stop")
+		//       .data([
+		//         {offset: "0%", color: "steelblue"},
+		//         {offset: "50%", color: "gray"},
+		//         {offset: "100%", color: "red"}
+		//       ])
+		//     .enter().append("stop")
+		//       .attr("offset", function(d) { return d.offset; })
+		//       .attr("stop-color", function(d) { return d.color; });
+
+		var defs = svg.append("defs");
+
         for (var i = 0; i < sets.length; i++) {
-            svg.append("path").datum(topojson.merge(w, w.objects.units.geometries.filter(function (d) {
+            svg.append("svg:g").datum(topojson.merge(w, w.objects.units.geometries.filter(function (d) {
                         return sets[i].set.has(d.id);
                     })))
-                    .attr('class', "regions selected")
-                    .attr("d", path)
-                   	.on("click", click)
-                    .on("dblclick", dblclick)
-                    .attr({'data-name': sets[i].name})
-                    .attr({'data_id': sets[i].id})
-                    .attr("fill", sets[i].color)
-                    .on('mouseover', function () {
-                        var region = d3.select(this);
-                        //document.querySelector('.legend').innerText = region.attr('data-name');
-                    }).on('mouseout', function () {
-                        //document.querySelector('.legend').innerText = '';
-                    });
+            	.attr("id", sets[i].id)
+            .append("path")
+            	.attr('class', "regions selected")
+                .attr("d", path)
+               	.on("click", click)
+                .on("dblclick", dblclick)
+                .attr({'data-name': sets[i].name})
+                .attr({'data_id': sets[i].id})
+                //.attr("fill", sets[i].color)
+                .attr("fill", "url(#gradient_"+sets[i].id+")")
+                .on('mouseover', function () {
+                    var region = d3.select(this);
+                    //document.querySelector('.legend').innerText = region.attr('data-name');
+                }).on('mouseout', function () {
+                    //document.querySelector('.legend').innerText = '';
+        		});
+
+        	defs.append("linearGradient")
+		      .attr("id", function(d){return "gradient_"+sets[i].id;})
+		      .attr("x1", "0")
+			  .attr("y1", "0")
+			  .attr("x2", "0")
+			  .attr("y2", "1")
+		      .attr("spreadMethod", "pad")
+		      //.attr("gradientUnits", "userSpaceOnUse")
+		    .selectAll("stop")
+		      .data(getGradientData(game, sets[i].id))
+		    .enter().append("stop")
+		      .attr("offset", function(d) { return d.offset; })
+		      .attr("stop-color", function(d) { return d.color; });
+
         }
+
+
+
 
     });
 

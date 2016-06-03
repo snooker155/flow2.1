@@ -190,7 +190,8 @@ Template.world_map.onRendered(function(){
 					//console.log(d3.select(linearGradient))
 					d3.select(linearGradient).selectAll("stop")
 				      .data(getGradientData(game, set.id))
-				    .enter().append("stop")
+				    //.enter().append("stop")
+				     // .transition().duration(200)
 				      .attr("offset", function(d) { return d.offset; })
 				      .attr("stop-color", function(d) { return d.color; });
 				}

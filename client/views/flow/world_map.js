@@ -77,7 +77,7 @@ function getGradientData(game, region_id){
 
 Template.world_map.onCreated(function() {
     var self = this;
-    self.subscribe("customers", function(){
+    self.subscribe("games", function(){
     	Tracker.autorun(function () {
 
     	});
@@ -188,9 +188,10 @@ Template.world_map.onRendered(function(){
 				//console.log(d3.select(linearGradient).selectAll("stop"));
 				if(linearGradient.id == "gradient_"+set.id){
 					//console.log(d3.select(linearGradient))
+					$(linearGradient)[0].innerHTML = "";
 					d3.select(linearGradient).selectAll("stop")
 				      .data(getGradientData(game, set.id))
-				    //.enter().append("stop")
+				    .enter().append("stop")
 				     // .transition().duration(200)
 				      .attr("offset", function(d) { return d.offset; })
 				      .attr("stop-color", function(d) { return d.color; });

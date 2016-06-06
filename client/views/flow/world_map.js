@@ -68,7 +68,7 @@ function getGradientData(game, region_id){
 	// }else{
 	//     set.color = max_product.product.product_color;		
 	// }
-	console.log(products);
+	//console.log(products);
 	
 
 	return products;
@@ -113,6 +113,7 @@ Template.world_map.onRendered(function(){
             .append("g");
 
     svg.append("rect")
+    	.attr("id", "map_rect")
 	    .attr("width", width)
 	    .attr("height", height)
 	    .on("click", reset);

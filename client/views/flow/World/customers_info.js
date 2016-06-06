@@ -1,3 +1,179 @@
+function drawGraph(){
+
+        var nodes = [];
+        var nodes_rich = [];
+        var nodes_middle = [];
+        var nodes_poor = [];
+        var links = [];
+        var color;
+        var game = Games.findOne({});
+        var neighbor;
+        //var i = 0;
+
+        game.customers.forEach(function (customer) {
+
+            //if(i <= 30){
+
+                if(customer.customer_product && customer.customer_product.product_color){
+                    color = customer.customer_product.product_color;
+                }else{
+                    color = "lightblue";
+                }
+
+                var datum = {
+                    id: customer.customer_id,
+                    income: customer.customer_income,
+                    activity: customer.customer_activity,
+                    color: color,
+                    group: customer.getIncomeGroup(game),
+                };
+
+                if(datum.group == "rich"){
+                    nodes_rich.push(datum);
+                }else if(datum.group == "middle"){
+                    nodes_middle.push(datum);
+                }else if(datum.group == "poor"){
+                    nodes_poor.push(datum);
+                }
+
+                nodes.push(datum);
+
+                customer.customer_neighbors.forEach(function (neighbor_obj) {
+                    game.customers.forEach(function(customer) {
+                        if(customer.customer_id == neighbor_obj.customer_id){
+                            neighbor = customer;
+                        }
+                    });
+
+                    var link = {
+                        source: customer.customer_id,
+                        target: neighbor.customer_id,
+                        weight: neighbor_obj.weight
+                    };
+                    links.push(link);
+                });
+
+                //i++;
+            //}
+        });
+
+        console.log(nodes);
+        console.log(links);
+
+
+        /* Create force graph */
+        var w = 1200;
+        var h = 800;
+
+        var size = nodes.length;
+        nodes.forEach(function(d, i) { d.x = d.y = w / size * i});
+
+        var svg = d3.select("#graph").append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+        var force = d3.layout.force()
+                      .nodes(nodes)
+                      .links(links)
+                      .linkStrength(0.2)
+                      .linkDistance(70)
+                      .charge(-120)
+                      .size([w, h]);
+
+        setTimeout(function() {
+
+            var n = 600
+            force.start();
+            for (var i = n * n; i > 0; --i) force.tick();
+            force.stop();
+
+            svg.selectAll("line")
+               .data(links)
+               .enter().append("svg:line")
+               .attr("class", "graph_line")
+               .attr("x1", function(d) { return d.source.x; })
+               .attr("y1", function(d) { return d.source.y; })
+               .attr("x2", function(d) { return d.target.x; })
+               .attr("y2", function(d) { return d.target.y; })
+               .style("stroke", "black")
+               .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
+            svg.append("svg:g")
+               .selectAll("circle")
+               .data(nodes_rich)
+               .enter().append("svg:polygon")
+               .attr("class", "graph_circle")
+               .attr("points", function(d) { return (d.x + d.income / 2 * 1.2)+","+(d.y + d.income / 2 * 1.2)
+                +" "+(d.x)+","+(d.y - d.income / 2 * 1.5)
+                +" "+(d.x - d.income / 2 * 1.5)+","+(d.y + d.income / 2 * 1.2); })
+               .attr("fill", function(d){ if (d.activity == 1){
+                        return d.color;
+                    }else{
+                        return "red";
+                    }
+                });
+
+            svg.append("svg:g")
+               .selectAll("circle")
+               .data(nodes_middle)
+               .enter().append("svg:rect")
+               .attr("class", "graph_circle")
+               .attr("x", function(d) { return d.x - d.income * 1.2 / 2; })
+               .attr("y", function(d) { return d.y - d.income * 1.2 / 2; })
+               .attr("fill", function(d){ if (d.activity == 1){
+                        return d.color;
+                    }else{
+                        return "red";
+                    }
+                })
+               .attr("width", function(d) { return d.income*1.2; })
+               .attr("height", function(d) { return d.income*1.2; });
+
+            svg.append("svg:g")
+               .selectAll("circle")
+               .data(nodes_poor)
+               .enter().append("svg:circle")
+               .attr("class", "graph_circle")
+               .attr("cx", function(d) { return d.x; })
+               .attr("cy", function(d) { return d.y; })
+               .attr("fill", function(d){ if (d.activity == 1){
+                        return d.color;
+                    }else{
+                        return "red";
+                    }
+                })
+               .attr("r", function(d) { return d.income/1.5; });
+
+            svg.append("svg:g")
+               .selectAll("text")
+               .data(nodes)
+               .enter().append("svg:text")
+               .attr("class", "graph_text")
+               .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+               .attr("text-anchor", "middle")
+               .attr("y", ".3em")
+               //.text(function(d) { return d.id+" ["+d.income+"]"; });
+               .text(function(d) { return d.id; });
+
+        }, 20);
+}
+
+
+
+Template.customers_info.onCreated(function() {
+    var self = this;
+    self.subscribe("games", function(){
+        Tracker.autorun(function () {
+            $("#graph").html("");
+            drawGraph();
+        });
+        //drawGraph();
+    });
+});
+
+
+
+
 Template.customers_info.onRendered(function(){
 
     var game = Games.findOne({});
@@ -22,7 +198,7 @@ Template.customers_info.onRendered(function(){
     //     console.log(customers.map(function(customer){return [customer.customer_conservatism, customer.customer_money];}))
     // });
 
-    console.log(data);
+    //console.log(data);
 
     $('#scatter_digramm').highcharts({
         chart: {

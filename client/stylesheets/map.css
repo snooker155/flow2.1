@@ -5,9 +5,13 @@
 }
 
 
-rect {
+#map_rect {
   fill: none;
   pointer-events: all;
+}
+
+.graph_line {
+    color: black;
 }
 
 

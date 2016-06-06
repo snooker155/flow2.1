@@ -1,18 +1,142 @@
 var selected_region = new ReactiveVar("World");
 var semaphore = new ReactiveVar(0);
 
+var getSunburstData = function(game){
+	var regions_state = [];
 
-Template.world_info.onCreated(function() {
-    var self = this;
-    self.subscribe("games", function(){
-    	Tracker.autorun(function () {
+	var regions_state1 = {
+		name: "World",
+		children: regions_state,
+	}
 
-    	});
-    });
-});
+	for(var region in game.regions){
+		var region_state = [];
+		var free_people = 0;
+
+
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+
+
+		var inactive_count = 0;
+		var notselected_count = 0;
+		var region_customer_number = game.getRegionCustomerNumber(region);
+		var increment = 0;
+		game.products.forEach(function (product) {
+		  	var count = 0;
+			game.customers.forEach(function (customer) {
+				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
+					if(customer.customer_region == region){
+						count++;
+					}
+				}
+			});
+			
+			if(count > 0){
+				increment += parseFloat((count / region_customer_number * 100).toFixed(2));
+				region_state.push({
+					name: product.product_name,
+					color: product.product_color,
+					size: increment,
+				});
+			}
+		});
+
+		game.customers.forEach(function (customer) {
+			if(customer.customer_activity == 0){
+				if(customer.customer_region == region){
+					inactive_count++;
+				}
+			}else if(customer.customer_activity == 1 && !customer.customer_product){
+				if(customer.customer_region == region){
+					notselected_count++;
+				}
+			}
+		});
+
+		if(inactive_count > 0){
+			increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
+			region_state.push({
+				name: "Inactive",
+				color: "red",
+				size: increment,
+			});
+		}
+
+		if(notselected_count > 0){
+			increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
+			region_state.push({
+				name: "Free",
+				color: "#fff",
+				size: increment,
+			});
+		}
+
+
+
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+	////////////////////////////////////////////////////
+
+
+
+		// if(game.regions[region].players !== undefined){
+		// 	for(var player in game.regions[region].players){
+		// 		if(game.regions[region].players[player] !== undefined && game.players[player].regions[region].people !== 0){
+		// 			region_state.push({
+		// 				name: game.players[player].player.username,
+		// 				size: game.players[player].regions[region].people,
+		// 			});
+		// 		}
+		// 	}
+		// 	if(game.regions[region].region_people_number - game.getCustomersInRegion(region) >= 0){
+		// 		region_state.push({
+		// 			name: "Free",
+		// 			size: game.regions[region].region_people_number - game.getCustomersInRegion(region),
+		// 		});
+		// 	}
+		// }else{
+		// 	if(game.regions[region].region_people_number - game.getCustomersInRegion(region) >= 0){
+		// 		region_state.push({
+		// 			name: "Free",
+		// 			size: game.regions[region].region_people_number - game.getCustomersInRegion(region),
+		// 		});
+		// 	}
+		// }
+
+		if(region_state[1]){
+			regions_state.push({
+				name: region,
+				children: region_state,
+			});
+		}else{
+			regions_state.push({
+				name: region,
+				size: game.regions[region].region_people_number,
+			});
+		}
+	}
+	console.log(regions_state1);
+	return regions_state1;
+}
+
+
+
+
+// Template.world_info.onCreated(function() {
+//     var self = this;
+//     self.subscribe("games", function(){
+//     	Tracker.autorun(function () {
+
+//     	});
+//     });
+// });
 
 
 Template.world_info.onRendered(function(){
+
+selected_region.set("World");
 	
 var width = 500,
     height = 570,
@@ -53,61 +177,9 @@ var arc = d3.svg.arc()
 var game = Games.findOne({});
 
 
-var getSunburstData = function(){
-	var game = Games.findOne({});
-	var regions_state = [];
-
-	var regions_state1 = {
-		name: "World",
-		children: regions_state,
-	}
-
-	for(var region in game.regions){
-		var region_state = [];
-		var free_people = 0;
-		if(game.regions[region].players !== undefined){
-			for(var player in game.regions[region].players){
-				if(game.regions[region].players[player] !== undefined && game.players[player].regions[region].people !== 0){
-					region_state.push({
-						name: game.players[player].player.username,
-						size: game.players[player].regions[region].people,
-					});
-				}
-			}
-			if(game.regions[region].region_people_number - game.getCustomersInRegion(region) >= 0){
-				region_state.push({
-					name: "Free",
-					size: game.regions[region].region_people_number - game.getCustomersInRegion(region),
-				});
-			}
-		}else{
-			if(game.regions[region].region_people_number - game.getCustomersInRegion(region) >= 0){
-				region_state.push({
-					name: "Free",
-					size: game.regions[region].region_people_number - game.getCustomersInRegion(region),
-				});
-			}
-		}
-
-		if(region_state[1]){
-			regions_state.push({
-				name: region,
-				children: region_state,
-			});
-		}else{
-			regions_state.push({
-				name: region,
-				size: game.regions[region].region_people,
-			});
-		}
-	}
-	return regions_state1;
-}
-  
-
 
   var g = svg.selectAll("g")
-    .data(partition.nodes(getSunburstData()))
+    .data(partition.nodes(getSunburstData(game)))
     .enter().append("g").attr("id", function(d, i) {return "part"+i; } );
 
 
@@ -115,13 +187,8 @@ var getSunburstData = function(){
   var path = g.append("path")
     .attr("d", arc)
     .style("fill", function(d) { 
-    	for (var player in game.players){
-    		if(d.name == game.players[player].player.username){
-    			return game.players[player].player_color;
-    		}
-    	}
-
-    	return color((d.children ? d : d.parent).name);
+    	console.log(d);
+    	return d.color ? d.color : "#337ab7";
     })
     .on("click", click);
 
@@ -255,11 +322,11 @@ function computeTextRotation(d) {//set text'ss origin to the centroid
 
 
 Tracker.autorun(function () {
-	console.log(semaphore.get());
+	var game = Games.findOne({});
 	if(semaphore.get() == 0){
   		var g = svg.selectAll("g");
-  		g.select("path").data(partition.nodes(getSunburstData())).transition().duration(200).attr("d", arc);
-    	g.select("text").data(partition.nodes(getSunburstData())).transition().attr("transform", function(d) { return computeTextRotation(d) });
+  		g.select("path").data(partition.nodes(getSunburstData(game))).transition().duration(200).attr("d", arc);
+    	g.select("text").data(partition.nodes(getSunburstData(game))).transition().attr("transform", function(d) { return computeTextRotation(d) });
 	}
 
 });
@@ -318,7 +385,7 @@ Template.world_info.helpers({
 		}		
 	},
 
-	colours: function(){
+	colors: function(){
 		return ["#ccc", "#1ab394"];
 	},
 });

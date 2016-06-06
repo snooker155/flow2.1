@@ -23,7 +23,7 @@ Router.route('/', {
 
 
 Router.route('/world', function () {
-  this.render('world_info');
+  this.render('outer2');
   this.layout('gameLayout');
 });
 
@@ -34,7 +34,7 @@ Router.route('/segment', function () {
 
 
 Router.route('/customers', function () {
-  this.render('customers_info');
+  this.render('outer3');
   this.layout('gameLayout');
 });
 

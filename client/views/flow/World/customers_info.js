@@ -1,3 +1,10 @@
+var Highcharts = require('highcharts');
+
+// Load module after Highcharts is loaded
+//require('highcharts/modules/exporting')(Highcharts);
+
+
+
 function drawGraph(){
 
         var nodes = [];
@@ -57,8 +64,8 @@ function drawGraph(){
             //}
         });
 
-        console.log(nodes);
-        console.log(links);
+        //console.log(nodes);
+        //console.log(links);
 
 
         /* Create force graph */
@@ -76,8 +83,8 @@ function drawGraph(){
                       .nodes(nodes)
                       .links(links)
                       .linkStrength(0.2)
-                      .linkDistance(70)
-                      .charge(-120)
+                      .linkDistance(50)
+                      .charge(-70)
                       .size([w, h]);
 
         setTimeout(function() {
@@ -176,8 +183,10 @@ Template.customers_info.onCreated(function() {
 
 Template.customers_info.onRendered(function(){
 
-    var game = Games.findOne({});
 
+Tracker.autorun(function () {
+
+    var game = Games.findOne({});
 
     var data = (_.values(_.groupBy(game.customers, function(customer){ 
         return customer.customer_region; 
@@ -186,19 +195,11 @@ Template.customers_info.onRendered(function(){
         data.push({
             name: customers[0].customer_region,
             //color: ,
-            data:customers.map(function(customer){return [parseFloat(customer.customer_conservatism).toFixed(4)*1, customer.customer_period_income];})
+            data:customers.map(function(customer){return [parseFloat(customer.customer_conservatism).toFixed(4)*1, customer.customer_income];})
         }); 
         return data;
     }, []);
 
-
-    // a.forEach(function (customers) {
-    //     console.log(customers);
-    //     customers.map(function(customer){return [customer.customer_conservatism, customer.customer_money];});
-    //     console.log(customers.map(function(customer){return [customer.customer_conservatism, customer.customer_money];}))
-    // });
-
-    //console.log(data);
 
     $('#scatter_digramm').highcharts({
         chart: {
@@ -222,15 +223,15 @@ Template.customers_info.onRendered(function(){
         },
         yAxis: {
             title: {
-                text: 'Money ($)'
+                text: 'Income ($)'
             }
         },
         legend: {
-            layout: 'vertical',
+            layout: 'horizontal',
             align: 'left',
             verticalAlign: 'top',
-            x: 500,
-            y: 50,
+            x: 275,
+            y: 25,
             floating: true,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
             borderWidth: 1
@@ -264,58 +265,61 @@ Template.customers_info.onRendered(function(){
     });
 
 
-
-	var doughnutData = [
-        {
-            value: 300,
-            color: "#a3e1d4",
-            highlight: "#1ab394",
-            label: "App"
-        },
-        {
-            value: 50,
-            color: "#dedede",
-            highlight: "#1ab394",
-            label: "Software"
-        },
-        {
-            value: 100,
-            color: "#b5b8cf",
-            highlight: "#1ab394",
-            label: "Laptop"
-        }
-    ];
-
-    var doughnutOptions = {
-        segmentShowStroke: true,
-        segmentStrokeColor: "#fff",
-        segmentStrokeWidth: 2,
-        percentageInnerCutout: 45, // This is 0 for Pie charts
-        animationSteps: 100,
-        animationEasing: "easeOutBounce",
-        animateRotate: true,
-        animateScale: false,
-        responsive: true,
-    };
+});
 
 
-    var ctx1 = document.getElementById("pie_chart1").getContext("2d");
-    var myNewChart = new Chart(ctx1).Doughnut(doughnutData, doughnutOptions);
 
-    var ctx2 = document.getElementById("pie_chart2").getContext("2d");
-    var myNewChart = new Chart(ctx2).Doughnut(doughnutData, doughnutOptions);
+	// var doughnutData = [
+ //        {
+ //            value: 300,
+ //            color: "#a3e1d4",
+ //            highlight: "#1ab394",
+ //            label: "App"
+ //        },
+ //        {
+ //            value: 50,
+ //            color: "#dedede",
+ //            highlight: "#1ab394",
+ //            label: "Software"
+ //        },
+ //        {
+ //            value: 100,
+ //            color: "#b5b8cf",
+ //            highlight: "#1ab394",
+ //            label: "Laptop"
+ //        }
+ //    ];
 
-    var ctx3 = document.getElementById("pie_chart3").getContext("2d");
-    var myNewChart = new Chart(ctx3).Doughnut(doughnutData, doughnutOptions);
+ //    var doughnutOptions = {
+ //        segmentShowStroke: true,
+ //        segmentStrokeColor: "#fff",
+ //        segmentStrokeWidth: 2,
+ //        percentageInnerCutout: 45, // This is 0 for Pie charts
+ //        animationSteps: 100,
+ //        animationEasing: "easeOutBounce",
+ //        animateRotate: true,
+ //        animateScale: false,
+ //        responsive: true,
+ //    };
 
-    var ctx1 = document.getElementById("pie_chart4").getContext("2d");
-    var myNewChart = new Chart(ctx1).Doughnut(doughnutData, doughnutOptions);
 
-    var ctx2 = document.getElementById("pie_chart5").getContext("2d");
-    var myNewChart = new Chart(ctx2).Doughnut(doughnutData, doughnutOptions);
+ //    var ctx1 = document.getElementById("pie_chart1").getContext("2d");
+ //    var myNewChart = new Chart(ctx1).Doughnut(doughnutData, doughnutOptions);
 
-    var ctx3 = document.getElementById("pie_chart6").getContext("2d");
-    var myNewChart = new Chart(ctx3).Doughnut(doughnutData, doughnutOptions);
+ //    var ctx2 = document.getElementById("pie_chart2").getContext("2d");
+ //    var myNewChart = new Chart(ctx2).Doughnut(doughnutData, doughnutOptions);
+
+ //    var ctx3 = document.getElementById("pie_chart3").getContext("2d");
+ //    var myNewChart = new Chart(ctx3).Doughnut(doughnutData, doughnutOptions);
+
+ //    var ctx1 = document.getElementById("pie_chart4").getContext("2d");
+ //    var myNewChart = new Chart(ctx1).Doughnut(doughnutData, doughnutOptions);
+
+ //    var ctx2 = document.getElementById("pie_chart5").getContext("2d");
+ //    var myNewChart = new Chart(ctx2).Doughnut(doughnutData, doughnutOptions);
+
+ //    var ctx3 = document.getElementById("pie_chart6").getContext("2d");
+ //    var myNewChart = new Chart(ctx3).Doughnut(doughnutData, doughnutOptions);
 
 
 
@@ -363,5 +367,132 @@ Template.customers_info.helpers({
         });
         return Math.round(total_user_activity / game.customers.length * 100);
     },
+
+    regions(){
+        var game = Games.findOne({});
+        var regions = [];
+
+        for (var region in game.regions){
+            regions.push(game.regions[region]);
+        }
+
+        //console.log(regions);
+        return regions;
+
+    },
+
+    createChart: function (region) {
+        // Gather data:
+        var self = this;
+        var game = Games.findOne({}); 
+        var customers = game.customers,
+            all_customers = 0,
+            inactive_customers = 0;
+        customers.forEach(function (customer) {
+            if(region.hash.region != "world"){
+                if(customer.customer_region == self.region_id){
+                    all_customers++;
+                }
+            }else{
+                all_customers++;
+            }
+        });
+
+        customers.forEach(function (customer) {
+            if(region.hash.region != "world"){
+                if(customer.customer_activity != 1 && customer.customer_region == self.region_id){
+                    inactive_customers++;
+                }
+            }else{
+                if(customer.customer_activity != 1){
+                    inactive_customers++;
+                }
+            }
+        });
+
+        var customersData = [{
+                y: inactive_customers,
+                name: "Inactive"
+             }, {
+                 y: all_customers - inactive_customers,
+                 name: "Active"
+             }];
+
+
+        if(region.hash.region != "world"){
+            // Use Meteor.defer() to craete chart after DOM is ready:
+            Meteor.defer(function() {
+              // Create standard Highcharts chart with options:
+              Highcharts.chart('region_'+self.region_id+'_pie_chart', {
+                chart: {
+                    height: 200,
+                    type: 'pie',
+                },
+                title: {
+                    text: self.region_name
+                },
+                series: [{
+                  data: customersData
+                }],
+
+                colors: [ "red", "#337ab7"],
+
+                credits: {
+                    enabled: false
+                },
+
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: false,
+                            // borderRadius: 5,
+                            // backgroundColor: 'rgba(252, 255, 197, 0.7)',
+                            // borderWidth: 1,
+                            // borderColor: '#AAA',
+                            // y: -6
+                        }
+                    }
+                },
+              });
+            });
+        }else{
+            // Use Meteor.defer() to craete chart after DOM is ready:
+            Meteor.defer(function() {
+              // Create standard Highcharts chart with options:
+              Highcharts.chart('world_pie_chart', {
+                chart: {
+                    height: 200,
+                    type: 'pie',
+                },
+                title: {
+                    text: "World"
+                },
+
+                series: [{
+                  data: customersData
+                }],
+
+                colors: [ "red", "#337ab7"],
+
+                credits: {
+                    enabled: false
+                },
+
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: false,
+                            // borderRadius: 5,
+                            // backgroundColor: 'rgba(252, 255, 197, 0.7)',
+                            // borderWidth: 1,
+                            // borderColor: '#AAA',
+                            // y: -6
+                        }
+                    }
+                },
+              });
+            });
+        }
+    }
 });
 

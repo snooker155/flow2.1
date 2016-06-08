@@ -1,16 +1,4 @@
-Template.segment_info.onRendered(function(){
-
-    Tracker.autorun(function () {
-        var game = Games.findOne({});
-
-        $(".sparklines").sparkline('html', {
-            width: '100%',
-            height: '50px',
-            lineColor: 'green',
-            fillColor: '#fff'
-        });
-    });
-
+Template.news_info.onRendered(function(){
 
 
             var data1 = [
@@ -211,179 +199,35 @@ Template.segment_info.onRendered(function(){
 
 
 
-Template.segment_info.helpers({
-    current_avg_price_array: function(){
-        var game = Games.findOne({});
-        var someArray1 = game.avg_price_history;
-        return someArray1.toString();
+Template.news_info.helpers({
+    someArray1: function(){
+        var someArray1 = [2500,1752,3562,7855,4542,7547,6554,1452,7445,5544];
+        return someArray1;
     },
 
-    // options1: function(){
-    //     var options1 = {
-    //         width: '100%',
-    //         height: '50px',
-    //         lineColor: 'green',
-    //         fillColor: '#fff'
-    //     };
-    //     return options1;
-    // },
-
-    current_user_number_array: function(){
-        var game = Games.findOne({});
-        var someArray2 = game.customers_history;
-        return someArray2.toString();
+    options1: function(){
+        var options1 = {
+            width: '100%',
+            height: '50px',
+            lineColor: 'green',
+            fillColor: '#fff'
+        };
+        return options1;
     },
 
-    // options2: function(){
-    //     var options2 = {
-    //         width: '100%',
-    //         height: '50px',
-    //         lineColor: 'green',
-    //         fillColor: '#fff'
-    //     };
-    //     return options2;
-    // },
-
-    current_world_avg_price(){
-        var game = Games.findOne({});
-        var current_world_avg_price = 0;
-
-        game.products.forEach(function (product) {
-            current_world_avg_price += product.product_price;
-        });
-
-        return parseFloat((current_world_avg_price / game.products.length).toFixed(2));
+    someArray2: function(){
+        var someArray2 = [11452,15442,17744,12445,18542,19545,20044,20554,25555,15707];
+        return someArray2;
     },
 
-    avg_price_10(){
-        var game = Games.findOne({});
-        var avg_price_10 = 0;
-
-        return avg_price_10;
+    options2: function(){
+        var options2 = {
+            width: '100%',
+            height: '50px',
+            lineColor: 'green',
+            fillColor: '#fff'
+        };
+        return options2;
     },
-
-    price_rise(){
-        var game = Games.findOne({});
-        var price_rise = 0;
-
-        return price_rise;
-    },
-
-    last_period_avg_price(){
-        var game = Games.findOne({});
-        var last_period_avg_price = 0;
-
-        return last_period_avg_price;
-    },
-
-    current_world_users(){
-        var game = Games.findOne({});
-        var current_world_users = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                current_world_users++;
-            }
-        });
-
-        return current_world_users;
-    },
-
-    ratio_potential_current_users(){
-        var game = Games.findOne({});
-        var current_world_users = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                current_world_users++;
-            }
-        });
-
-
-        return (current_world_users / game.customers.length * 100).toFixed(2);
-    },
-    
-    new_users(){
-        var game = Games.findOne({});
-        var new_users = 0;
-
-        return new_users;
-    },
-    
-    last_period_world_users(){
-        var game = Games.findOne({});
-        var last_period_world_users = 0;
-
-        return last_period_world_users;
-    },
-
-    world_demand(){
-        var game = Games.findOne({});
-        return parseFloat(game.getDemand().toFixed(2));
-    },
-    
-    world_market(){
-        var game = Games.findOne({});
-        return parseFloat(game.getMarket().toFixed(2));
-    },
-    
-    people_number(){
-        var game = Games.findOne({});
-        var people_number = 0;
-        game.customers ? people_number = game.customers.length : 0;
-
-        return people_number;
-    },
-    
-    companies_number(){
-        var game = Games.findOne({});
-        var companies_number = 0;
-        game.companies ? companies_number = game.companies.length : 0;
-
-        return companies_number;
-    },
-
-    active_customers_number(){
-        var game = Games.findOne({});
-        var active_customers_number = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_activity == 1){
-                active_customers_number++;
-            }
-        });
-
-        return active_customers_number;
-    },
-
-    products_number(){
-        var game = Games.findOne({});
-        var products_number = 0;
-        game.products ? products_number = game.products.length : 0;
-
-        return products_number;
-    },
-
-    avg_income(){
-        var game = Games.findOne({});
-        var total_customers = 0;
-        var total_income = 0;
-        game.customers.forEach(function (customer) {
-            total_customers++;
-            total_income += customer.customer_income;
-        });
-
-        return parseFloat((total_income / total_customers).toFixed(2));
-    },
-
-    clients_number(){
-        var game = Games.findOne({});
-        var clients_number = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                clients_number++;
-            }
-        });
-
-        return clients_number;
-    },
-
 });
 

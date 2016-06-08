@@ -261,13 +261,14 @@ Meteor.startup(() => {
 			product_id: product.product_id,
 			product_name: product.product_name,
 			product_price: product.product_price,
+			product_region: "",
+			product_price_history: [],
 			product_color: product.product_color,
 			//product_quality: product.,
 			prop: product.prop,
 			product_quantity: product.product_quantity,
 		});
 
-		market += product.product_price * product.product_quantity;
 	});
 
 
@@ -344,9 +345,6 @@ Meteor.startup(() => {
      		region_pref: region.region_pref,
      		region_trend: region.region_trend,
 			region_people_number: region.region_people_number,
-			//region_market: region.region_market,
-			region_market: market,
-			region_demand: customer_income,
 			base_profit_rate: region.base_profit_rate,
 			base_price_rate: region.base_price_rate,
 			level_of_conservatism: parseFloat((level_of_conservatism / region.region_people_number).toFixed(3)),
@@ -359,6 +357,8 @@ Meteor.startup(() => {
     	game_name: "test",
      	regions: regions,
      	customers: customers,
+     	customers_history: [],
+     	avg_price_history: [],
      	products: products,
      	status: "process",
      	time_period: 0,
@@ -388,11 +388,24 @@ Meteor.startup(() => {
 	console.log('Initializing: Conservatism --- End');
 
 
+
+	console.log('Initializing: History --- Start');
+
+	game.setPriceHistory();	 
+	//game.setCustomersHistory();
+
+	console.log('Initializing: History --- End');
+
+
+
 	Games.update(game._id,{
 		customers: game.customers,
+		customers_history: game.customers_history,
+		avg_price_history: game.avg_price_history,
 		products: game.products,
 		regions: game.regions,
 	});
+
 
 
 
@@ -432,12 +445,19 @@ Meteor.startup(() => {
 
 
 
+		game.setPriceHistory();	   		
+	   	game.setCustomersHistory();
+
+
+
 	   	console.log("-----------------------------   UPDATE   ---------------------------------");
 
 
 
 	   	Games.update(game._id,{
 	   		customers: game.customers,
+	   		customers_history: game.customers_history,
+	   		avg_price_history: game.avg_price_history,
 	   		products: game.products,
 	   		regions: game.regions,
 	   	});

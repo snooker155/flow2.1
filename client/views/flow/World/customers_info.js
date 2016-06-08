@@ -338,17 +338,19 @@ Template.customers_info.helpers({
         game.customers.forEach(function (customer) {
             total_income += customer.customer_income;
         });
-        return total_income;
+        return parseFloat(total_income.toFixed(2));
     },
 
-    // total_income: function () {
-    //     var game = Games.findOne({});
-    //     var total_income = 0;
-    //     game.customers.forEach(function (customer) {
-    //         total_income += customer.customer_period_income;
-    //     });
-    //     return total_income;
-    // },
+    total_active_customers: function () {
+        var game = Games.findOne({});
+        var count = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_activity == 1){
+                count++;
+            }
+        });
+        return count;
+    },
 
     total_conservatism: function () {
         var game = Games.findOne({});

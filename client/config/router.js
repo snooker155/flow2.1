@@ -28,7 +28,12 @@ Router.route('/world', function () {
 });
 
 Router.route('/segment', function () {
-  this.render('segment_info');
+  this.render('segment_outer');
+  this.layout('gameLayout');
+});
+
+Router.route('/news', function () {
+  this.render('news_info');
   this.layout('gameLayout');
 });
 

@@ -259,19 +259,24 @@ Template.segment_info.helpers({
         var game = Games.findOne({});
         var avg_price_10 = 0;
 
-        return avg_price_10;
+        game.avg_price_history.forEach(function (avg_price) {
+            avg_price_10 += avg_price;
+        });
+
+        return parseFloat((avg_price_10 / game.avg_price_history.length).toFixed(2));
     },
 
     price_rise(){
         var game = Games.findOne({});
-        var price_rise = 0;
+        var diff = game.avg_price_history[game.avg_price_history.length-1] - game.avg_price_history[game.avg_price_history.length-2];
+        var price_rise = parseFloat((diff / game.avg_price_history[game.avg_price_history.length-2] * 100).toFixed(2));
 
         return price_rise;
     },
 
     last_period_avg_price(){
         var game = Games.findOne({});
-        var last_period_avg_price = 0;
+        var last_period_avg_price = game.avg_price_history[game.avg_price_history.length-2];
 
         return last_period_avg_price;
     },
@@ -303,14 +308,15 @@ Template.segment_info.helpers({
     
     new_users(){
         var game = Games.findOne({});
-        var new_users = 0;
+        var diff = game.customers_history[game.customers_history.length-1] - game.customers_history[game.customers_history.length-2];
+        var new_users = parseFloat((diff / game.customers_history[game.customers_history.length-2] * 100).toFixed(2));
 
         return new_users;
     },
     
     last_period_world_users(){
         var game = Games.findOne({});
-        var last_period_world_users = 0;
+        var last_period_world_users = game.customers_history[game.customers_history.length-2];
 
         return last_period_world_users;
     },

@@ -398,13 +398,17 @@ Meteor.startup(() => {
 
 
 
-	Games.update(game._id,{
+	Games.update(game_id,{
 		customers: game.customers,
 		customers_history: game.customers_history,
 		avg_price_history: game.avg_price_history,
 		products: game.products,
 		regions: game.regions,
+		game_name: game.game_name,
+		status: game.status,
+		time_period: game.time_period,
 	});
+
 
 
 
@@ -447,12 +451,15 @@ Meteor.startup(() => {
 
 
 		game.setPriceHistory();	   		
-	   	game.setCustomersHistory();
+	   	game.setCustomersHistory(game.time_period);
 
 
 
 	   	console.log("-----------------------------   UPDATE   ---------------------------------");
 
+	   	console.log("-----------------------------   "+ game.time_period +"   ---------------------------------");
+
+	   	game.time_period += 1;
 
 
 	   	Games.update(game._id,{
@@ -461,6 +468,7 @@ Meteor.startup(() => {
 	   		avg_price_history: game.avg_price_history,
 	   		products: game.products,
 	   		regions: game.regions,
+	   		time_period: game.time_period,
 	   	});
 
 

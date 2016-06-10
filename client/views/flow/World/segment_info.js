@@ -12,89 +12,13 @@ Template.segment_info.onRendered(function(){
     });
 
 
-
-            var data1 = [
-                [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
-            ];
-            var data2 = [
-                [0,1],[1,0],[2,2],[3,0],[4,1],[5,3],[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]
-            ];
-            
-            var dataset1 = [
-                {
-                    // label: "Number of orders",
-                    data: data2,
-                    color: "#1ab394",
-                    lines: {
-                        lineWidth:1,
-                            show: true,
-                            fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 0.2
-                            }, {
-                                opacity: 0.4
-                            }]
-                        }
-                    },
-                    splines: {
-                        show: false,
-                        tension: 0.6,
-                        lineWidth: 1,
-                        fill: 0.1
-                    },
-
-                }, {
-                    //label: "Payments",
-                    data: data1,
-                    color: "#1C84C6",
-                    lines: {
-                        lineWidth:1,
-                            show: true,
-                            fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 0.2
-                            }, {
-                                opacity: 0.4
-                            }]
-                        }
-                    },
-                    splines: {
-                        show: true,
-                        tension: 0.6,
-                        lineWidth: 1,
-                        fill: 0.1
-                    },
-                    points: {
-                        radius: 1,
-                        show: true
-                    },
-                    shadowSize: 2
-                }
-            ];
-
-            var options1 = {
-                grid: {
-                    hoverable: true,
-                    clickable: true,
-                    tickColor: "#d5d5d5",
-                    borderWidth: 1,
-                    color: '#d5d5d5'
-                },
-                colors: ["#1ab394", "#1C84C6"],
-                xaxis:{
-                },
-                yaxis: {
-                    ticks: 4
-                },
-                tooltip: true
-            };
-
-            $("#flot-dashboard1-chart").length && $.plot($("#flot-dashboard1-chart"), dataset1, options1);
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////    USERS-INCOME-CHART    ////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
 
-            var data3 = [
+
+    var data3 = [
                 [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
                 [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
                 [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
@@ -105,22 +29,33 @@ Template.segment_info.onRendered(function(){
                 [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
             ];
 
-            var data4 = [
-                [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
-                [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
-                [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
-                [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
-                [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
-                [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
-                [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
-                [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
-            ];
+    // var data4 = [
+    //             [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
+    //             [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
+    //             [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
+    //             [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
+    //             [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
+    //             [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
+    //             [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
+    //             [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
+    //         ];
+
+
+    var game = Games.findOne({});
+
+    var data1 = [];
+
+    game.customers_history.forEach(function (customer) {
+        data1.push([gd(2012, 1, customer.time_period), customer.current_users]);
+    });
+
+    console.log(data1);
 
 
             var dataset = [
                 {
                     label: "Number of orders",
-                    data: data4,
+                    data: data1,
                     color: "#1ab394",
                     bars: {
                         show: true,
@@ -170,7 +105,7 @@ Template.segment_info.onRendered(function(){
                 },
                 yaxes: [{
                     position: "left",
-                    max: 1070,
+                    max: 400,
                     color: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -202,7 +137,102 @@ Template.segment_info.onRendered(function(){
 
             var previousPoint = null, previousLabel = null;
 
-            $.plot($("#flot-dashboard-chart"), dataset, options);
+            $.plot($("#users_income_chart"), dataset, options);
+
+
+
+
+
+
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+
+
+
+
+            // var data1 = [
+            //     [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
+            // ];
+            // var data2 = [
+            //     [0,1],[1,0],[2,2],[3,0],[4,1],[5,3],[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]
+            // ];
+            
+            // var dataset1 = [
+            //     {
+            //         // label: "Number of orders",
+            //         data: data2,
+            //         color: "#1ab394",
+            //         lines: {
+            //             lineWidth:1,
+            //                 show: true,
+            //                 fill: true,
+            //             fillColor: {
+            //                 colors: [{
+            //                     opacity: 0.2
+            //                 }, {
+            //                     opacity: 0.4
+            //                 }]
+            //             }
+            //         },
+            //         splines: {
+            //             show: false,
+            //             tension: 0.6,
+            //             lineWidth: 1,
+            //             fill: 0.1
+            //         },
+
+            //     }, {
+            //         //label: "Payments",
+            //         data: data1,
+            //         color: "#1C84C6",
+            //         lines: {
+            //             lineWidth:1,
+            //                 show: true,
+            //                 fill: true,
+            //             fillColor: {
+            //                 colors: [{
+            //                     opacity: 0.2
+            //                 }, {
+            //                     opacity: 0.4
+            //                 }]
+            //             }
+            //         },
+            //         splines: {
+            //             show: true,
+            //             tension: 0.6,
+            //             lineWidth: 1,
+            //             fill: 0.1
+            //         },
+            //         points: {
+            //             radius: 1,
+            //             show: true
+            //         },
+            //         shadowSize: 2
+            //     }
+            // ];
+
+            // var options1 = {
+            //     grid: {
+            //         hoverable: true,
+            //         clickable: true,
+            //         tickColor: "#d5d5d5",
+            //         borderWidth: 1,
+            //         color: '#d5d5d5'
+            //     },
+            //     colors: ["#1ab394", "#1C84C6"],
+            //     xaxis:{
+            //     },
+            //     yaxis: {
+            //         ticks: 4
+            //     },
+            //     tooltip: true
+            // };
+
+            // $("#flot-dashboard1-chart").length && $.plot($("#flot-dashboard1-chart"), dataset1, options1);
+
+
+        
 
 
 });
@@ -218,31 +248,14 @@ Template.segment_info.helpers({
         return someArray1.toString();
     },
 
-    // options1: function(){
-    //     var options1 = {
-    //         width: '100%',
-    //         height: '50px',
-    //         lineColor: 'green',
-    //         fillColor: '#fff'
-    //     };
-    //     return options1;
-    // },
-
     current_user_number_array: function(){
         var game = Games.findOne({});
-        var someArray2 = game.customers_history;
-        return someArray2.toString();
+        var current_users = [];
+        game.customers_history.forEach(function (customer) {
+            current_users.push(customer.current_users);
+        });
+        return current_users.toString();
     },
-
-    // options2: function(){
-    //     var options2 = {
-    //         width: '100%',
-    //         height: '50px',
-    //         lineColor: 'green',
-    //         fillColor: '#fff'
-    //     };
-    //     return options2;
-    // },
 
     current_world_avg_price(){
         var game = Games.findOne({});
@@ -308,15 +321,21 @@ Template.segment_info.helpers({
     
     new_users(){
         var game = Games.findOne({});
-        var diff = game.customers_history[game.customers_history.length-1] - game.customers_history[game.customers_history.length-2];
-        var new_users = parseFloat((diff / game.customers_history[game.customers_history.length-2] * 100).toFixed(2));
+        var new_users = 0;
+        if(game.customers_history[game.customers_history.length-1] && game.customers_history[game.customers_history.length-2]){
+            var diff = game.customers_history[game.customers_history.length-1].current_users - game.customers_history[game.customers_history.length-2].current_users;
+            new_users = parseFloat((diff / game.customers_history[game.customers_history.length-2].current_users * 100).toFixed(2));
+        }
 
         return new_users;
     },
     
     last_period_world_users(){
         var game = Games.findOne({});
-        var last_period_world_users = game.customers_history[game.customers_history.length-2];
+        var last_period_world_users = 0;
+        if(game.customers_history[game.customers_history.length-2]){
+            last_period_world_users = game.customers_history[game.customers_history.length-2].current_users;
+        }
 
         return last_period_world_users;
     },

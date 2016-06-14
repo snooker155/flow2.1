@@ -18,43 +18,24 @@ Template.segment_info.onRendered(function(){
 
 
 
-    var data3 = [
-                [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
-                [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
-                [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
-                [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
-                [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
-                [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
-                [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
-                [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
-            ];
-
-    // var data4 = [
-    //             [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
-    //             [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
-    //             [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
-    //             [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
-    //             [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
-    //             [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
-    //             [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
-    //             [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
-    //         ];
-
-
+Tracker.autorun(function () {
     var game = Games.findOne({});
 
     var data1 = [];
+    var data2 = [];
 
     game.customers_history.forEach(function (customer) {
         data1.push([gd(2012, 1, customer.time_period), customer.current_users]);
+        data2.push([gd(2012, 1, customer.time_period), customer.avg_income]);
     });
 
     console.log(data1);
+    console.log(data2);
 
 
             var dataset = [
                 {
-                    label: "Number of orders",
+                    label: "Active users",
                     data: data1,
                     color: "#1ab394",
                     bars: {
@@ -65,8 +46,8 @@ Template.segment_info.onRendered(function(){
                     }
 
                 }, {
-                    label: "Payments",
-                    data: data3,
+                    label: "Avg income",
+                    data: data2,
                     yaxis: 2,
                     color: "#1C84C6",
                     lines: {
@@ -82,13 +63,15 @@ Template.segment_info.onRendered(function(){
                         }
                     },
                     splines: {
-                        show: false,
+                        show: true,
                         tension: 0.6,
                         lineWidth: 1,
                         fill: 0.1
                     },
                 }
             ];
+
+    
 
 
             var options = {
@@ -113,6 +96,7 @@ Template.segment_info.onRendered(function(){
                     axisLabelPadding: 3
                 }, {
                     position: "right",
+                    max: 25,
                     clolor: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -138,6 +122,7 @@ Template.segment_info.onRendered(function(){
             var previousPoint = null, previousLabel = null;
 
             $.plot($("#users_income_chart"), dataset, options);
+    });
 
 
 
@@ -281,15 +266,21 @@ Template.segment_info.helpers({
 
     price_rise(){
         var game = Games.findOne({});
-        var diff = game.avg_price_history[game.avg_price_history.length-1] - game.avg_price_history[game.avg_price_history.length-2];
-        var price_rise = parseFloat((diff / game.avg_price_history[game.avg_price_history.length-2] * 100).toFixed(2));
+        var price_rise = 0;
+        if(game.avg_price_history[game.avg_price_history.length-1] && game.avg_price_history[game.avg_price_history.length-2]){
+            var diff = game.avg_price_history[game.avg_price_history.length-1] - game.avg_price_history[game.avg_price_history.length-2];
+            price_rise = parseFloat((diff / game.avg_price_history[game.avg_price_history.length-2] * 100).toFixed(2));
+        }
 
         return price_rise;
     },
 
     last_period_avg_price(){
         var game = Games.findOne({});
-        var last_period_avg_price = game.avg_price_history[game.avg_price_history.length-2];
+        var last_period_avg_price = 0;
+        if(game.avg_price_history[game.avg_price_history.length-2]){
+            last_period_avg_price = game.avg_price_history[game.avg_price_history.length-2];
+        }
 
         return last_period_avg_price;
     },

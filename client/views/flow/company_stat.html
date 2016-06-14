@@ -1,6 +1,7 @@
 <template name="company_stat">
 	<div class="ibox">
 				<div class="ibox-content">
+				{{#if has_company}}
 					<div class="profile-info"  style="margin-bottom:10px;">
                         <div class="row">
                             <!-- <div class="col-md-5">
@@ -82,6 +83,9 @@
 		                    </table>
 	                    </div>
 	                </div>
+                {{else}}
+                	No company yet.
+                {{/if}}
                 </div>
             </div>
 </template>

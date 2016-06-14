@@ -355,8 +355,11 @@ Meteor.startup(() => {
 
 	var game_id = Games.insert({
     	game_name: "test",
+    	players: [],
      	regions: regions,
      	customers: customers,
+     	companies: [],
+     	news: [],
      	customers_history: [],
      	avg_price_history: [],
      	products: products,
@@ -399,15 +402,21 @@ Meteor.startup(() => {
 
 
 	Games.update(game_id,{
+		players: game.players,
 		customers: game.customers,
 		customers_history: game.customers_history,
 		avg_price_history: game.avg_price_history,
+		news: game.news,
+		companies: game.companies,
 		products: game.products,
 		regions: game.regions,
 		game_name: game.game_name,
 		status: game.status,
 		time_period: game.time_period,
 	});
+
+
+
 
 
 
@@ -439,14 +448,21 @@ Meteor.startup(() => {
 
 
 
-	   		/////  WORLD CHANGES  ///////
+	   		// /////  WORLD CHANGES  ///////
 
-	   		customer.changeIncome(game);
+	   		// customer.changeIncome();
 
-	   		/////////////////////////////
+	   		// /////////////////////////////
 
 
 	   	});
+
+
+	   	/////  WORLD CHANGES  ///////
+
+	   	game.changeIncome();
+
+	   	/////////////////////////////
 
 
 
@@ -463,9 +479,12 @@ Meteor.startup(() => {
 
 
 	   	Games.update(game._id,{
+	   		players: game.players,
 	   		customers: game.customers,
 	   		customers_history: game.customers_history,
 	   		avg_price_history: game.avg_price_history,
+	   		news: game.news,
+	   		companies: game.companies,
 	   		products: game.products,
 	   		regions: game.regions,
 	   		time_period: game.time_period,

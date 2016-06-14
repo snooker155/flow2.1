@@ -3,7 +3,7 @@ if (Meteor.isClient) {
 
   Meteor.subscribe("regions");
 
-  // Meteor.subscribe("users");
+  Meteor.subscribe("users");
   // Meteor.subscribe("companies");
   // Meteor.subscribe("news");
   // Meteor.subscribe("departments");

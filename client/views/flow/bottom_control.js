@@ -1,49 +1,31 @@
 
 Template.bottom_control.helpers({
-    // players:function(){
-    // 	var game = Games.findOne({});
-    // 	var players = [];
-    // 	for (var player in game.players){
-    // 		players.push({
-	   //      	player: game.players[player].player,
-	   //      	player_color: game.players[player].player_color,
-	   //      	player_share: Math.round(game.players[player].player_share)-1,
-	   //      	player_share_text: Math.round(game.players[player].player_share),
-	   //      });
-    // 	}
-    // 	return players;
-    // },
-
-    player: function(){
+    products:function(){
     	var game = Games.findOne({});
-        if(game.players[Meteor.user().username]){
-    	   return game.players[Meteor.user().username].player;
-        }
+    	var products = [];
+        var free_share = 100;
+    	game.products.forEach(function (product) {
+            var product_share = 0;
+            var total_product_customers = 0;
+            game.customers.forEach(function (customer) {
+                if(customer.customer_product.product_id == product.product_id){
+                    total_product_customers++;
+                }
+            });
+            product_share = Math.floor(total_product_customers / game.customers.length * 100);
+            free_share -= product_share;
+            products.push({
+                product_name: product.product_name,
+                product_color: product.product_color,
+                product_share: product_share,
+            });
+        });
+        products.push({
+            product_name: "Free",
+            product_color: "lightblue",
+            product_share: free_share,
+        });
+    	return products;
     },
-
-    player_share: function(){
-    	var game = Games.findOne({});
-        if (game.players[Meteor.user().username] !== undefined && game.players[Meteor.user().username].player_share !== undefined){
-    	   return Math.round(game.players[Meteor.user().username].player_share);
-        }else{
-            return 0;
-        }
-    },
-
-    free_share: function(){
-    	var game = Games.findOne({});
-    	if(game.players[Meteor.user().username] !== undefined && game.players[Meteor.user().username].player_share !== undefined){
-    		return Math.round(100 - game.players[Meteor.user().username].player_share);
-    	}else{
-    		return 100;
-    	}
-    },
-
-});
-
-
-
-Template.bottom_control.events({
-    
 
 });

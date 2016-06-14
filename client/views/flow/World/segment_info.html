@@ -127,25 +127,25 @@
                                                     <li>
                                                         <h2 class="no-margins">{{users_in_period}}</h2>
                                                         <small>Users in period</small>
-                                                        <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
+                                                        <div class="stat-percent">{{users_in_period_ratio}}% <!-- <i class="fa fa-level-up text-navy"></i> --></div>
                                                         <div class="progress progress-mini">
-                                                            <div style="width: 48%;" class="progress-bar"></div>
+                                                            <div style="width: {{users_in_period_ratio}}%;" class="progress-bar"></div>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <h2 class="no-margins ">${{income_in_period}}</h2>
                                                         <small>Income in period</small>
-                                                        <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
+                                                        <div class="stat-percent">{{income_in_period_ratio}}% <!-- <i class="fa fa-level-down text-navy"></i> --></div>
                                                         <div class="progress progress-mini">
-                                                            <div style="width: 60%;" class="progress-bar"></div>
+                                                            <div style="width: {{income_in_period_ratio}}%;" class="progress-bar"></div>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <h2 class="no-margins ">${{revenue_in_period}}</h2>
                                                         <small>Revenue in period</small>
-                                                        <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
+                                                        <div class="stat-percent">{{revenue_in_period_ratio}}% <!-- <i class="fa fa-bolt text-navy"></i> --></div>
                                                         <div class="progress progress-mini">
-                                                            <div style="width: 22%;" class="progress-bar"></div>
+                                                            <div style="width: {{revenue_in_period_ratio}}%;" class="progress-bar"></div>
                                                         </div>
                                                     </li>
                                                     </ul>

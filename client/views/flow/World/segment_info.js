@@ -29,8 +29,8 @@ Tracker.autorun(function () {
         data2.push([gd(2012, 1, customer.time_period), customer.avg_income]);
     });
 
-    console.log(data1);
-    console.log(data2);
+    // console.log(data1);
+    // console.log(data2);
 
 
             var dataset = [
@@ -313,7 +313,7 @@ Template.segment_info.helpers({
     new_users(){
         var game = Games.findOne({});
         var new_users = 0;
-        if(game.customers_history[game.customers_history.length-1] && game.customers_history[game.customers_history.length-2]){
+        if(game.customers_history[game.customers_history.length-1] && game.customers_history[game.customers_history.length-2] && game.customers_history[game.customers_history.length-2].current_users != 0){
             var diff = game.customers_history[game.customers_history.length-1].current_users - game.customers_history[game.customers_history.length-2].current_users;
             new_users = parseFloat((diff / game.customers_history[game.customers_history.length-2].current_users * 100).toFixed(2));
         }
@@ -399,6 +399,89 @@ Template.segment_info.helpers({
         });
 
         return clients_number;
+    },
+
+    users_in_period(){
+        var game = Games.findOne({});
+        var users_in_period = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_product != "" && customer.customer_activity == 1){
+                users_in_period++;
+            }
+        });
+
+        return users_in_period;
+    },
+
+    income_in_period(){
+        var game = Games.findOne({});
+        var total_customers = 0;
+        var total_income = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_activity == 1){
+                total_customers++;
+                total_income += customer.customer_income;
+            }
+        });
+        if(total_customers == 0){
+            return 0;
+        }else{
+            return parseFloat((total_income / total_customers).toFixed(2));
+        }
+    },
+
+    revenue_in_period(){
+        var game = Games.findOne({});
+        var total_revenue = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_product != "" && customer.customer_activity == 1){
+                total_revenue += customer.customer_income;
+            }
+        });
+
+        return parseFloat(total_revenue.toFixed(2));
+    },
+
+    users_in_period_ratio(){
+        var game = Games.findOne({});
+        var users_in_period = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_product != "" && customer.customer_activity == 1){
+                users_in_period++;
+            }
+        });
+
+        return Math.floor(users_in_period / game.customers.length * 100);
+    },
+
+    income_in_period_ratio(){
+        var game = Games.findOne({});
+        var total_active_customers = 0;
+        var total_active_income = 0;
+        var total_income = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_activity == 1){
+                total_active_customers++;
+                total_active_income += customer.customer_income;
+            }
+            total_income += customer.customer_income;
+        });
+
+        return Math.floor((total_active_income / total_income) * 100);
+    },
+
+    revenue_in_period_ratio(){
+        var game = Games.findOne({});
+        var total_active_revenue = 0;
+        var total_revenue = 0;
+        game.customers.forEach(function (customer) {
+            if(customer.customer_product != "" && customer.customer_activity == 1){
+                total_active_revenue += customer.customer_income;
+            }
+            total_revenue += customer.customer_income;
+        });
+
+        return Math.floor(total_active_revenue / total_revenue * 100);
     },
 
 });

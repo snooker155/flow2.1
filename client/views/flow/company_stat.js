@@ -1,4 +1,15 @@
 Template.company_stat.helpers({
+	has_company(){
+		var game = Games.findOne({});
+		var company;
+		game.companies.forEach(function (company) {
+			if(company.owner == Meteor.user().username){
+				company = company;
+			}
+		});
+		return company;
+	},
+
 	player_balance: function () {
 		var game = Games.findOne({});
 		return Math.round(game.players[Meteor.user().username].player_balance);

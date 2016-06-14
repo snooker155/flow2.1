@@ -1,17 +1,21 @@
 <template name="gameLayout">
-	
-	<!-- Page wrapper -->
+
+  {{#if Template.subscriptionsReady}}
+    <!-- Page wrapper -->
     {{> topGameNavbar }}
 
     <!-- Main view  -->
     {{> yield}}
 
-    <!-- {{#if has_company}} -->
     <!-- Statistic row -->
-    	<!-- {{> stat_row}} -->
+        {{> stat_row}}
         
-    	{{>bottom_control}}
+        {{>bottom_control}}
 
-    <!-- {{/if}} -->
+  {{else}}
+    Loading...
+  {{/if}}
 
 </template>
+
+

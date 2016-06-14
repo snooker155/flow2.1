@@ -12,8 +12,8 @@ Template.gameLayout.destroyed = function(){
 };
 
 
-Template.gameLayout.helpers({
-	has_company: function () {
-		return Companies.findOne({owner: Meteor.userId()});
-	}
+Template.gameLayout.onCreated(function(){
+  // subscribe to the publication responsible for sending the Pushups
+  // documents down to the client
+  this.subscribe("games");
 });

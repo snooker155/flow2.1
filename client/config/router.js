@@ -15,34 +15,91 @@ Router.route('/', {
 
   action: function () {
     //this.render('gameScreen');
-    this.render('outer');
-    this.layout('gameLayout');
+    if(Meteor.userId()){
+      this.render('outer');
+      this.layout('gameLayout');
+    }else{
+      Router.go('/login');
+    }
   },
 
 });
 
 
+Router.route('/company', function () {
+  if(Meteor.userId()){
+    //if(Companies.findOne({owner: Meteor.userId()})){
+      this.render('company_menu');
+      this.layout('gameLayout');
+    // }else{
+    //   Router.go('/company_creation');
+    // }
+  }else{
+    Router.go('/login');
+  }
+});
+
+
 Router.route('/world', function () {
-  this.render('outer2');
-  this.layout('gameLayout');
+  if(Meteor.userId()){
+    this.render('outer2');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
 });
 
 Router.route('/segment', function () {
-  this.render('segment_outer');
-  this.layout('gameLayout');
+  if(Meteor.userId()){
+    this.render('segment_outer');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
 });
 
 Router.route('/news', function () {
-  this.render('news_info');
-  this.layout('gameLayout');
+  if(Meteor.userId()){
+    this.render('news_info');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
 });
 
 
 Router.route('/customers', function () {
-  this.render('outer3');
-  this.layout('gameLayout');
+  if(Meteor.userId()){
+    this.render('outer3');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
 });
 
+
+
+//////////////  TEST ENV Routers  ///////////////////
+
+Router.route('/admin', function(){
+  if(Meteor.userId()){
+    this.render('admin');
+  }else{
+    Router.go('/login');
+  }
+});
+
+
+Router.route('/login', function(){
+   this.render('login');
+   this.layout('blankLayout');
+});
+
+
+Router.route('/register', function(){
+   this.render('register');
+   this.layout('blankLayout');
+});
 
 
 

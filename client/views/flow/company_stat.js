@@ -1,49 +1,51 @@
 Template.company_stat.helpers({
 	has_company(){
 		var game = Games.findOne({});
-		var company;
-		game.companies.forEach(function (company) {
-			if(company.owner == Meteor.user().username){
-				company = company;
-			}
-		});
-		return company;
+		return game.companies[Meteor.user().username];
 	},
 
-	player_balance: function () {
+	company_name: function () {
 		var game = Games.findOne({});
-		return Math.round(game.players[Meteor.user().username].player_balance);
+		return game.companies[Meteor.user().username].company_name;
 	},
 
-	player_users: function(){
+	company_balance: function () {
 		var game = Games.findOne({});
-		return Math.round(game.getPlayerUsers(Meteor.user().username));
+		return parseFloat(game.companies[Meteor.user().username].company_balance.toFixed(2));
 	},
 
-    player_world_share: function(){
+	company_level: function () {
+		var game = Games.findOne({});
+		return game.companies[Meteor.user().username].company_level;
+	},
+
+	company_exp: function(){
+		var game = Games.findOne({});
+		return game.companies[Meteor.user().username].company_exp;
+	},
+
+	company_customers: function(){
     	var game = Games.findOne({});
-    	if(game.players[Meteor.user().username] !== undefined && game.players[Meteor.user().username].player_share !== undefined){
-			return parseFloat((game.players[Meteor.user().username].player_share).toFixed(2));
+    	var customers_number = 0;
+    	game.customers.forEach(function (customer) {
+    		if(customer.customer_product.product_creator == game.companies[Meteor.user().username].company_name){
+				customers_number++;
+    		}
+    	});
+		return customers_number;
+	},
+
+    company_regions: function(){
+    	var game = Games.findOne({});
+		return game.companies[Meteor.user().username].company_region.length;
+	},
+
+    company_products: function(){
+    	var game = Games.findOne({});
+    	if(game.companies[Meteor.user().username].company_product_name){
+			return game.companies[Meteor.user().username].company_product_name.length;
 		}else{
 			return 0;
 		}
-	},
-
-    player_regions: function(){
-    	var game = Games.findOne({});
-    	var region_number = 0;
-    	for (var region in game.players[Meteor.user().username].regions){
-    		region_number++;
-    	}
-		return region_number;
-	},
-
-    player_branches: function(){
-    	var game = Games.findOne({});
-		var branches_number = 0;
-    	for (var region in game.players[Meteor.user().username].regions){
-    		branches_number++;
-    	}
-		return branches_number;
 	},
 });

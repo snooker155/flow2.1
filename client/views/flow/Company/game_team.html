@@ -1,5 +1,7 @@
 <template name="game_team">
-        <!--<div class="wrapper wrapper-content animated fadeInUp"> -->
+        <div class="wrapper wrapper-content animated fadeInUp"> 
+            {{>company_menu}}
+            {{#if has_team}}
             <div class="ibox">
                 <div class="ibox-content">
 
@@ -52,7 +54,7 @@
                                                 <a href="#" id="level_minus" class="btn btn-white btn-xs {{level_minus_enabled}}"><i class="fa fa-lg fa-minus"></i></a>
                                             </div> -->
                                             <div class="col-md-6">
-                                                <p class="text-center">{{employee_level}} / ({{max_employee_level}})</p>
+                                                <p class="text-center">{{employee_level}} / ({{max_level}})</p>
                                             </div>
                                             {{#if new_level}}
                                             <div class="col-md-2">
@@ -62,7 +64,7 @@
                                         </div>
                                     </td>
                                     <td class="project-title">
-                                        $ {{employee_price}}
+                                        $ {{price_for_employee}}
                                     </td>
                                     <td class="project-title">
                                         <strong>$ {{sum_of_department}}</strong> / month
@@ -165,5 +167,10 @@
 
                     </div>
                 </div>
-        <!-- </div> -->
+
+    {{else}}
+        {{>team_registration}}
+    {{/if}}
+
+        </div>
 </template>

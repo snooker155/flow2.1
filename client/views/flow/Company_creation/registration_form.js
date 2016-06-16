@@ -117,8 +117,8 @@ Template.registration_form.onCreated(function(){
 
     company_array.push({
         company_name: null,
-        company_sphere: null,
-        company_segment: null,
+        // company_sphere: null,
+        // company_segment: null,
         company_region: null,
         //company_country: null,
     });
@@ -216,19 +216,19 @@ Template.registration_form.events({
         event.preventDefault();
 
         if (index.get() == 0){
-            var form = template.$("#company_form");            
+            var form = template.$("#company_form");
         }
 
         if (index.get() == 1){
-            var form = template.$("#team_form");            
+            var form = template.$("#team_form");
         }
 
         if (index.get() == 2){
-            var form = template.$("#product_form");            
+            var form = template.$("#product_form");
         }
 
         if (index.get() == 3){
-            index.set(index.get()+1);            
+            index.set(index.get()+1);
         }
 
 
@@ -251,23 +251,25 @@ Template.registration_form.events({
 
 
     'click #finish': function(){
+        //console.log(company_array);
+        var game = Games.findOne({});
+        game.companies[Meteor.user().username] = {
+            company_name: company_array[0].company_name,
+            company_region: company_array[0].company_region,
+            company_level: 0,
+            company_exp: 0,
+            company_balance: 100000,
+            company_team: team_array,
+            company_product_name: product_name,
+            company_product: product_array,
+            owner: Meteor.user().username,
+        };
+        console.log(game.companies);
 
-        // Meteor.call('assignToRegion', Session.get("game"), company_array[0].company_region, function (error, result) {
-        //     if(!error){
-        //         Meteor.call('addCompany', company_array[0].company_name, company_array[0].company_sphere, company_array[0].company_segment, company_array[0].company_region, function (error, result) {
-        //             if (!error){
-        //                 Meteor.call('addToGame', Session.get("game"), result, function (error, result) {});
-        //                 Meteor.call('addEmployees', company_array[0].company_name, team_array, function (error, result) {
-        //                     if (!error){
-        //                         Meteor.call('addProduct', company_array[0].company_name, company_array[0].company_region, company_array[0].company_segment, product_name, product_array, function (error, result) {});
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
-        
-        Meteor.call('addCompany', company_array[0].company_name, company_array[0].company_region, team_array, product_name, product_array, function (error, result) {});
+        Meteor.call('updateGame', game);
+
     },
+
+
 });
 

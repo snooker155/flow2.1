@@ -1,0 +1,114 @@
+<template name="team_registration">
+        <div class="wrapper wrapper-content animated fadeInUp"> 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                    <div class="ibox-content">
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-12">
+    <div class="ibox">
+
+        <div class="ibox-content" style="background-color: #f1f1f1">
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+            <!--    <div class="ibox e-margins">
+                        <div class="ibox-content"> -->
+                            <h2>
+                                Team starter form
+                            </h2>
+                            <form id="team_form">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <!-- <table class="table table-hover"> -->
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="project-title" style="width: 5%;">#</th>
+                                                <th class="project-title" style="width: 25%;">Department</th>
+                                                <th class="project-title" style="width: 25%;">Number of employees</th>
+                                                <th class="project-title" style="width: 15%;">Level</th>
+                                                <th class="project-title" style="width: 15%;">Price</th>
+                                                <th class="project-title" style="width: 15%;">Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{#each available_departments}}
+                                            <tr>
+                                                <td class="project-title">
+                                                    {{number}}
+                                                </td>
+                                                <td class="project-title">
+                                                    <select class="form-control required department_name" name="department_name{{value}}" id="department_name{{value}}" aria-required="true">
+                                                        <option value="" selected>Select department</option>
+                                                        {{#each departments}}
+                                                            <option value="{{department_name}}">{{department_name}}</option>    
+                                                        {{/each}}
+                                                    </select>
+                                                </td>
+                                                <td class="project-title">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <a href="#" class="btn btn-white btn-xs new_employee_number_minus {{new_employee_number_minus_enabled}}"><i class="fa fa-lg fa-minus"></i></a>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <p class="text-center">{{employee_number}} / {{max_employee_number}}</p>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <a href="#" class="btn btn-white btn-xs new_employee_number_plus {{new_employee_number_plus_enabled}}"><i class="fa fa-lg fa-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="project-title">
+                                                    {{employee_level}}
+                                                </td>
+                                                <td class="project-title">
+                                                    $ {{price_for_employee}}
+                                                </td>
+                                                <td class="project-title">
+                                                    <strong>$ {{sum_of_department}}</strong> / period
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <strong>$ {{sum_of_month}}</strong> / period
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                              </div>
+                              </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+                            <div class="row">
+                                <div class="col-sm-3 pull-right">
+                                    <button id="create" class="btn btn-primary pull-right" style="margin-left:10px;">Create</button>
+                                </div>
+                            </div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</template>

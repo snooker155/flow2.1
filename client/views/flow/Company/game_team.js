@@ -14,8 +14,6 @@ Template.game_team.onCreated(function(){
 });
 
 
-
-
 Template.game_team.onRendered(function(){
 
 });
@@ -23,8 +21,15 @@ Template.game_team.onRendered(function(){
 
 Template.game_team.helpers({
 
+    has_team(){
+        var game = Games.findOne({});
+        return game.companies[Meteor.user().username].company_team;
+    },
+
     employees: function(){
-        return Employees.find({owner: Meteor.userId()}); 
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        return company.company_team; 
     },
 
     department_description_name: function(){
@@ -36,10 +41,9 @@ Template.game_team.helpers({
     },
 
     departments: function(){
-        var company = Companies.findOne({owner: Meteor.userId()});
+        var company = Games.findOne({}).companies[Meteor.user().username];
         var departments = [];
-        var employees = Employees.find({company_name: company.company_name});
-        employees.forEach(function (employee) {
+        company.company_team.forEach(function (employee) {
             departments.push(employee.department_name);
         });
         return Departments.find({department_name: {$nin: departments}});
@@ -47,9 +51,9 @@ Template.game_team.helpers({
 
     new_employees: function(){
 
-        var company = Companies.findOne({owner: Meteor.userId()});
-        if (Departments.find().count() - Employees.find({owner: Meteor.userId()}).count() > 0 ){
-            var n = Departments.find().count() - Employees.find({owner: Meteor.userId()}).count();
+        var company = Games.findOne({}).companies[Meteor.user().username];
+        if (Departments.find().count() - company.company_team.length > 0 ){
+            var n = Departments.find().count() - company.company_team.length;
         }else{
             var n = 0;
         }
@@ -81,8 +85,8 @@ Template.game_team.helpers({
 
 
     sum_of_month: function(){
-        var company = Companies.findOne({owner: Meteor.userId()});
-        var employees = Employees.find({company_name: company.company_name});
+        var company = Games.findOne({}).companies[Meteor.user().username];
+        var employees = company.company_team;
         var sum = 0;
         employees.forEach(function (employee) {
             sum += employee.sum_of_department;
@@ -138,8 +142,8 @@ Template.game_team.helpers({
     },
 
     sum_of_free: function(){
-        var company = Companies.findOne({owner: Meteor.userId()});
-        var employees = Employees.find({company_name: company.company_name});
+        var company = Games.findOne({}).companies[Meteor.user().username];
+        var employees = company.company_team;
         var sum = 0;
         employees.forEach(function (employee) {
             sum += employee.employee_number - 0;
@@ -193,8 +197,9 @@ Template.game_team.events({
 
     "click #level_minus": function(event){
             this.employee_level -= 1;
+            console.log(this.employee_level);
 
-            Meteor.call('updateEmployeeLevel', this._id, -1, function (error, result) {});
+            //Meteor.call('updateEmployeeLevel', this._id, -1, function (error, result) {});
 
             // var obj = {
             //     "feature": "employee_level_down",
@@ -206,8 +211,9 @@ Template.game_team.events({
 
     "click #level_plus": function(event){
             this.employee_level += 1;
+            console.log(this.employee_level);
 
-            Meteor.call('updateEmployeeLevel', this._id, 1, function (error, result) {});
+            //Meteor.call('updateEmployeeLevel', this._id, 1, function (error, result) {});
 
             // var obj = {
             //     "feature": "employee_level_up",
@@ -220,8 +226,9 @@ Template.game_team.events({
 
     "click #employee_number_minus": function(){
         this.employee_number -= 1;
+        console.log(this.employee_number);
 
-            Meteor.call('updateEmployeeNumber', this._id, -1, function (error, result) {});
+            //Meteor.call('updateEmployeeNumber', this._id, -1, function (error, result) {});
 
             // var obj = {
             //     "feature": "employee_number_down",
@@ -234,8 +241,9 @@ Template.game_team.events({
 
     "click #employee_number_plus": function(){
         this.employee_number += 1;
+        console.log(this.employee_number);
 
-            Meteor.call('updateEmployeeNumber', this._id, 1, function (error, result) {});
+            //Meteor.call('updateEmployeeNumber', this._id, 1, function (error, result) {});
 
             // var obj = {
             //     "feature": "employee_number_up",
@@ -268,7 +276,7 @@ Template.game_team.events({
 
         if(template.$("#new_department"+this.value).valid()){
 
-            Meteor.call('addEmployee', employees_array[this.id], function (error, result) {});
+            //Meteor.call('addEmployee', employees_array[this.id], function (error, result) {});
             employees_arrayDep.changed();
 
         }
@@ -276,7 +284,7 @@ Template.game_team.events({
 
 
     'click #disband': function(){
-        Meteor.call('deleteEmployees', this._id, function (error, result) {});
+        //Meteor.call('deleteEmployees', this._id, function (error, result) {});
     },
 
 });

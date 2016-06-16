@@ -6,9 +6,9 @@ if (Meteor.isClient) {
   Meteor.subscribe("users");
   // Meteor.subscribe("companies");
   // Meteor.subscribe("news");
-  // Meteor.subscribe("departments");
+  Meteor.subscribe("departments");
   Meteor.subscribe("products");
-  // Meteor.subscribe("features");
+  Meteor.subscribe("features");
 
   // Meteor.subscribe("customers");
 

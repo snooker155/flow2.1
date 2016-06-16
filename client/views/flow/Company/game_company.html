@@ -1,8 +1,68 @@
 <template name="game_company">
-  <!-- <div class="wrapper wrapper-content animated fadeInUp"> -->
+  <div class="wrapper wrapper-content animated fadeInUp">
+    {{>company_menu}}
+    {{#if has_company}}
     <div class="row">
             <div class="col-lg-9">
                     <div class="ibox">
+                        <div class="ibox-content" style="padding-bottom:5px;">
+
+
+
+                        <div class="row" style="margin-top:50px;">
+                                <div class="col-lg-12">
+                                            <div class="row">
+                                                <div class="col-lg-9">
+                                                    <div class="flot-chart">
+                                                        <div class="flot-chart-content" id="customers_revenue_chart" style="padding: 0px; position: relative;">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                <ul class="stat-list">
+                                                    <li>
+                                                        <h2 class="no-margins">{{users_in_period}}</h2>
+                                                        <small>Users in period</small>
+                                                        <div class="stat-percent">{{users_in_period_ratio}}% <!-- <i class="fa fa-level-up text-navy"></i> --></div>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: {{users_in_period_ratio}}%;" class="progress-bar"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <h2 class="no-margins ">${{revenue_in_period}}</h2>
+                                                        <small>Revenue in period</small>
+                                                        <div class="stat-percent">{{revenue_in_period_ratio}}% <!-- <i class="fa fa-level-down text-navy"></i> --></div>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: {{revenue_in_period_ratio}}%;" class="progress-bar"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <h2 class="no-margins ">${{balance_in_period}}</h2>
+                                                        <small>Balance in period</small>
+                                                        <div class="stat-percent">{{balance_in_period_ratio}}% <!-- <i class="fa fa-bolt text-navy"></i> --></div>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: {{balance_in_period_ratio}}%;" class="progress-bar"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <h2 class="no-margins ">${{costs_in_period}}</h2>
+                                                        <small>Costs in period</small>
+                                                        <div class="stat-percent">{{costs_in_period_ratio}}% <!-- <i class="fa fa-bolt text-navy"></i> --></div>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: {{costs_in_period_ratio}}%;" class="progress-bar"></div>
+                                                        </div>
+                                                    </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+
+                        <div class="ibox">
                         <div class="ibox-content" style="padding-bottom:5px;">
                             <div class="row m-t-sm">
                                 <div class="col-lg-12">
@@ -27,9 +87,13 @@
                                                     </td>
                                                     <td>
                                                        {{start_time}}
+                                                       <br>
+                                                        <small class="text-navy">time period</small>
                                                     </td>
                                                     <td>
                                                         {{end_time}}
+                                                        <br>
+                                                        <small class="text-navy">time period</small>
                                                     </td>
                                                     <td>
                                                     <p>
@@ -82,15 +146,15 @@
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat.
                                 </p> -->
                                 <div class="row m-t-lg">
-                                    <div class="col-md-4">
-                                        <h5><strong>{{company_level}}</strong> Level</h5>
+                                    <div class="col-md-4 col-md-offset-4">
+                                        <h5>Level <strong>{{company_level}}</strong></h5>
                                     </div>
-                                    <div class="col-md-4">
+<!--                                     <div class="col-md-4">
                                         <h5><strong>{{company_partners}}</strong> Partners</h5>
                                     </div>
                                     <div class="col-md-4">
                                         <h5><strong>{{company_articles}}</strong> Articles</h5>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- <div class="user-button">
                                     <div class="row">
@@ -106,21 +170,9 @@
                     <table class="table" style="margin-top:20px;">
                       <tbody>
                         <tr>
-                          <td><strong>Sphere</strong></td>
+                          <td><strong>Region</strong></td>
                           <td>
-                            {{company_sphere}}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><strong>Segment</strong></td>
-                          <td>
-                            {{company_segment}}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td><strong>Country</strong></td>
-                          <td>
-                            {{company_country}}
+                            {{company_region}}
                           </td>
                         </tr>
                         <tr>
@@ -149,13 +201,19 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <div class="text-center m-t-md">
-                        <a href="#" class="btn btn-xs btn-primary">Add contact</a>
-                        <a href="#" class="btn btn-xs btn-primary">Report contact</a>
-                    </div> -->
+                    <div class="text-center m-t-md">
+                        <a href="#" id="delete_company" class="btn btn-xs btn-danger">Delete company</a>
+                        <!-- <a href="#" class="btn btn-xs btn-primary">Add contact</a> -->
+                        <!-- <a href="#" class="btn btn-xs btn-primary">Report contact</a> -->
+                    </div>
                     </div>
                     </div>
             </div>
         </div>
-    <!-- </div> -->
+
+    {{else}}
+        {{>company_registration}}
+    {{/if}}
+
+    </div>
 </template>

@@ -117,7 +117,7 @@ var getSunburstData = function(game){
 			});
 		}
 	}
-	console.log(regions_state1);
+	//console.log(regions_state1);
 	return regions_state1;
 }
 
@@ -187,7 +187,7 @@ var game = Games.findOne({});
   var path = g.append("path")
     .attr("d", arc)
     .style("fill", function(d) { 
-    	console.log(d);
+    	//console.log(d);
     	return d.color ? d.color : "#337ab7";
     })
     .on("click", click);

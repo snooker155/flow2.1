@@ -5,9 +5,10 @@ var employees_arrayDep = new Tracker.Dependency();
 
 
 
-Template.team_creator_form.onCreated(function(){
+Template.team_registration.onCreated(function(){
 
-    // var company = Companies.findOne({owner: Meteor.userId()});
+    var game = Games.findOne({});
+    // var company = game.companies[Meteor.user().username];
     // var n = company.company_level + 1;
     employees_array = [];
     var n = 2;
@@ -17,8 +18,7 @@ Template.team_creator_form.onCreated(function(){
     for (i=0; i<n; i++){
         employees_array.push({
             id: i,
-            value: i+1,
-            //company_name: company.company_name,
+            number: i+1,
             department_name: null,
             employee_level: 1,
             max_level: 3,
@@ -43,7 +43,7 @@ var department_description = new ReactiveVar("");
 
 
 
-Template.team_creator_form.helpers({
+Template.team_registration.helpers({
 
     available_departments: function(){
         employees_arrayDep.depend();
@@ -54,11 +54,11 @@ Template.team_creator_form.helpers({
         return Departments.find();
     },
 
-    employee_number_increase_enabled:function(){
+    new_employee_number_plus_enabled:function(){
         return this.employee_number<this.max_employee_number?"":"disabled";
     },
 
-    employee_number_decrease_enabled:function(){
+    new_employee_number_minus_enabled:function(){
         return this.employee_number>0?"":"disabled";
     },
 
@@ -86,7 +86,7 @@ Template.team_creator_form.helpers({
 
 
 
-Template.team_creator_form.events({
+Template.team_registration.events({
     'change .department_name': function(event, template){
         event.preventDefault();
         var department_name = event.target.value;
@@ -108,35 +108,55 @@ Template.team_creator_form.events({
             department_description.set("Test");
         }
 
-        team_array = employees_array;
     },
 
-    "click #new_employee_number_plus": function(){
-        this.employee_number += 1;
-        this.sum_of_department = this.price_for_employee * this.employee_number;
+    'click .new_employee_number_plus': function(event){
+        event.preventDefault();
+        var self = this;
+        self.employee_number += 1;
+        self.sum_of_department = self.price_for_employee * self.employee_number;
         employees_arrayDep.changed();
-        
-        team_array = employees_array;
+
     },
 
-    "click #new_employee_number_minus": function(){
+    'click .new_employee_number_minus': function(){
         this.employee_number -= 1;
         this.sum_of_department = this.price_for_employee * this.employee_number;
         employees_arrayDep.changed();
 
-        team_array = employees_array;
     },
 
 
-    "submit #team_form": function(event, template){
+    'click #create': function(event, template){
         event.preventDefault();
+        var form = template.$("#team_form");
 
-        //console.log(employees_array);
-        var company = Companies.findOne({owner: Meteor.userId()});
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
 
-        if(template.$("#team_form").valid()){
-            Meteor.call('addEmployees', company.company_name, employees_array, function (error, result) {});            
+        if (form.valid()){
+
+            //console.log(employees_array);
+
+            company.company_activities.push({
+                status: "Complete",
+                title: "Team has formed",
+                start_time: game.time_period,
+                end_time: game.time_period,
+                comments: "Company "+company.company_name+" successfully formed the team.",
+            });
+
+
+            company.company_team = employees_array;
+
+
+            Meteor.call('updateGame', game);
+
         }
 
-    }
+        //console.log(game.companies);
+
+    },
+
+
 });

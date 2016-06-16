@@ -17,6 +17,73 @@ Meteor.startup(() => {
 		Products.remove(product._id);
 	});
 
+	Departments.find().fetch().forEach(function (department) {
+		Departments.remove(department._id);
+	});
+
+	Features.find().fetch().forEach(function (feature) {
+		Features.remove(feature._id);
+	});
+
+
+
+
+
+	///////////////////////////////////////////////////////////////////////
+	///////////////    DEPARTMENTS   //////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
+
+	Departments.insert({
+		department_name: "Technology",
+		employee_price: 200,
+	});
+
+
+	Departments.insert({
+		department_name: "Design",
+		employee_price: 150,
+	});
+
+	Departments.insert({
+		department_name: "Support",
+		employee_price: 100,
+	});
+
+
+
+
+
+	///////////////////////////////////////////////////////////////////////
+	////////////////     FEATURES    //////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
+
+	Features.insert({
+		feature_name: "Prop_1",
+		time_to_achieve: 15,
+		feature_price: 250,
+		neccessary_employees_number: 2,
+		neccessary_level: 1,
+	});
+
+	Features.insert({
+		feature_name: "Prop_2",
+		time_to_achieve: 25,
+		feature_price: 350,
+		neccessary_employees_number: 3,
+		neccessary_level: 1,
+	});
+
+	Features.insert({
+		feature_name: "Prop_3",
+		time_to_achieve: 35,
+		feature_price: 450,
+		neccessary_employees_number: 4,
+		neccessary_level: 1,
+	});
+
+
 
 	///////////////////////////////////////////////////////////////////////
 	//////////////////  PRODUCTS  /////////////////////////////////////////
@@ -82,11 +149,13 @@ Meteor.startup(() => {
 	//////////////////  REGIONS  /////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
+	var PEOPLE_BASE = 5;
+
   	Regions.insert({
 		region_id: "CE",
 		region_name: "Central Europe",
 		//region_people_number: 2000 + Math.floor((Math.random() * 500) + 100),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Design",
 		region_market: 1.5,
 		region_demand: 4,
@@ -101,7 +170,7 @@ Meteor.startup(() => {
 		region_id: "NE",
 		region_name: "Northern Europe",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Design",
 		region_market: 1.5,
 		region_demand: 4,
@@ -116,7 +185,7 @@ Meteor.startup(() => {
 		region_id: "AF",
 		region_name: "Africa",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -131,7 +200,7 @@ Meteor.startup(() => {
 		region_id: "SA",
 		region_name: "South America",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Design",
 		region_market: 1.5,
 		region_demand: 4,
@@ -146,7 +215,7 @@ Meteor.startup(() => {
 		region_id: "NA",
 		region_name: "North America",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Technology",
 		region_market: 1.5,
 		region_demand: 4,
@@ -161,7 +230,7 @@ Meteor.startup(() => {
 		region_id: "AS",
 		region_name: "Asia",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Technology",
 		region_market: 1.5,
 		region_demand: 4,
@@ -176,7 +245,7 @@ Meteor.startup(() => {
 		region_id: "CA",
 		region_name: "Caribbean",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -191,7 +260,7 @@ Meteor.startup(() => {
 		region_id: "SP",
 		region_name: "South Pacific",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -206,7 +275,7 @@ Meteor.startup(() => {
 		region_id: "IN",
 		region_name: "India",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -221,7 +290,7 @@ Meteor.startup(() => {
 		region_id: "OR",
 		region_name: "Orient",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -236,7 +305,7 @@ Meteor.startup(() => {
 		region_id: "RU",
 		region_name: "Russia",
 		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: 20 + Math.floor((Math.random() * 5) + 2),
+		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
@@ -358,7 +427,7 @@ Meteor.startup(() => {
     	players: [],
      	regions: regions,
      	customers: customers,
-     	companies: [],
+     	companies: {},
      	news: [],
      	customers_history: [],
      	avg_price_history: [],
@@ -382,10 +451,6 @@ Meteor.startup(() => {
 	    console.log('Initializing: Relations:' + n +' of '+ game.customers.length);
 	    n++;
 
-
-	    //customer.updateCustomer();
-
-	    //customer.changeActivity();
 	});
     console.log('Initializing: Relations --- End');
 	console.log('Initializing: Conservatism --- End');
@@ -395,10 +460,9 @@ Meteor.startup(() => {
 	console.log('Initializing: History --- Start');
 
 	game.setPriceHistory();	 
-	//game.setCustomersHistory();
+	game.setCustomersHistory();
 
 	console.log('Initializing: History --- End');
-
 
 
 	Games.update(game_id,{
@@ -428,10 +492,6 @@ Meteor.startup(() => {
 
 
 
-
-
-
-
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -443,16 +503,6 @@ Meteor.startup(() => {
 	   		customer.makeRelations();
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
-
-	   		//customer.updateCustomer();
-
-
-
-	   		// /////  WORLD CHANGES  ///////
-
-	   		// customer.changeIncome();
-
-	   		// /////////////////////////////
 
 
 	   	});
@@ -471,11 +521,17 @@ Meteor.startup(() => {
 
 
 
+
 	   	console.log("-----------------------------   UPDATE   ---------------------------------");
 
 	   	console.log("-----------------------------   "+ game.time_period +"   ---------------------------------");
 
 	   	game.time_period += 1;
+
+
+	   	var game_new = Games.findOne({});
+
+	   	game_new.setCompaniesHistory();
 
 
 	   	Games.update(game._id,{
@@ -484,11 +540,14 @@ Meteor.startup(() => {
 	   		customers_history: game.customers_history,
 	   		avg_price_history: game.avg_price_history,
 	   		news: game.news,
-	   		companies: game.companies,
+	   		companies: game_new.companies,
 	   		products: game.products,
 	   		regions: game.regions,
 	   		time_period: game.time_period,
+	   		game_name: game.game_name,
+	   		status: game.status,
 	   	});
+
 
 
 	   	console.log("-------------------------------   END   ----------------------------------");

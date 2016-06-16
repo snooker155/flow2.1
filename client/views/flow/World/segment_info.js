@@ -352,8 +352,11 @@ Template.segment_info.helpers({
     companies_number(){
         var game = Games.findOne({});
         var companies_number = 0;
-        game.companies ? companies_number = game.companies.length : 0;
-
+        if(game.companies){
+            for (var company in game.companies){
+                companies_number++;
+            }
+        }
         return companies_number;
     },
 

@@ -1,0 +1,24 @@
+<template name="company_menu">
+    <!-- {{#if has_company}} -->
+    <div class="wrapper wrapper-content animated fadeInUp" style="padding-bottom:0px; padding-top:10px;">
+	   <div class="row">
+            <div class="col-lg-12">
+               	<div class="ibox">
+                	<div class="ibox-content">
+                        <div class="tabs-container">
+                            <ul class="nav nav-pills startup nav-justified">
+                                <li class="{{isActiveRoute regex='company'}}" style="border-left:none;"><a href="{{pathFor route='company'}}">Company</a></li>
+                                <li class="{{isActiveRoute regex='team'}}" style="border-left:none;"><a href="{{pathFor route='team'}}">Team</a></li>
+                                <li class="{{isActiveRoute regex='product'}}" style="border-left:none;"><a href="{{pathFor route='product'}}">Product</a></li>
+                                <li class="{{isActiveRoute regex='marketing'}}" style="border-left:none;"><a href="{{pathFor route='marketing'}}">Marketing</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- {{/if}} -->
+</template>
+

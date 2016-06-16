@@ -28,12 +28,35 @@ Router.route('/', {
 
 Router.route('/company', function () {
   if(Meteor.userId()){
-    //if(Companies.findOne({owner: Meteor.userId()})){
-      this.render('company_menu');
-      this.layout('gameLayout');
-    // }else{
-    //   Router.go('/company_creation');
-    // }
+    this.render('game_company');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
+});
+
+Router.route('/team', function () {
+  if(Meteor.userId()){
+    this.render('game_team');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
+});
+
+Router.route('/product', function () {
+  if(Meteor.userId()){
+    this.render('game_product');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
+});
+
+Router.route('/marketing', function () {
+  if(Meteor.userId()){
+    this.render('game_marketing');
+    this.layout('gameLayout');
   }else{
     Router.go('/login');
   }

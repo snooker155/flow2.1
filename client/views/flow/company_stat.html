@@ -23,21 +23,21 @@
 			                </div> -->
 			                <div class="col-md-5">
                                 <h2 class="no-margins">
-                                    {{player.player.username}}
+                                    {{company_name}}
                                 </h2>
-                                <h5><strong><!-- {{player_product}} -->Player_product</strong></h5>
-                                <h5>Level: <strong>{{player.player_level}}</strong></h5>
+                                <!-- <h5><strong>{{player_product}}Player_product</strong></h5> -->
+                                <h5>Level: <strong>{{company_level}}</strong></h5>
                             </div>
                            	<div class="col-md-7">
 	                            <small>Balance</small>
-				                <h2 class="no-margins">$ {{player_balance}}</h2>
+				                <h2 class="no-margins">$ {{company_balance}}</h2>
 			                </div>
                         </div>
                         <div class="row">
                         	<div class="col-md-12">
-                        		<small>Experience: {{player.player_exp}}%</small>
+                        		<small>Experience: {{company_exp}}%</small>
 								<div class="progress progress-mini">
-                                    <div style="width: {{player.player_exp}}%;" class="progress-bar progress-bar-warning"></div>
+                                    <div style="width: {{company_exp}}%;" class="progress-bar progress-bar-warning"></div>
                                 </div>
                         	</div>
                         </div>
@@ -49,20 +49,20 @@
 		                        <tbody>
 		                        <tr>
 		                            <td>
-		                                <strong>{{player_users}}</strong> Users
+		                                <strong>{{company_customers}}</strong> Customers
+		                            </td>
+		                            <td>
+		                            	<strong>{{company_products}}</strong> Products
+		                            </td>
+		                        </tr>
+		                        <!-- <tr>
+		                            <td>
+		                                <strong>{{company_regions}}</strong> Regions
 		                            </td>
 		                            <td>
 		                                <strong>{{player_world_share}}</strong> World Share
 		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <td>
-		                                <strong>{{player_regions}}</strong> Regions
-		                            </td>
-		                            <td>
-		                                <strong>{{player_branches}}</strong> Branches
-		                            </td>
-		                        </tr>
+		                        </tr> -->
 		                        <!-- <tr>
 		                            <td>
 		                                <strong>{{company_partners}}</strong> Partners

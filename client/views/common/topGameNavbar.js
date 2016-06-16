@@ -8,6 +8,12 @@ Template.topGameNavbar.rendered = function(){
 
 };
 
+Template.topGameNavbar.helpers({
+    username(){
+        return Meteor.user().username;
+    },
+});
+
 Template.topGameNavbar.events({
 
     // Toggle left navigation

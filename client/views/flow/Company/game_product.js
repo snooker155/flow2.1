@@ -5,12 +5,12 @@ var features_arrayDep = new Tracker.Dependency();
 
 var n_features_old = new ReactiveVar(0);
 
-var feature_description_name = new ReactiveVar("Choose");
+// var feature_description_name = new ReactiveVar("Choose");
 
-var feature_description = new ReactiveVar("");
+// var feature_description = new ReactiveVar("");
 
-var test_createdAt = new Date();
-var test_progress = new ReactiveVar(0);
+//var test_createdAt = new Date();
+//var test_progress = new ReactiveVar(0);
 
 
 
@@ -28,22 +28,33 @@ Template.game_product.onCreated(function(){
 
 Template.game_product.helpers({
 
+    has_products(){
+        var game = Games.findOne({});
+        game.products.forEach(function (product) {
+            if(product.product_creator = game.companies[Meteor.user().username].company_name){
+                return true;
+            }else{
+                return false;
+            }
+        });;
+    },
+
     features_lists: function(){
-        var features = Feature_lists.find({product_id: Products.findOne({owner: Meteor.userId()})._id});
+        var features = Feature.find({});
         return features;
     },
 
-    product_name: function(){
-        return Products.findOne({owner: Meteor.userId()}).product_name;
-    },
+    // product_name: function(){
+    //     return Products.findOne({owner: Meteor.userId()}).product_name;
+    // },
 
-    feature_description_name: function(){
-        return feature_description_name.get();
-    },
+    // feature_description_name: function(){
+    //     return feature_description_name.get();
+    // },
 
-    feature_description: function(){
-        return feature_description.get();
-    },
+    // feature_description: function(){
+    //     return feature_description.get();
+    // },
 
     feature_completed: function(){
         if(this.progress == 100){
@@ -72,7 +83,7 @@ Template.game_product.helpers({
                 var date = new Date();
                 Meteor.setTimeout(function(){
                     //console.log(((date - createdAt)/(time_to_achieve*basictime)).toFixed(2));
-                    Meteor.call('updateFeatureProgress', id, (progress + ((date - createdAt)/(time_to_achieve*basictime))));
+                    //Meteor.call('updateFeatureProgress', id, (progress + ((date - createdAt)/(time_to_achieve*basictime))));
 
                   },(time_to_achieve*basictime));
                   //},(1000));
@@ -80,7 +91,7 @@ Template.game_product.helpers({
                 return Math.round(progress);
             }
             else {
-                Meteor.call('updateFeatureProgress', id, 100);
+                //Meteor.call('updateFeatureProgress', id, 100);
                 progress = 100;
                 return progress;
             }
@@ -225,11 +236,11 @@ Template.game_product.events({
         var feature_name = this.feature_name;
         var feature = Features.findOne({feature_name: feature_name});
         if (feature){
-            feature_description_name.set(feature.feature_name);
-            feature_description.set(feature.feature_description);
+            // feature_description_name.set(feature.feature_name);
+            // feature_description.set(feature.feature_description);
         }else{
-            feature_description_name.set("Test");
-            feature_description.set("Test");
+            // feature_description_name.set("Test");
+            // feature_description.set("Test");
         }
     },
 
@@ -247,8 +258,8 @@ Template.game_product.events({
             this.neccessary_employees_number = feature.neccessary_employees_number * this.feature_level;
             this.available_employees_number = Employees.findOne({owner: Meteor.userId(), department_name: feature.neccessary_department}).employee_number;
             features_arrayDep.changed();
-            feature_description_name.set(feature.feature_name);
-            feature_description.set(feature.feature_description);
+            // feature_description_name.set(feature.feature_name);
+            // feature_description.set(feature.feature_description);
         }else{
             this.feature_price = 0;
             this.feature_sum = this.feature_price * this.feature_level;
@@ -258,8 +269,8 @@ Template.game_product.events({
             this.neccessary_employees_number = 0;
             this.available_employees_number = 0;
             features_arrayDep.changed();
-            feature_description_name.set("Test");
-            feature_description.set("Test");
+            // feature_description_name.set("Test");
+            // feature_description.set("Test");
         }
     },
 
@@ -267,7 +278,7 @@ Template.game_product.events({
     "click #feature_level_minus": function(event){
             //this.feature_level -= 1;
 
-            Meteor.call('updateFeatureLevel', this._id, this.feature_level -= 1, function (error, result) {});
+            //Meteor.call('updateFeatureLevel', this._id, this.feature_level -= 1, function (error, result) {});
 
             // var obj = {
             //     "feature": "feature_level_down",
@@ -280,7 +291,7 @@ Template.game_product.events({
     "click #feature_level_plus": function(event){
             //this.feature_level += 1;
 
-            Meteor.call('updateFeatureLevel', this._id, this.feature_level += 1, function (error, result) {});
+            //Meteor.call('updateFeatureLevel', this._id, this.feature_level += 1, function (error, result) {});
 
             // var obj = {
             //     "feature": "feature_level_up",
@@ -307,8 +318,8 @@ Template.game_product.events({
 
 
     "click #publish": function(){
-        Meteor.call('publishFeature', this._id, Session.get("game"), function (error, result) {});
-        Meteor.call('updateCompanyExp', this.company_name, 5, function (error, result) {});
+        //Meteor.call('publishFeature', this._id, Session.get("game"), function (error, result) {});
+        //Meteor.call('updateCompanyExp', this.company_name, 5, function (error, result) {});
 
     },
 
@@ -316,13 +327,13 @@ Template.game_product.events({
     "click #create_new_feature": function(event, template){
         event.preventDefault();
 
-        console.log(this.product_id);
-        console.log(features_array[this.id]);
+        //console.log(this.product_id);
+        //console.log(features_array[this.id]);
 
 
         if(template.$("#new_feature"+this.value).valid()){
 
-            Meteor.call('addFeatureList', this.product_id, features_array[this.id], function (error, result) {});
+            //Meteor.call('addFeatureList', this.product_id, features_array[this.id], function (error, result) {});
 
         }
     },
@@ -330,13 +341,13 @@ Template.game_product.events({
     'click #stop': function(event){
         event.preventDefault();
 
-        Meteor.call('stopFeature', this._id, function (error, result) {});        
+        //Meteor.call('stopFeature', this._id, function (error, result) {});        
     },
 
     'click #start': function(event){
         event.preventDefault();
 
-        Meteor.call('startFeature', this._id, function (error, result) {});        
+        //Meteor.call('startFeature', this._id, function (error, result) {});        
     },
 
     'click #delete': function(){
@@ -344,11 +355,11 @@ Template.game_product.events({
 
         var product = Products.findOne({owner: Meteor.userId()});
 
-        Meteor.call('deleteFeatureList', this._id, function (error, result) {
-            if (!Feature_lists.findOne({ product_id: product._id })){
-                Meteor.call('deleteProduct', product._id, function (error, result) {});
-            }
-        });
+        //Meteor.call('deleteFeatureList', this._id, function (error, result) {
+        //     if (!Feature_lists.findOne({ product_id: product._id })){
+        //         Meteor.call('deleteProduct', product._id, function (error, result) {});
+        //     }
+        // });
     },
 
 });

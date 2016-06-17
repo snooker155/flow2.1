@@ -1,7 +1,7 @@
 <template name="game_product">
     <div class="wrapper wrapper-content animated fadeInUp">
         {{>company_menu}}
-        
+        {{#if has_products}}
         <div class="ibox">
             <!-- <div class="ibox-title">
 
@@ -166,5 +166,10 @@
 
             </div>
         </div>
+
+    {{else}}
+        {{>product_registration}}
+    {{/if}}
+    
     </div>
 </template>

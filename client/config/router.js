@@ -37,8 +37,12 @@ Router.route('/company', function () {
 
 Router.route('/team', function () {
   if(Meteor.userId()){
-    this.render('game_team');
-    this.layout('gameLayout');
+    //if(Games.findOne({}).companies[Meteor.user().username]){
+      this.render('game_team');
+      this.layout('gameLayout');
+    // }else{
+    //   Router.go('/company');
+    // }
   }else{
     Router.go('/login');
   }

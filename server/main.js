@@ -60,27 +60,30 @@ Meteor.startup(() => {
 
 
 	Features.insert({
-		feature_name: "Prop_1",
-		time_to_achieve: 15,
+		feature_name: "prop_1",
+		time_to_achieve: 10,
 		feature_price: 250,
 		neccessary_employees_number: 2,
-		neccessary_level: 1,
+		max_feature_level: 3,
+		//neccessary_level: 1,
 	});
 
 	Features.insert({
-		feature_name: "Prop_2",
-		time_to_achieve: 25,
+		feature_name: "prop_2",
+		time_to_achieve: 15,
 		feature_price: 350,
 		neccessary_employees_number: 3,
-		neccessary_level: 1,
+		max_feature_level: 3,
+		//neccessary_level: 1,
 	});
 
 	Features.insert({
-		feature_name: "Prop_3",
-		time_to_achieve: 35,
+		feature_name: "prop_3",
+		time_to_achieve: 20,
 		feature_price: 450,
 		neccessary_employees_number: 4,
-		neccessary_level: 1,
+		max_feature_level: 3,
+		//neccessary_level: 1,
 	});
 
 
@@ -492,6 +495,8 @@ Meteor.startup(() => {
 
 
 
+
+
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -501,6 +506,9 @@ Meteor.startup(() => {
 	   	game.customers.forEach(function (customer) {
 
 	   		customer.makeRelations();
+
+	   		// !!! customer.makeConservatism(); !!! // Doesn't work without this in case of new products
+	  		
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
 

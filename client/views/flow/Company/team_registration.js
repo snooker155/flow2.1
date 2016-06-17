@@ -25,7 +25,7 @@ Template.team_registration.onCreated(function(){
             price_for_employee: price_for_employee,
             employee_number: employee_number,
             max_employee_number: max_employee_number,
-            sum_of_department: price_for_employee * employee_number * 1,
+            employee_number_at_work: 0,
         });
     }
 
@@ -36,9 +36,9 @@ Template.team_registration.onCreated(function(){
 
 
 
-var department_description_name = new ReactiveVar("Choose");
+// var department_description_name = new ReactiveVar("Choose");
 
-var department_description = new ReactiveVar("");
+// var department_description = new ReactiveVar("");
 
 
 
@@ -55,29 +55,41 @@ Template.team_registration.helpers({
     },
 
     new_employee_number_plus_enabled:function(){
-        return this.employee_number<this.max_employee_number?"":"disabled";
+        if(this.department_name != null){
+            return this.employee_number<this.max_employee_number?"":"disabled";
+        }else{
+            return "hidden";
+        }
     },
 
     new_employee_number_minus_enabled:function(){
-        return this.employee_number>0?"":"disabled";
+        if(this.department_name != null){
+            return this.employee_number>0?"":"disabled";
+        }else{
+            return "hidden";
+        }
     },
 
 
-    department_description_name: function(){
-        return department_description_name.get();
-    },
+    // department_description_name: function(){
+    //     return department_description_name.get();
+    // },
 
-    department_description: function(){
-        return department_description.get();
-    },
+    // department_description: function(){
+    //     return department_description.get();
+    // },
 
     sum_of_month: function(){
         var sum = 0;
         employees_arrayDep.depend();
         employees_array.forEach(function (employee) {
-            sum += employee.sum_of_department;
+            sum += employee.employee_number * employee.price_for_employee;
         });
         return sum;
+    },
+
+    sum_of_department(){
+        return this.employee_number * this.price_for_employee;
     },
 
 });
@@ -97,20 +109,20 @@ Template.team_registration.events({
             this.sum_of_department = this.price_for_employee * this.employee_number;
             this.department_name = department.department_name;
             employees_arrayDep.changed();
-            department_description_name.set(department.department_name);
-            department_description.set(department.department_description);
+            // department_description_name.set(department.department_name);
+            // department_description.set(department.department_description);
         }else{
             this.price_for_employee = 0;
             this.sum_of_department = this.price_for_employee * this.employee_number;
             this.department_name = null;
             employees_arrayDep.changed();
-            department_description_name.set("Test");
-            department_description.set("Test");
+            // department_description_name.set("Test");
+            // department_description.set("Test");
         }
 
     },
 
-    'click .new_employee_number_plus': function(event){
+    'click .new_employee_number_plus_form': function(event){
         event.preventDefault();
         var self = this;
         self.employee_number += 1;
@@ -119,7 +131,7 @@ Template.team_registration.events({
 
     },
 
-    'click .new_employee_number_minus': function(){
+    'click .new_employee_number_minus_form': function(){
         this.employee_number -= 1;
         this.sum_of_department = this.price_for_employee * this.employee_number;
         employees_arrayDep.changed();

@@ -7,10 +7,17 @@
                 	<div class="ibox-content">
                         <div class="tabs-container">
                             <ul class="nav nav-pills startup nav-justified">
+                                {{#if has_company}}
                                 <li class="{{isActiveRoute regex='company'}}" style="border-left:none;"><a href="{{pathFor route='company'}}">Company</a></li>
                                 <li class="{{isActiveRoute regex='team'}}" style="border-left:none;"><a href="{{pathFor route='team'}}">Team</a></li>
                                 <li class="{{isActiveRoute regex='product'}}" style="border-left:none;"><a href="{{pathFor route='product'}}">Product</a></li>
                                 <li class="{{isActiveRoute regex='marketing'}}" style="border-left:none;"><a href="{{pathFor route='marketing'}}">Marketing</a></li>
+                                {{else}}
+                                <li class="{{isActiveRoute regex='company'}}" style="border-left:none;"><a href="{{pathFor route='company'}}">Company</a></li>
+                                <li class="disabled" style="border-left:none;"><a href="">Team</a></li>
+                                <li class="disabled" style="border-left:none;"><a href="">Product</a></li>
+                                <li class="disabled" style="border-left:none;"><a href="">Marketing</a></li>
+                                {{/if}}
                             </ul>
                         </div>
                     </div>

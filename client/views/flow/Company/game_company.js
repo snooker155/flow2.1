@@ -5,6 +5,101 @@ Template.game_company.onRendered(function(){
     ////////////////////////////////////////////////////////////////////////////
 
 
+    var data1 = [];
+    var data2 = [];
+
+
+
+            var dataset = [
+                {
+                    label: "Company balance",
+                    data: data1,
+                    color: "#1ab394",
+                    bars: {
+                        show: true,
+                        align: "center",
+                        barWidth: 24 * 60 * 60 * 600,
+                        lineWidth:0
+                    }
+
+                }, {
+                    label: "Company revenue",
+                    data: data2,
+                    yaxis: 2,
+                    color: "#1C84C6",
+                    lines: {
+                        lineWidth:1,
+                            show: true,
+                            fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 0.2
+                            }, {
+                                opacity: 0.4
+                            }]
+                        }
+                    },
+                    splines: {
+                        show: true,
+                        tension: 0.6,
+                        lineWidth: 1,
+                        fill: 0.1
+                    },
+                }
+            ];
+
+    
+
+
+            var options = {
+                xaxis: {
+                    mode: "time",
+                    tickSize: [3, "day"],
+                    tickLength: 0,
+                    axisLabel: "Date",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Arial',
+                    axisLabelPadding: 10,
+                    color: "#d5d5d5"
+                },
+                yaxes: [{
+                    position: "left",
+                    max: 250000,
+                    color: "#d5d5d5",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Arial',
+                    axisLabelPadding: 3
+                }, {
+                    position: "right",
+                    max: 250000,
+                    clolor: "#d5d5d5",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: ' Arial',
+                    axisLabelPadding: 67
+                }
+                ],
+                legend: {
+                    noColumns: 1,
+                    labelBoxBorderColor: "#000000",
+                    position: "nw"
+                },
+                grid: {
+                    hoverable: false,
+                    borderWidth: 0
+                }
+            };
+
+            function gd(year, month, day) {
+                return new Date(year, month - 1, day).getTime();
+            }
+
+            var previousPoint = null, previousLabel = null;
+
+            $.plot($("#customers_revenue_chart"), dataset, options);
+
 
 Tracker.autorun(function () {
     var game = Games.findOne({});
@@ -17,7 +112,6 @@ Tracker.autorun(function () {
             data1.push([gd(2012, 1, company.time_period), company.company_balance]);
             data2.push([gd(2012, 1, company.time_period), company.company_revenue]);
         });
-    }
 
     // console.log(data1);
     // console.log(data2);
@@ -112,6 +206,7 @@ Tracker.autorun(function () {
             var previousPoint = null, previousLabel = null;
 
             $.plot($("#customers_revenue_chart"), dataset, options);
+        }
     });
 
 
@@ -131,7 +226,7 @@ Template.game_company.helpers({
     activities_list: function(){
         var game = Games.findOne({});
         if(game.companies[Meteor.user().username].company_activities){
-            return game.companies[Meteor.user().username].company_activities.slice(game.companies[Meteor.user().username].company_activities.length-5).sort(function(a, b){return b.time_period - a.time_period});
+            return game.companies[Meteor.user().username].company_activities.slice(game.companies[Meteor.user().username].company_activities.length-7).sort(function(a, b){return b.end_time - a.end_time});
         }
     },
 

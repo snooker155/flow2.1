@@ -168,16 +168,26 @@ Template.product_registration.events({
         var product_price = template.$("#product_price").val();
         var product_color = template.$("#product_color").val();
 
-        console.log(product_name);
-        console.log(product_price);
-        console.log(product_color);
-        console.log(features_array);
+        // console.log(product_name);
+        // console.log(product_price);
+        // console.log(product_color);
+        // console.log(features_array);
 
         if(template.$("#product_form").valid()){
 
             features_array.forEach(function (feature) {
                 prop.push({
                     prop_name: feature.feature_name,
+                    id: feature.id,
+                    value: feature.value,
+                    prop_level: feature.feature_level,
+                    max_prop_level: feature.max_feature_level,
+                    prop_price: feature.feature_price,
+                    time_to_achieve: feature.time_to_achieve,
+                    neccessary_employees_number: feature.neccessary_employees_number,
+                    neccessary_department: feature.neccessary_department,
+                    progress: feature.progress,
+
                 })
             });
 
@@ -193,6 +203,10 @@ Template.product_registration.events({
             }
 
             game.products.push(product);
+
+            game.customers.forEach(function (customer) {
+                customer.makeProductConservatism(product)
+            });
 
             Meteor.call('updateGame', game);
 

@@ -30,22 +30,43 @@ Template.game_product.helpers({
 
     has_products(){
         var game = Games.findOne({});
-        game.products.forEach(function (product) {
-            if(product.product_creator = game.companies[Meteor.user().username].company_name){
-                return true;
-            }else{
-                return false;
+        var has_product = false;
+        game.products.forEach(function(product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                has_product = true;
             }
-        });;
+        });
+        return has_product;
+    },
+
+    products(){
+        var game = Games.findOne({});
+        var company_products = [];
+        game.products.forEach(function(product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                company_products.push(product);
+            }
+        });
+        return company_products;
     },
 
     features_lists: function(){
-        var features = Feature.find({});
+        var features = Features.find({});
         return features;
     },
 
     // product_name: function(){
-    //     return Products.findOne({owner: Meteor.userId()}).product_name;
+    //     var game = Games.findOne({});
+    //     var product = null;
+    //     game.products.forEach(function(product) {
+    //         if(product.product_creator == game.companies[Meteor.user().username].company_name){
+    //             product = product;
+    //         }
+    //     });
+    //     if(product){
+    //         console.log(product);
+    //         return product.product_name;
+    //     }
     // },
 
     // feature_description_name: function(){
@@ -56,55 +77,55 @@ Template.game_product.helpers({
     //     return feature_description.get();
     // },
 
-    feature_completed: function(){
-        if(this.progress == 100){
-            return true;
-        }else{
-            return false;
-        }
-    },
+    // feature_completed: function(){
+    //     if(this.progress == 100){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+    // },
 
-    progress_value: function(){
-      var progress = this.progress;
-      if (this.updated_time != 0){
-        var createdAt = this.updated_time;
-      }else{
-         var createdAt = this.createdAt;
-      }
-      var id = this._id;
-      var time_to_achieve = this.time_to_achieve;
-      var basictime = 100;
-      if(this.is_stop){
-        return Math.round(progress);
-      }else{
-        if (progress !== 100){
-            if(progress < 100){
-                //console.log('progress_start');
-                var date = new Date();
-                Meteor.setTimeout(function(){
-                    //console.log(((date - createdAt)/(time_to_achieve*basictime)).toFixed(2));
-                    //Meteor.call('updateFeatureProgress', id, (progress + ((date - createdAt)/(time_to_achieve*basictime))));
+    // progress_value: function(){
+    //   var progress = this.progress;
+    //   if (this.updated_time != 0){
+    //     var createdAt = this.updated_time;
+    //   }else{
+    //      var createdAt = this.createdAt;
+    //   }
+    //   var id = this._id;
+    //   var time_to_achieve = this.time_to_achieve;
+    //   var basictime = 100;
+    //   if(this.is_stop){
+    //     return Math.round(progress);
+    //   }else{
+    //     if (progress !== 100){
+    //         if(progress < 100){
+    //             //console.log('progress_start');
+    //             var date = new Date();
+    //             Meteor.setTimeout(function(){
+    //                 //console.log(((date - createdAt)/(time_to_achieve*basictime)).toFixed(2));
+    //                 //Meteor.call('updateFeatureProgress', id, (progress + ((date - createdAt)/(time_to_achieve*basictime))));
 
-                  },(time_to_achieve*basictime));
-                  //},(1000));
-                //console.log('progress_end');
-                return Math.round(progress);
-            }
-            else {
-                //Meteor.call('updateFeatureProgress', id, 100);
-                progress = 100;
-                return progress;
-            }
-        }else{
-            return progress;
-        }
-      }
-    },
+    //               },(time_to_achieve*basictime));
+    //               //},(1000));
+    //             //console.log('progress_end');
+    //             return Math.round(progress);
+    //         }
+    //         else {
+    //             //Meteor.call('updateFeatureProgress', id, 100);
+    //             progress = 100;
+    //             return progress;
+    //         }
+    //     }else{
+    //         return progress;
+    //     }
+    //   }
+    // },
 
 
-    progress_bar_value: function(){
-        return Math.round(this.progress);
-    },
+    // progress_bar_value: function(){
+    //     return Math.round(this.progress);
+    // },
 
 
 
@@ -130,8 +151,8 @@ Template.game_product.helpers({
 
 
 
-    feature_sum: function(){
-        return this.feature_price * this.feature_level;
+    prop_sum: function(){
+        return this.prop_price * this.prop_level;
     },
 
     new_level: function(){
@@ -146,57 +167,65 @@ Template.game_product.helpers({
         return this.is_published;
     },
 
-    new_features_lists: function(){
+    // new_features_lists: function(){
+    //     var game = Games.findOne({});
+    //     var company = game.comapnies[Meteor.user().username];
+    //     var product = false;
+    //     game.products.forEach(function(product) {
+    //         console.log(product.product_creator == game.companies[Meteor.user().username].company_name);
+    //         if(product.product_creator == game.companies[Meteor.user().username].company_name){
+    //             product = product;
+    //         }
+    //     });
+    //     if (Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count() > 0 ){
+    //          var n = Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count();
+    //     }else{
+    //         var n = 0;
+    //     }
+    //     if(n_features_old.get() != n){
+    //         features_array = [];
+    //         var feature_price = 0;
+    //         var feature_level = 1;
+    //         var max_feature_level = 10;
+    //         var time_to_achieve = 0;
+    //         var progress = 0;
+    //         var neccessary_employees_number = 0;
+    //         var available_employees_number = 0;
+    //         for (i=0; i<n; i++){
+    //             features_array.push({
+    //                 id: i,
+    //                 value: i+1,
+    //                 company_name: company.company_name,
+    //                 product_id: product.product_id,
+    //                 feature_name: null,
+    //                 feature_level: feature_level,
+    //                 max_feature_level: max_feature_level,
+    //                 feature_price: feature_price,
+    //                 time_to_achieve: time_to_achieve,
+    //                 neccessary_employees_number: neccessary_employees_number,
+    //                 available_employees_number: available_employees_number,
+    //                 progress: progress,
+    //                 feature_sum: feature_price * feature_level,
+    //             });
+    //         }
+    //         n_features_old.set(n);
+    //     }
+    //     //console.log(features_array);
+    //     features_arrayDep.depend();
+    //     return features_array;
+    // },
 
-        var company = Companies.findOne({owner: Meteor.userId()});
-        if (Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count() > 0 ){
-             var n = Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count();
-        }else{
-            var n = 0;
-        }
-        if(n_features_old.get() != n){
-            features_array = [];
-            var feature_price = 0;
-            var feature_level = 1;
-            var max_feature_level = 10;
-            var time_to_achieve = 0;
-            var progress = 0;
-            var neccessary_employees_number = 0;
-            var available_employees_number = 0;
-            for (i=0; i<n; i++){
-                features_array.push({
-                    id: i,
-                    value: i+1,
-                    company_name: company.company_name,
-                    product_id: Products.findOne({owner: Meteor.userId()})._id,
-                    feature_name: null,
-                    feature_level: feature_level,
-                    max_feature_level: max_feature_level,
-                    feature_price: feature_price,
-                    time_to_achieve: time_to_achieve,
-                    neccessary_employees_number: neccessary_employees_number,
-                    available_employees_number: available_employees_number,
-                    progress: progress,
-                    feature_sum: feature_price * feature_level,
-                });
-            }
-            n_features_old.set(n);
-        }
-        //console.log(features_array);
-        features_arrayDep.depend();
-        return features_array;
-    },
 
-
-    features: function(){
-        var company = Companies.findOne({owner: Meteor.userId()});
-        var features = [];
-        var feature_lists = Feature_lists.find({owner: Meteor.userId()});
-        feature_lists.forEach(function (feature_list) {
-            features.push(feature_list.feature_name);
-        });
-        return Features.find({feature_name: {$nin: features}});
-    },
+    // features: function(){
+    //     var game = Games.findOne({});
+    //     var company = game.comapnies[Meteor.user().username];
+    //     var features = [];
+    //     var feature_lists = Features.find({owner: Meteor.userId()});
+    //     feature_lists.forEach(function (feature_list) {
+    //         features.push(feature_list.feature_name);
+    //     });
+    //     return Features.find({feature_name: {$nin: features}});
+    // },
 
 
     feature_level_increase_enabled:function(){
@@ -231,18 +260,36 @@ Template.game_product.helpers({
 
 
 Template.game_product.events({
-    "click #feature_row": function(){
+
+    "click #delete_product": function(event){
         event.preventDefault();
-        var feature_name = this.feature_name;
-        var feature = Features.findOne({feature_name: feature_name});
-        if (feature){
-            // feature_description_name.set(feature.feature_name);
-            // feature_description.set(feature.feature_description);
-        }else{
-            // feature_description_name.set("Test");
-            // feature_description.set("Test");
-        }
+
+        var game = Games.findOne({});
+
+        var count = 0;
+
+        game.products.forEach(function (product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                game.products.splice(count, 1);
+            }
+            count++;
+        });
+
+        Meteor.call('updateGame', game);
     },
+
+    // "click #feature_row": function(){
+    //     event.preventDefault();
+    //     var feature_name = this.feature_name;
+    //     var feature = Features.findOne({feature_name: feature_name});
+    //     if (feature){
+    //         feature_description_name.set(feature.feature_name);
+    //         feature_description.set(feature.feature_description);
+    //     }else{
+    //         feature_description_name.set("Test");
+    //         feature_description.set("Test");
+    //     }
+    // },
 
 
     'change #feature_name': function(event, template){

@@ -50,8 +50,12 @@ Router.route('/team', function () {
 
 Router.route('/product', function () {
   if(Meteor.userId()){
-    this.render('game_product');
-    this.layout('gameLayout');
+    //if(Games.findOne({}).companies[Meteor.user().username]){
+      this.render('game_product');
+      this.layout('gameLayout');
+    // }else{
+    //   Router.go('/company');
+    // }
   }else{
     Router.go('/login');
   }
@@ -59,8 +63,12 @@ Router.route('/product', function () {
 
 Router.route('/marketing', function () {
   if(Meteor.userId()){
-    this.render('game_marketing');
-    this.layout('gameLayout');
+    //if(Games.findOne({}).companies[Meteor.user().username]){
+      this.render('game_marketing');
+      this.layout('gameLayout');
+    // }else{
+    //   Router.go('/company');
+    // }
   }else{
     Router.go('/login');
   }

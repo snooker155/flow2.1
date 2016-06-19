@@ -449,7 +449,7 @@ Meteor.startup(() => {
 	    	
 	    customer.makeRelations();
 
-	    customer.makeConservatism();
+	    customer.setInitConservatism();
 
 	    console.log('Initializing: Relations:' + n +' of '+ game.customers.length);
 	    n++;

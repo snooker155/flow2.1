@@ -28,7 +28,7 @@ Template.company_stat.helpers({
     	var game = Games.findOne({});
     	var customers_number = 0;
     	game.customers.forEach(function (customer) {
-    		if(customer.customer_product.product_creator == game.companies[Meteor.user().username].company_name){
+    		if(customer.customer_product && customer.customer_product.product_creator == game.companies[Meteor.user().username].company_name){
 				customers_number++;
     		}
     	});

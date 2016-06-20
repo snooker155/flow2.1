@@ -226,7 +226,7 @@ Template.game_company.helpers({
     activities_list: function(){
         var game = Games.findOne({});
         if(game.companies[Meteor.user().username].company_activities){
-            return game.companies[Meteor.user().username].company_activities.slice(game.companies[Meteor.user().username].company_activities.length-7).sort(function(a, b){return b.end_time - a.end_time});
+            return game.companies[Meteor.user().username].company_activities.slice(game.companies[Meteor.user().username].company_activities.length-10).sort(function(a, b){return b.start_time - a.start_time});
         }
     },
 

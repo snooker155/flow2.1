@@ -144,14 +144,20 @@ Template.game_product.helpers({
     // },
 
 
-    // test_progress_bar: function(){
-    //     return Math.round(test_progress.get());
+    // production_progress: function(){
+    //     var game = Games.findOne({});
+    //     var self = this;
+    //     if((game.time_period - self.start_period) / self.time_to_achieve > 1){
+    //         return 100;
+    //     }else{ 
+    //         return Math.round((game.time_period - self.start_period) / self.time_to_achieve * 100);
+    //     }
     // },
 
 
 
 
-    prop_sum: function(){
+    prop_costs: function(){
         return this.prop_price * this.prop_level;
     },
 
@@ -163,9 +169,11 @@ Template.game_product.helpers({
         }
     },
 
-    is_published: function(){
-        return this.is_published;
-    },
+
+
+    // is_published: function(){
+    //     return this.is_published;
+    // },
 
     // new_features_lists: function(){
     //     var game = Games.findOne({});
@@ -229,30 +237,30 @@ Template.game_product.helpers({
 
 
     feature_level_increase_enabled:function(){
-        return this.feature_level<this.max_feature_level?"":"disabled";
+        return this.prop_level<this.max_prop_level?"":"disabled";
     },
 
     feature_level_decrease_enabled:function(){
-        return this.feature_level>0?"":"disabled";
+        return this.prop_level>0?"":"disabled";
     },
 
 
     new_feature_level_increase_enabled:function(){
-        return this.feature_level<this.max_feature_level?"":"disabled";
+        return this.prop_level<this.max_prop_level?"":"disabled";
     },
 
     new_feature_level_decrease_enabled:function(){
-        return this.feature_level>0?"":"disabled";
+        return this.prop_level>0?"":"disabled";
     },
 
 
-    is_stop: function(){
-        return this.is_stop;
-    },
+    // is_stop: function(){
+    //     return this.is_stop;
+    // },
 
-    not_first_level: function(){
-        return this.feature_level !== 1? true: false;
-    },
+    // not_first_level: function(){
+    //     return this.feature_level !== 1? true: false;
+    // },
 
 
 });
@@ -322,91 +330,105 @@ Template.game_product.events({
     },
 
 
-    "click #feature_level_minus": function(event){
-            //this.feature_level -= 1;
-
-            //Meteor.call('updateFeatureLevel', this._id, this.feature_level -= 1, function (error, result) {});
-
-            // var obj = {
-            //     "feature": "feature_level_down",
-            //     "value": this.feature_level
-            // };
-            // //Communication.send('company_change', obj);
-            // console.log(obj);
-    },
-
     "click #feature_level_plus": function(event){
-            //this.feature_level += 1;
+        var self =  this;
+        //console.log(self);
+        var game = Games.findOne({});
+        var selected_product = null;
 
-            //Meteor.call('updateFeatureLevel', this._id, this.feature_level += 1, function (error, result) {});
+        game.products.forEach(function (product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                selected_product = product;
+            }
+        });
 
-            // var obj = {
-            //     "feature": "feature_level_up",
-            //     "value": this.feature_level
-            // };
-            // //Communication.send('company_change', obj);
-            // console.log(obj);
+        selected_product.prop.forEach(function (property) {
+            if(property.id == self.id){
+                property.prop_level += 1;
+                property.progress = 0;
+                property.start_period = game.time_period;
+                selected_product.product_status = "In production";
+            }
+        });
+
+        //console.log(self);
+
+        Meteor.call('updateGame', game);
     },
 
 
-    "click #new_feature_level_decrease": function(event){
-        this.feature_level -= 1;
-        this.feature_sum = this.feature_price * this.feature_level;
-        this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number * this.feature_level;
-        features_arrayDep.changed();
-    },
+    // "click #new_feature_level_decrease": function(event){
+    //     this.feature_level -= 1;
+    //     this.feature_sum = this.feature_price * this.feature_level;
+    //     this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number * this.feature_level;
+    //     features_arrayDep.changed();
+    // },
 
-    "click #new_feature_level_increase": function(event){
-        this.feature_level += 1;
-        this.feature_sum = this.feature_price * this.feature_level;
-        this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number  * this.feature_level;
-        features_arrayDep.changed();
-    },
-
-
-    "click #publish": function(){
-        //Meteor.call('publishFeature', this._id, Session.get("game"), function (error, result) {});
-        //Meteor.call('updateCompanyExp', this.company_name, 5, function (error, result) {});
-
-    },
+    // "click #new_feature_level_increase": function(event){
+    //     this.feature_level += 1;
+    //     this.feature_sum = this.feature_price * this.feature_level;
+    //     this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number  * this.feature_level;
+    //     features_arrayDep.changed();
+    // },
 
 
-    "click #create_new_feature": function(event, template){
+    // "click #publish": function(){
+    //     //Meteor.call('publishFeature', this._id, Session.get("game"), function (error, result) {});
+    //     //Meteor.call('updateCompanyExp', this.company_name, 5, function (error, result) {});
+
+    // },
+
+
+    // "click #create_new_feature": function(event, template){
+    //     event.preventDefault();
+
+    //     //console.log(this.product_id);
+    //     //console.log(features_array[this.id]);
+
+
+    //     if(template.$("#new_feature"+this.value).valid()){
+
+    //         //Meteor.call('addFeatureList', this.product_id, features_array[this.id], function (error, result) {});
+
+    //     }
+    // },
+
+    // 'click #stop': function(event){
+    //     event.preventDefault();
+
+    //     //Meteor.call('stopFeature', this._id, function (error, result) {});        
+    // },
+
+    // 'click #start': function(event){
+    //     event.preventDefault();
+
+    //     //Meteor.call('startFeature', this._id, function (error, result) {});        
+    // },
+
+    'click #delete_prop': function(){
         event.preventDefault();
+        var self = this;
 
-        //console.log(this.product_id);
-        //console.log(features_array[this.id]);
+        var game = Games.findOne({});
+
+        var count = 0;
+        var selected_product = null;
+
+        game.products.forEach(function (product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                selected_product = product;
+            }
+        });
+
+        selected_product.prop.forEach(function (property) {
+            if(property.id == self.id){
+                selected_product.prop.splice(count, 1);
+            }
+            count++;
+        });
 
 
-        if(template.$("#new_feature"+this.value).valid()){
-
-            //Meteor.call('addFeatureList', this.product_id, features_array[this.id], function (error, result) {});
-
-        }
-    },
-
-    'click #stop': function(event){
-        event.preventDefault();
-
-        //Meteor.call('stopFeature', this._id, function (error, result) {});        
-    },
-
-    'click #start': function(event){
-        event.preventDefault();
-
-        //Meteor.call('startFeature', this._id, function (error, result) {});        
-    },
-
-    'click #delete': function(){
-        event.preventDefault();
-
-        var product = Products.findOne({owner: Meteor.userId()});
-
-        //Meteor.call('deleteFeatureList', this._id, function (error, result) {
-        //     if (!Feature_lists.findOne({ product_id: product._id })){
-        //         Meteor.call('deleteProduct', product._id, function (error, result) {});
-        //     }
-        // });
+        Meteor.call('updateGame', game);
     },
 
 });

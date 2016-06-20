@@ -136,7 +136,6 @@ Template.company_registration.events({
                 status: "Complete",
                 title: "Company created",
                 start_time: game.time_period,
-                end_time: game.time_period,
                 comments: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
             });
 

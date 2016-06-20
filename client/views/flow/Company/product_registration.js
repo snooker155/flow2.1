@@ -68,7 +68,7 @@ Template.product_registration.helpers({
         return Features.find({});
     },
 
-    feature_sum(){
+    feature_costs(){
         return this.feature_price * this.feature_level;
     },
 
@@ -175,21 +175,29 @@ Template.product_registration.events({
 
         if(template.$("#product_form").valid()){
 
-            features_array.forEach(function (feature) {
-                prop.push({
-                    prop_name: feature.feature_name,
-                    id: feature.id,
-                    value: feature.value,
-                    prop_level: feature.feature_level,
-                    max_prop_level: feature.max_feature_level,
-                    prop_price: feature.feature_price,
-                    time_to_achieve: feature.time_to_achieve,
-                    neccessary_employees_number: feature.neccessary_employees_number,
-                    neccessary_department: feature.neccessary_department,
-                    progress: feature.progress,
 
-                })
+
+            features_array.forEach(function (feature) {
+                if(company.has_department(feature.neccessary_department) && company.has_employees_number(feature.neccessary_department, feature.neccessary_employees_number)){
+                    prop.push({
+                        prop_name: feature.feature_name,
+                        id: feature.id,
+                        value: feature.value,
+                        prop_level: feature.feature_level,
+                        max_prop_level: feature.max_feature_level,
+                        prop_price: feature.feature_price,
+                        time_to_achieve: feature.time_to_achieve,
+                        neccessary_employees_number: feature.neccessary_employees_number,
+                        neccessary_department: feature.neccessary_department,
+                        progress: feature.progress,
+                        start_period: game.time_period,
+                    })
+                }else{
+                    alert("Not enougth resources");
+                }
             });
+
+
 
             product = {
                 product_id: game.products[game.products.length - 1].product_id + 1,
@@ -200,6 +208,7 @@ Template.product_registration.events({
                 prop: prop,
                 product_quantity: 75,
                 product_creator: company.company_name,
+                product_status: "In production",
             }
 
             game.products.push(product);
@@ -207,6 +216,15 @@ Template.product_registration.events({
             game.customers.forEach(function (customer) {
                 customer.makeProductConservatism(product)
             });
+
+
+            company.company_activities.push({
+                status: "In production",
+                title: "Product has gone in production",
+                start_time: game.time_period,
+                comments: "Product "+product_name+" has gone in production.",
+            });
+
 
             Meteor.call('updateGame', game);
 

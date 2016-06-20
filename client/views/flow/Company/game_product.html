@@ -8,17 +8,22 @@
             <div class="ibox-content">
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <h2>
+                    <div class="col-md-3">
+                        <h3>
                             Product name: <strong style="color: {{product_color}}">{{product_name}}</strong>
-                        </h2>
+                        </h3>
                     </div>
-                    <div class="col-md-4">
-                        <h2>
+                    <div class="col-md-3">
+                        <h3>
                             Product price: <strong>$ {{product_price}}</strong>
-                        </h2>
+                        </h3>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <h3>
+                            Product status: <strong>{{product_status}}</strong>
+                        </h3>
+                    </div>
+                    <div class="col-md-3">
                         <a href="#" id="delete_product" class="btn btn-xs btn-danger">Delete product</a>
                     </div>
                 </div>
@@ -33,11 +38,12 @@
                         <thead>
                             <tr>
                                 <th style="width:15%;">Feature</th>
-                                <th style="width:10%;">Time to achieve</th>
+                                <th style="width:10%;">Production</th>
+                                <th style="width:5%;">Department</th>
                                 <th style="width:5%;">Employees</th>
-                                <th style="width:10%;">Feature price</th>
-                                <th style="width:10%;">Feature sum</th>
-                                <th style="width:20%;">Level progress</th>
+                                <th style="width:10%;">Prop price</th>
+                                <th style="width:10%;">Prop costs</th>
+                                <th style="width:20%;">Production progress</th>
                                 <th style="width:15%;" class="text-center">Level</th>
                                 <th style="width:15%;" class="project-actions">Actions</th>
                             </tr>
@@ -55,7 +61,10 @@
                                         {{prop_name}}
                                     </td>
                                     <td class="project-title">
-                                        {{time_to_achieve}} sec
+                                        {{time_to_achieve}} periods
+                                    </td>
+                                    <td class="project-title">
+                                        {{neccessary_department}}
                                     </td>
                                     <td class="project-title">
                                         {{neccessary_employees_number}}
@@ -64,7 +73,7 @@
                                         ${{prop_price}}
                                     </td>
                                     <td class="project-title">
-                                        ${{prop_sum}}
+                                        ${{prop_costs}}
                                     </td>
                                     <td class="project-completion">
                                         <small>Completion with: {{progress}}%</small>
@@ -95,16 +104,16 @@
                                                 <button class="btn btn-success btn-xs" id="publish">Publish</button>
                                             {{/if}}
                                         {{else}} -->
-                                            {{#if is_stop}}
+                                            <!-- {{#if is_stop}}
                                                 {{#if not_first_level}}
                                                     <button class="btn btn-warning btn-xs" id="reject">Reject</button>
                                                 {{/if}}
                                                 <button class="btn btn-primary btn-xs" id="start">Start</button>
                                             {{else}}
                                                 <button class="btn btn-warning btn-xs" id="stop">Stop</button>
-                                            {{/if}}
+                                            {{/if}}-->
                                         <!-- {{/if}} -->
-                                            <button class="btn btn-danger btn-xs" id="delete">Delete</button>
+                                            <button class="btn btn-danger btn-xs" id="delete_prop">Delete</button>
                                     </td>
                                 </tr>
                             {{/each}}

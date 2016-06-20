@@ -154,7 +154,6 @@ Template.team_registration.events({
                 status: "Complete",
                 title: "Team has formed",
                 start_time: game.time_period,
-                end_time: game.time_period,
                 comments: "Company "+company.company_name+" successfully formed the team.",
             });
 

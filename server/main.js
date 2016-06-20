@@ -61,27 +61,30 @@ Meteor.startup(() => {
 
 	Features.insert({
 		feature_name: "prop_1",
-		time_to_achieve: 10,
+		time_to_achieve: 5,
 		feature_price: 250,
 		neccessary_employees_number: 2,
+		neccessary_department: "Support",
 		max_feature_level: 3,
 		//neccessary_level: 1,
 	});
 
 	Features.insert({
 		feature_name: "prop_2",
-		time_to_achieve: 15,
+		time_to_achieve: 7,
 		feature_price: 350,
 		neccessary_employees_number: 3,
+		neccessary_department: "Design",
 		max_feature_level: 3,
 		//neccessary_level: 1,
 	});
 
 	Features.insert({
 		feature_name: "prop_3",
-		time_to_achieve: 20,
+		time_to_achieve: 10,
 		feature_price: 450,
 		neccessary_employees_number: 4,
+		neccessary_department: "Technology",
 		max_feature_level: 3,
 		//neccessary_level: 1,
 	});
@@ -103,6 +106,8 @@ Meteor.startup(() => {
 			//{prop_name: "prop_2"},
 		],
 		product_quantity: 100,
+		product_creator: "Bot",
+        product_status: "Completed",
 	});
 
 	Products.insert({
@@ -116,36 +121,42 @@ Meteor.startup(() => {
 			{prop_name: "prop_2"},
 		],
 		product_quantity: 75,
+		product_creator: "Bot",
+        product_status: "Completed",
 	});
 
 
-	Products.insert({
-		product_id: 3,
-		product_name: "Prod " + 3,
-		product_price: 12,
-		product_color: "magenta",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_2"},
-			{prop_name: "prop_3"},
-		],
-		product_quantity: 50,
-	});
+	// Products.insert({
+	// 	product_id: 3,
+	// 	product_name: "Prod " + 3,
+	// 	product_price: 12,
+	// 	product_color: "magenta",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_2"},
+	// 		{prop_name: "prop_3"},
+	// 	],
+	// 	product_quantity: 50,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+	// });
 
 
-	Products.insert({
-		product_id: 4,
-		product_name: "Prod " + 4,
-		product_price: 20,
-		product_color: "pink",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1"},
-			{prop_name: "prop_2"},
-			{prop_name: "prop_3"},
-		],
-		product_quantity: 25,
-	});
+	// Products.insert({
+	// 	product_id: 4,
+	// 	product_name: "Prod " + 4,
+	// 	product_price: 20,
+	// 	product_color: "pink",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_1"},
+	// 		{prop_name: "prop_2"},
+	// 		{prop_name: "prop_3"},
+	// 	],
+	// 	product_quantity: 25,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+	// });
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -339,6 +350,8 @@ Meteor.startup(() => {
 			//product_quality: product.,
 			prop: product.prop,
 			product_quantity: product.product_quantity,
+			product_creator: product.product_creator,
+        	product_status: product.product_status,
 		});
 
 	});
@@ -367,14 +380,14 @@ Meteor.startup(() => {
 				customer_conservatism: null,
 				customer_product_conservatism: {},
 				customer_income: new_customer_income,
-				//customer_pref: 0.5,
+				customer_pref: 3,
 				//customer_activity: Math.round(Math.random() + 0.4),
 				customer_activity: 1,
 				customer_product: "",
 				//customer_product_quantity: 0,
 				customer_neighbors: [],
 				//customer_adv: 0,
-				//customer_history: 0,
+				//customer_history: [],
 				needed: [
 					{
 						value: 0, 
@@ -540,6 +553,39 @@ Meteor.startup(() => {
 	   	var game_new = Games.findOne({});
 
 	   	game_new.setCompaniesHistory();
+
+
+	    game.products.forEach(function (product) {
+	   		var prop_finished = 0;
+	   		var company = null;
+	   		if(product.product_status == "In production"){
+	   			product.prop.forEach(function (property) {
+	   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
+			            property.progress = 100;
+			            prop_finished++;
+			        }else{ 
+			            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
+			        }
+	   			});
+	   		}
+
+	   		if(prop_finished == product.prop.length){
+	   			product.product_status = "Completed";
+
+	   			for(var company in game_new.companies){
+	   				if(game_new.companies[company].company_name == product.product_creator){
+	   					company = game_new.companies[company]
+	   				}
+	   			}
+
+	   			company.company_activities.push({
+		           status: "Complete",
+		           title: "Product development has been finished",
+		           start_time: game.time_period,
+		           comments: "Product "+product.product_name+" has been developed.",
+		        });
+	   		}
+	   	});
 
 
 	   	Games.update(game._id,{

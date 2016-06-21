@@ -36,18 +36,18 @@ Meteor.startup(() => {
 
 	Departments.insert({
 		department_name: "Technology",
-		employee_price: 200,
+		employee_price: 100,
 	});
 
 
 	Departments.insert({
 		department_name: "Design",
-		employee_price: 150,
+		employee_price: 50,
 	});
 
 	Departments.insert({
 		department_name: "Support",
-		employee_price: 100,
+		employee_price: 20,
 	});
 
 
@@ -108,6 +108,7 @@ Meteor.startup(() => {
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
+        product_regions: ["AF", "OR", "IN"],
 	});
 
 	Products.insert({
@@ -123,47 +124,50 @@ Meteor.startup(() => {
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
+        product_regions: ["NA", "SA", "CA"],
 	});
 
 
-	// Products.insert({
-	// 	product_id: 3,
-	// 	product_name: "Prod " + 3,
-	// 	product_price: 12,
-	// 	product_color: "magenta",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_2"},
-	// 		{prop_name: "prop_3"},
-	// 	],
-	// 	product_quantity: 50,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
-	// });
+	Products.insert({
+		product_id: 3,
+		product_name: "Prod " + 3,
+		product_price: 12,
+		product_color: "magenta",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_2"},
+			{prop_name: "prop_3"},
+		],
+		product_quantity: 50,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AS", "SP", "IN"],
+	});
 
 
-	// Products.insert({
-	// 	product_id: 4,
-	// 	product_name: "Prod " + 4,
-	// 	product_price: 20,
-	// 	product_color: "pink",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_1"},
-	// 		{prop_name: "prop_2"},
-	// 		{prop_name: "prop_3"},
-	// 	],
-	// 	product_quantity: 25,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
-	// });
+	Products.insert({
+		product_id: 4,
+		product_name: "Prod " + 4,
+		product_price: 20,
+		product_color: "pink",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1"},
+			{prop_name: "prop_2"},
+			{prop_name: "prop_3"},
+		],
+		product_quantity: 25,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["CE", "NE", "RU"],
+	});
 
 
 	//////////////////////////////////////////////////////////////////////
 	//////////////////  REGIONS  /////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
-	var PEOPLE_BASE = 5;
+	var PEOPLE_BASE = 30;
 
   	Regions.insert({
 		region_id: "CE",
@@ -352,6 +356,7 @@ Meteor.startup(() => {
 			product_quantity: product.product_quantity,
 			product_creator: product.product_creator,
         	product_status: product.product_status,
+        	product_regions: product.product_regions,
 		});
 
 	});
@@ -510,6 +515,8 @@ Meteor.startup(() => {
 
 
 
+
+
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -518,9 +525,7 @@ Meteor.startup(() => {
 
 	   	game.customers.forEach(function (customer) {
 
-	   		customer.makeRelations();
-
-	   		// !!! customer.makeConservatism(); !!! // Doesn't work without this in case of new products
+	   		//customer.makeRelations();
 	  		
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
@@ -552,12 +557,10 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
-	   	game_new.setCompaniesHistory();
-
 
 	    game.products.forEach(function (product) {
 	   		var prop_finished = 0;
-	   		var company = null;
+	   		var target_company = null;
 	   		if(product.product_status == "In production"){
 	   			product.prop.forEach(function (property) {
 	   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
@@ -574,18 +577,37 @@ Meteor.startup(() => {
 
 	   			for(var company in game_new.companies){
 	   				if(game_new.companies[company].company_name == product.product_creator){
-	   					company = game_new.companies[company]
+	   					target_company = game_new.companies[company]
 	   				}
 	   			}
 
-	   			company.company_activities.push({
+	   			target_company.company_team.forEach(function (dep) {
+	   				dep.employee_number_at_work = 0;
+	   			});
+
+	   			target_company.company_activities.push({
 		           status: "Complete",
 		           title: "Product development has been finished",
 		           start_time: game.time_period,
 		           comments: "Product "+product.product_name+" has been developed.",
 		        });
+
+		        game.news.push({
+                    time_period: game.time_period,
+                    type: "user", /////Types: usd, newspaper-o, user, warning
+                    header: "New product has been released",
+                    text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
+                });
 	   		}
 	   	});
+
+
+		for(var company in game_new.companies){
+			game_new.companies[company].changeCompanyBalance(game);
+		}
+
+
+		game_new.setCompaniesHistory();
 
 
 	   	Games.update(game._id,{
@@ -606,7 +628,7 @@ Meteor.startup(() => {
 
 	   	console.log("-------------------------------   END   ----------------------------------");
 
-	}, 30000);
+	}, 10000);
 
 
 });

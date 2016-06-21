@@ -31,17 +31,22 @@ Template.bottom_control.helpers({
             }
         });
 
-        products.push({
-            product_name: "Free",
-            product_color: "lightblue",
-            product_share: Math.floor(free_share / game.customers.length * 100),
-        });
+        if(free_share > 0 && Math.floor(free_share / game.customers.length * 100) > 0){
+            products.push({
+                product_name: "Free",
+                product_color: "lightblue",
+                product_share: Math.floor(free_share / game.customers.length * 100),
+            });
+        }
 
-        products.push({
-            product_name: "Inactive",
-            product_color: "red",
-            product_share: Math.floor(inactive_share / game.customers.length * 100),
-        });
+        if(inactive_share > 0 && Math.floor(inactive_share / game.customers.length * 100) > 0){
+            products.push({
+                product_name: "Inactive",
+                product_color: "red",
+                product_share: Math.floor(inactive_share / game.customers.length * 100),
+            });
+        }
+
         return products;
     },
 

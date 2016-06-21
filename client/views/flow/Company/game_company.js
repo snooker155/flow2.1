@@ -65,7 +65,7 @@ Template.game_company.onRendered(function(){
                 },
                 yaxes: [{
                     position: "left",
-                    max: 250000,
+                    max: 30000,
                     color: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -73,7 +73,7 @@ Template.game_company.onRendered(function(){
                     axisLabelPadding: 3
                 }, {
                     position: "right",
-                    max: 250000,
+                    max: 2500,
                     clolor: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -113,7 +113,7 @@ Tracker.autorun(function () {
             data2.push([gd(2012, 1, company.time_period), company.company_revenue]);
         });
 
-    // console.log(data1);
+    //console.log(data1);
     // console.log(data2);
 
 
@@ -172,7 +172,7 @@ Tracker.autorun(function () {
                 },
                 yaxes: [{
                     position: "left",
-                    max: 250000,
+                    max: 30000,
                     color: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -180,7 +180,7 @@ Tracker.autorun(function () {
                     axisLabelPadding: 3
                 }, {
                     position: "right",
-                    max: 250000,
+                    max: 2500,
                     clolor: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -269,8 +269,17 @@ Template.game_company.helpers({
 
     company_product: function(){
         var game = Games.findOne({});
-        if (game.companies[Meteor.user().username].company_product_name){
-            return game.companies[Meteor.user().username].company_product_name;
+        var company = game.companies[Meteor.user().username];
+        var company_product = null;
+        game.products.forEach(function (product) {
+            if(product.product_creator == company.company_name){
+                company_product = product;
+            }
+        });
+
+
+        if (company_product){
+            return company_product.product_name;
         }else{
             return "No product yet";
         }
@@ -306,31 +315,49 @@ Template.game_company.helpers({
 
     users_in_period_ratio(){
         var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
         var users_in_period = 0;
-        return Math.floor(game.companies[Meteor.user().username].getUsers(game) / game.customers.length * 100);
+        if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_users != 0){
+            return Math.floor(company.getUsers(game) / company.company_history[company.company_history.length - 2].company_users * 100);
+        }else{
+            return 0;
+        }
     },
 
     revenue_in_period_ratio(){
         var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
         var total_active_revenue = 0;
         var total_revenue = 0;
         game.customers.forEach(function (customer) {
             total_revenue += customer.customer_income;
         });
-
-        return Math.floor(game.companies[Meteor.user().username].getRevenue(game) / total_revenue * 100);
+        if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_revenue != 0){
+            return Math.floor(company.getRevenue(game) / company.company_history[company.company_history.length - 2].company_revenue * 100);
+        }else{
+            return 0;
+        }
     },
 
     balance_in_period_ratio(){
         var game = Games.findOne({});
-        return Math.floor(game.companies[Meteor.user().username].company_balance / 100000 * 100);
+        var company = game.companies[Meteor.user().username];
+        if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_balance != 0){
+            return Math.floor(company.company_balance / company.company_history[company.company_history.length - 2].company_balance * 100);
+        }else{
+            return 0;
+        }
     },
 
     costs_in_period_ratio(){
         var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
         var costs = game.companies[Meteor.user().username].getCosts(game);
-        var balance = game.companies[Meteor.user().username].company_balance;
-        return Math.floor(costs / balance * 100);
+        if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_costs != 0){
+            return Math.floor(costs / company.company_history[company.company_history.length - 2].company_costs * 100);
+        }else{
+            return 0;
+        }
     },
 
 

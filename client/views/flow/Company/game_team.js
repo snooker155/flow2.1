@@ -65,7 +65,6 @@ Template.game_team.helpers({
             for (i=0; i<n; i++){
                 employees_array.push({
                     id: company.company_team[company.company_team.length - 1].id + 1,
-                    value: company.company_team[company.company_team.length - 1].value + 1,
                     department_name: null,
                     employee_level: 1,
                     max_level: 3,
@@ -116,15 +115,11 @@ Template.game_team.helpers({
 
 
     employee_number_plus_enabled:function(){
-        if(this.employee_number_at_work == 0){
-            return this.employee_number<this.max_employee_number?"":"disabled";    
-        }else{
-            return "hidden";
-        }
+        return this.employee_number<this.max_employee_number?"":"disabled";    
     },
 
     employee_number_minus_enabled:function(){
-        if(this.employee_number_at_work == 0){
+        if(this.employee_number - this.employee_number_at_work > 0){
             return this.employee_number>0?"":"disabled";
         }else{
             return "hidden";
@@ -149,7 +144,14 @@ Template.game_team.helpers({
     },
 
     sum_of_at_work: function(){
-        return 0;
+        var company = Games.findOne({}).companies[Meteor.user().username];
+        var employees = company.company_team;
+        var sum = 0;
+        employees.forEach(function (employee) {
+            sum += employee.employee_number_at_work;
+        });
+        employees_arrayDep.depend();
+        return sum;
     },
 
     sum_of_free: function(){
@@ -257,7 +259,7 @@ Template.game_team.events({
 
     "click .employee_number_plus": function(){
         var self =  this;
-        console.log(self);
+        //console.log(self);
         var game = Games.findOne({});
         var company = game.companies[Meteor.user().username];
 
@@ -295,7 +297,7 @@ Template.game_team.events({
 
         //console.log(self);
 
-        if(template.$("#new_department"+self.value).valid()){
+        if(template.$("#new_department"+self.id).valid()){
 
             company.company_team.push(self);
             employees_arrayDep.changed();

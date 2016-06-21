@@ -15,19 +15,21 @@ Template.world_stat.helpers({
         var free_share = 0;
         var inactive_share = 0;
     	game.products.forEach(function (product) {
-            var product_share = 0;
-            var total_product_customers = 0;
-            game.customers.forEach(function (customer) {
-                if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
-                    total_product_customers++;
-                }
-            });
-            product_share = Math.floor(total_product_customers / game.customers.length * 100);
-            products.push({
-                product_name: product.product_name,
-                product_color: product.product_color,
-                product_share: product_share,
-            });
+            if(product.product_status != "In production"){
+                var product_share = 0;
+                var total_product_customers = 0;
+                game.customers.forEach(function (customer) {
+                    if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
+                        total_product_customers++;
+                    }
+                });
+                product_share = Math.floor(total_product_customers / game.customers.length * 100);
+                products.push({
+                    product_name: product.product_name,
+                    product_color: product.product_color,
+                    product_share: product_share,
+                });
+            }
         });
 
         game.customers.forEach(function (customer) {

@@ -142,17 +142,18 @@ Template.company_registration.events({
 
             game.companies[Meteor.user().username] = {
                 company_name: template.$("#company_name").val(),
-                company_region: template.$("#region").val(),
+                company_region: [template.$("#region").val()],
                 company_level: 0,
                 company_exp: 0,
-                company_balance: 100000,
+                company_balance: 25000,
                 owner: Meteor.user().username,
                 company_activities: company_activities,
                 company_history: [{
-                    company_balance: 100000,
+                    company_balance: 25000,
                     company_users: 0,
                     company_revenue: 0,
                     company_costs: 0,
+                    time_period: game.time_period,
                 }],
             };
 

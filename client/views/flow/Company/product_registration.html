@@ -54,7 +54,9 @@
                                                 <td>#</td>
                                                 <td>Name</td>
                                                 <td>Neccessary time (sec)</td>
+                                                <td>Neccessary department</td>
                                                 <td>Neccessary employees</td>
+                                                <td>Current employees</td>
                                                 <td>Price</td>
                                                 <td>Level</td>
                                                 <td>Sum</td>
@@ -73,7 +75,9 @@
                                                         </select>
                                                     </td>
                                                     <td>{{time_to_achieve}}</td>
-                                                    <td>{{neccessary_employees_number}}</td>
+                                                    <td style="color: {{has_department}};">{{neccessary_department}}</td>
+                                                    <td style="color: {{has_employees_number}};">{{neccessary_employees_number}}</td>
+                                                    <td>{{current_employees_number}}</td>
                                                     <td>$ {{feature_price}}</td>
                                                     <td>
                                                         <!-- <div class="row">
@@ -93,6 +97,8 @@
                                                 </tr>
                                             {{/each}}
                                             <tr>
+                                                <td></td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

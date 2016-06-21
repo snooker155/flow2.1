@@ -81,6 +81,49 @@ Template.product_registration.helpers({
         return sum;
     },
 
+    current_employees_number(){
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        var current_employees_number = null;
+        company.company_team.forEach(function (dep) {
+            if(self.neccessary_department == dep.department_name){
+                current_employees_number = dep.employee_number;
+            }
+        });
+        if(current_employees_number){
+            return current_employees_number;
+        }else{
+            return "Not exist department";
+        }
+    },
+
+    has_department(){
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        if(self.neccessary_department){
+            if(company.has_department(self.neccessary_department)){
+                return "green";
+            }else{
+                return "red";
+            }
+        }
+    },
+
+    has_employees_number(){
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        if(self.neccessary_department && self.neccessary_employees_number){
+            if(company.has_employees_number(self.neccessary_department, self.neccessary_employees_number)){
+                return "green";
+            }else{
+                return "red";
+            }
+        }
+    },
+
     // feature_level_increase_enabled:function(){
     //     return this.feature_level<this.max_feature_level?"":"disabled";
     // },
@@ -163,6 +206,7 @@ Template.product_registration.events({
         var company = game.companies[Meteor.user().username];
         var product = {};
         var prop = [];
+        var can_create = true;
 
         var product_name = template.$("#product_name").val();
         var product_price = template.$("#product_price").val();
@@ -175,59 +219,75 @@ Template.product_registration.events({
 
         if(template.$("#product_form").valid()){
 
-
-
             features_array.forEach(function (feature) {
-                if(company.has_department(feature.neccessary_department) && company.has_employees_number(feature.neccessary_department, feature.neccessary_employees_number)){
-                    prop.push({
-                        prop_name: feature.feature_name,
-                        id: feature.id,
-                        value: feature.value,
-                        prop_level: feature.feature_level,
-                        max_prop_level: feature.max_feature_level,
-                        prop_price: feature.feature_price,
-                        time_to_achieve: feature.time_to_achieve,
-                        neccessary_employees_number: feature.neccessary_employees_number,
-                        neccessary_department: feature.neccessary_department,
-                        progress: feature.progress,
-                        start_period: game.time_period,
-                    })
+                if(company.has_department(feature.neccessary_department)){
+                    if(company.has_employees_number(feature.neccessary_department, feature.neccessary_employees_number)){
+                        prop.push({
+                            prop_name: feature.feature_name,
+                            id: feature.id,
+                            value: feature.value,
+                            prop_level: feature.feature_level,
+                            max_prop_level: feature.max_feature_level,
+                            prop_price: feature.feature_price,
+                            time_to_achieve: feature.time_to_achieve,
+                            neccessary_employees_number: feature.neccessary_employees_number,
+                            neccessary_department: feature.neccessary_department,
+                            progress: feature.progress,
+                            start_period: game.time_period,
+                        })
+                    }else{
+                        can_create = false;
+                        alert("Not enough employees in department \""+feature.neccessary_department+"\".\n\nRequire "+feature.neccessary_employees_number+", has "+company.getDepEmployeeNumber(feature.neccessary_department)+".");
+                    }
                 }else{
-                    alert("Not enougth resources");
+                    can_create = false;
+                    alert("Company does not have the neccessary department \""+feature.neccessary_department+"\".");
                 }
             });
 
 
+    
+            if(can_create){
+                var regions = [];
+                company.company_region.forEach(function (region) {
+                    regions.push(region);
+                });
 
-            product = {
-                product_id: game.products[game.products.length - 1].product_id + 1,
-                product_name: product_name,
-                product_price: parseInt(product_price),
-                product_color: product_color,
-                //product_quality: 1 + Math.floor(Math.random() * 10),
-                prop: prop,
-                product_quantity: 75,
-                product_creator: company.company_name,
-                product_status: "In production",
+                product = {
+                    product_id: game.products[game.products.length - 1].product_id + 1,
+                    product_name: product_name,
+                    product_price: parseInt(product_price),
+                    product_color: product_color,
+                    //product_quality: 1 + Math.floor(Math.random() * 10),
+                    prop: prop,
+                    product_quantity: 75,
+                    product_creator: company.company_name,
+                    product_status: "In production",
+                    product_regions: regions,
+                }
+
+                game.products.push(product);
+
+                game.customers.forEach(function (customer) {
+                    customer.makeProductConservatism(product)
+                });
+
+                features_array.forEach(function (feature) {
+                    company.setToWork(feature.neccessary_department, feature.neccessary_employees_number);
+                });
+
+
+                company.company_activities.push({
+                    status: "In production",
+                    title: "Product has gone in production",
+                    start_time: game.time_period,
+                    comments: "Product "+product_name+" has gone in production.",
+                });
+
+
+                Meteor.call('updateGame', game);
+
             }
-
-            game.products.push(product);
-
-            game.customers.forEach(function (customer) {
-                customer.makeProductConservatism(product)
-            });
-
-
-            company.company_activities.push({
-                status: "In production",
-                title: "Product has gone in production",
-                start_time: game.time_period,
-                comments: "Product "+product_name+" has gone in production.",
-            });
-
-
-            Meteor.call('updateGame', game);
-
         }
     }
 });

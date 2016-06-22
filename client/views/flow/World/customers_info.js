@@ -168,14 +168,14 @@ function drawGraph(){
 
 
 Template.customers_info.onCreated(function() {
-    var self = this;
-    self.subscribe("games", function(){
-        Tracker.autorun(function () {
-            $("#graph").html("");
-            drawGraph();
-        });
-        //drawGraph();
-    });
+    // var self = this;
+    // self.subscribe("games", function(){
+    //     Tracker.autorun(function () {
+    //         $("#graph").html("");
+    //         drawGraph();
+    //     });
+    //     //drawGraph();
+    // });
 });
 
 
@@ -184,88 +184,88 @@ Template.customers_info.onCreated(function() {
 Template.customers_info.onRendered(function(){
 
 
-Tracker.autorun(function () {
+// Tracker.autorun(function () {
 
-    var game = Games.findOne({});
+//     var game = Games.findOne({});
 
-    var data = (_.values(_.groupBy(game.customers, function(customer){ 
-        return customer.customer_region; 
-    })))
-    .reduce(function(data, customers){ 
-        data.push({
-            name: customers[0].customer_region,
-            //color: ,
-            data:customers.map(function(customer){return [parseFloat(customer.customer_conservatism).toFixed(4)*1, customer.customer_income];})
-        }); 
-        return data;
-    }, []);
-
-
-    $('#scatter_digramm').highcharts({
-        chart: {
-            type: 'scatter',
-            zoomType: 'xy'
-        },
-        title: {
-            text: 'Income ($) / Conservatism'
-        },
-        // subtitle: {
-        //     text: 'Source: Heinz  2003'
-        // },
-        xAxis: {
-            title: {
-                enabled: true,
-                text: 'Conservatism level'
-            },
-            startOnTick: true,
-            endOnTick: true,
-            showLastLabel: true
-        },
-        yAxis: {
-            title: {
-                text: 'Income ($)'
-            }
-        },
-        legend: {
-            layout: 'horizontal',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 275,
-            y: 25,
-            floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
-            borderWidth: 1
-        },
-        plotOptions: {
-            scatter: {
-                marker: {
-                    radius: 5,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.x} <b>/</b> {point.y} $'
-                }
-            }
-        },
-
-        series: data
-    });
+//     var data = (_.values(_.groupBy(game.customers, function(customer){ 
+//         return customer.customer_region; 
+//     })))
+//     .reduce(function(data, customers){ 
+//         data.push({
+//             name: customers[0].customer_region,
+//             //color: ,
+//             data:customers.map(function(customer){return [parseFloat(customer.customer_conservatism).toFixed(4)*1, customer.customer_income];})
+//         }); 
+//         return data;
+//     }, []);
 
 
-});
+//     $('#scatter_digramm').highcharts({
+//         chart: {
+//             type: 'scatter',
+//             zoomType: 'xy'
+//         },
+//         title: {
+//             text: 'Income ($) / Conservatism'
+//         },
+//         // subtitle: {
+//         //     text: 'Source: Heinz  2003'
+//         // },
+//         xAxis: {
+//             title: {
+//                 enabled: true,
+//                 text: 'Conservatism level'
+//             },
+//             startOnTick: true,
+//             endOnTick: true,
+//             showLastLabel: true
+//         },
+//         yAxis: {
+//             title: {
+//                 text: 'Income ($)'
+//             }
+//         },
+//         legend: {
+//             layout: 'horizontal',
+//             align: 'left',
+//             verticalAlign: 'top',
+//             x: 275,
+//             y: 25,
+//             floating: true,
+//             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+//             borderWidth: 1
+//         },
+//         plotOptions: {
+//             scatter: {
+//                 marker: {
+//                     radius: 5,
+//                     states: {
+//                         hover: {
+//                             enabled: true,
+//                             lineColor: 'rgb(100,100,100)'
+//                         }
+//                     }
+//                 },
+//                 states: {
+//                     hover: {
+//                         marker: {
+//                             enabled: false
+//                         }
+//                     }
+//                 },
+//                 tooltip: {
+//                     headerFormat: '<b>{series.name}</b><br>',
+//                     pointFormat: '{point.x} <b>/</b> {point.y} $'
+//                 }
+//             }
+//         },
+
+//         series: data
+//     });
+
+
+//});
 
 
 
@@ -495,6 +495,60 @@ Template.customers_info.helpers({
               });
             });
         }
-    }
+    },
+
+    customers(){
+        var game = Games.findOne({});
+        return game.customers;
+    },
+});
+
+
+
+
+Template.customer.helpers({
+    customer_group(){
+        var game = Games.findOne({});
+        var self = this;
+        return self.getIncomeGroup(game);
+    },
+
+    customer_conservatism(){
+        return this.customer_conservatism ? 
+            parseFloat(this.customer_conservatism).toFixed(3) : 
+            parseFloat(this.base_customer_conservatism).toFixed(3);
+    },
+
+    products(){
+        var self = this;
+        var game = Games.findOne({});
+        var product_selection = [];
+        game.products.forEach(function (product) {
+            if(self.customer_product && self.customer_product.product_id == product.product_id){
+                product_selection.push({
+                    product_name: product.product_name,
+                    chosen_product: "font-weight: bold",
+                    product_price: product.product_price,
+                    customer_product_conservatism: parseFloat(self.customer_product_conservatism[product.product_id].toFixed(3)),
+                    product_utility: self.getSubjectiveUtility(product),
+                    product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
+                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
+                    product_needed: self.updateNeeded(product),
+                });
+            }else{
+                product_selection.push({
+                    product_name: product.product_name,
+                    chosen_product: "",
+                    product_price: product.product_price,
+                    customer_product_conservatism: parseFloat(self.customer_product_conservatism[product.product_id].toFixed(3)),
+                    product_utility: self.getSubjectiveUtility(product),
+                    product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
+                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
+                    product_needed: self.updateNeeded(product),
+                });
+            }
+        });
+        return product_selection;
+    },
 });
 

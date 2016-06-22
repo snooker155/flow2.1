@@ -167,171 +167,160 @@ Meteor.startup(() => {
 	//////////////////  REGIONS  /////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
-	var PEOPLE_BASE = 30;
+	var PEOPLE_MULTI = 3;
 
   	Regions.insert({
 		region_id: "CE",
 		region_name: "Central Europe",
-		//region_people_number: 2000 + Math.floor((Math.random() * 500) + 100),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Design",
+		region_people_number: 3 * PEOPLE_MULTI,
+		region_pref: 4,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Medium",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Medium",
+		base_income_rate: 21,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.07,
 	});
 
 	Regions.insert({
 		region_id: "NE",
 		region_name: "Northern Europe",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Design",
+		region_people_number: 2 * PEOPLE_MULTI,
+		region_pref: 3.5,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Medium",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Medium",
+		base_income_rate: 23,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.08,
 	});
 
 	Regions.insert({
 		region_id: "AF",
 		region_name: "Africa",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Support",
+		region_people_number: 4 * PEOPLE_MULTI,
+		region_pref: 1,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 9,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.03,
 	});
 
 	Regions.insert({
 		region_id: "SA",
 		region_name: "South America",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Design",
+		region_people_number: 4 * PEOPLE_MULTI,
+		region_pref: 2.5,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Negative",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Negative",
+		base_income_rate: 18,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.04,
 	});
 
 	Regions.insert({
 		region_id: "NA",
 		region_name: "North America",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Technology",
+		region_people_number: 7 * PEOPLE_MULTI,
+		region_pref: 5,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Negative",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Negative",
+		base_income_rate: 25,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.02,
 	});
 
 	Regions.insert({
 		region_id: "AS",
 		region_name: "Asia",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Technology",
+		region_people_number: 10 * PEOPLE_MULTI,
+		region_pref: 3,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "High",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		//region_trend: "High",
+		base_income_rate: 16,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
 		level_of_conservatism: 0.05,
 	});
 
 	Regions.insert({
 		region_id: "CA",
-		region_name: "Caribbean",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
+		region_name: 2.5,
+		region_people_number: 2 * PEOPLE_MULTI,
 		region_pref: "Support",
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 14,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.04,
 	});
 
 	Regions.insert({
 		region_id: "SP",
 		region_name: "South Pacific",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Support",
+		region_people_number: 3 * PEOPLE_MULTI,
+		region_pref: 2,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 15,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.06,
 	});
 
 	Regions.insert({
 		region_id: "IN",
 		region_name: "India",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Support",
+		region_people_number: 8 * PEOPLE_MULTI,
+		region_pref: 1.5,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 10,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.03,
 	});
 
 	Regions.insert({
 		region_id: "OR",
 		region_name: "Orient",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Support",
+		region_people_number: 7 * PEOPLE_MULTI,
+		region_pref: 2.5,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 13,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.07,
 	});
 
 	Regions.insert({
 		region_id: "RU",
 		region_name: "Russia",
-		//region_people_number: Math.floor(Math.random() * 5),
-		region_people_number: PEOPLE_BASE + Math.floor((Math.random() * 5) + 2),
-		region_pref: "Support",
+		region_people_number: 5 * PEOPLE_MULTI,
+		region_pref: 3,
 		region_market: 1.5,
 		region_demand: 4,
-		region_trend: "Low",
-		base_profit_rate: 0.07,
-		base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
-		region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		//region_trend: "Low",
+		base_income_rate: 20,
+		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
+		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
+		level_of_conservatism: 0.04,
 	});
 
 
@@ -370,10 +359,11 @@ Meteor.startup(() => {
 	    
 	    for (var i = 0; i < region.region_people_number; ++i){
 
-	    	new_level_of_conservatism = Math.random() / 10;
-	    	level_of_conservatism += new_level_of_conservatism;
+	    	// new_level_of_conservatism = Math.random() / 10;
+	    	// level_of_conservatism += new_level_of_conservatism;
 
-	    	new_customer_income = 10 + Math.floor(Math.random() * 20);
+	    	//new_customer_income = region.base_income_rate + Math.floor(Math.random() * 20);
+	    	new_customer_income = region.base_income_rate;
 	    	customer_income += new_customer_income;
 
 	     	customers.push({
@@ -381,12 +371,11 @@ Meteor.startup(() => {
 				customer_region: region.region_id,
 				customer_pref: region.region_pref,
 				//customer_money: 2000 + Math.floor((Math.random() * 500) + 100),
-				base_customer_conservatism: new_level_of_conservatism,
+				base_customer_conservatism: region.level_of_conservatism,
 				customer_conservatism: null,
 				customer_product_conservatism: {},
 				customer_income: new_customer_income,
-				customer_pref: 3,
-				//customer_activity: Math.round(Math.random() + 0.4),
+				customer_pref: region.region_pref,
 				customer_activity: 1,
 				customer_product: "",
 				//customer_product_quantity: 0,
@@ -433,11 +422,11 @@ Meteor.startup(() => {
      		region_id: region.region_id,
      		region_name: region.region_name,
      		region_pref: region.region_pref,
-     		region_trend: region.region_trend,
+     		//region_trend: region.region_trend,
 			region_people_number: region.region_people_number,
-			base_profit_rate: region.base_profit_rate,
-			base_price_rate: region.base_price_rate,
-			level_of_conservatism: parseFloat((level_of_conservatism / region.region_people_number).toFixed(3)),
+			base_income_rate: region.base_income_rate,
+			//base_price_rate: region.base_price_rate,
+			level_of_conservatism: region.level_of_conservatism,
     	}
     });
 
@@ -628,7 +617,7 @@ Meteor.startup(() => {
 
 	   	console.log("-------------------------------   END   ----------------------------------");
 
-	}, 10000);
+	}, 30000);
 
 
 });

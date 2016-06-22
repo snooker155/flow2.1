@@ -360,10 +360,11 @@ Template.world_map.helpers({
 			return game.regions[selected_region.get()];
 		}else{
 			var world_people_number = 0,
+				world_pref = 0,
 				world_region_market = 0,
 				world_region_demand = 0,
-				world_base_profit_rate = 0,
-				world_base_price_rate = 0,
+				world_base_income_rate = 0,
+				//world_base_price_rate = 0,
 				world_level_of_conservatism = 0,
 				world_region_trend;
 
@@ -371,10 +372,11 @@ Template.world_map.helpers({
 
 			for (var region in game.regions){
 				world_people_number += game.regions[region].region_people_number;
+				world_pref += game.regions[region].region_pref;
 				world_region_market += game.regions[region].region_market;
 				world_region_demand += game.regions[region].region_demand;
-				world_base_profit_rate += game.regions[region].base_profit_rate;
-				world_base_price_rate += game.regions[region].base_price_rate;
+				world_base_income_rate += game.regions[region].base_income_rate;
+				//world_base_price_rate += game.regions[region].base_price_rate;
 				world_level_of_conservatism += game.regions[region].level_of_conservatism;
 			};
 
@@ -390,13 +392,13 @@ Template.world_map.helpers({
 			
 			return world = {
 				region_name: "World",
-				region_pref: "Technology",
+				region_pref: parseFloat((world_pref / number_of_regions).toFixed(2)),
 				region_trend: world_region_trend,
 				region_people_number: world_people_number,
 				region_market: world_region_market,
 				region_demand: world_region_demand,
-				base_profit_rate: parseFloat((world_base_profit_rate / number_of_regions).toFixed(2)),
-				base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
+				base_income_rate: parseFloat((world_base_income_rate / number_of_regions).toFixed(2)),
+				//base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
 				level_of_conservatism: parseFloat((world_level_of_conservatism / number_of_regions).toFixed(3)),
 			};
 		}

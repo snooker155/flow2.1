@@ -23,7 +23,7 @@ twbs:bootstrap
 fortawesome:fontawesome
 zimme:iron-router-active
 
-button:select2
+#button:select2
 accounts-password
 cramhead:jquery-validate
 manuel:reactivearray

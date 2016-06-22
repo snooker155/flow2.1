@@ -255,9 +255,9 @@ Meteor.startup(() => {
 
 	Regions.insert({
 		region_id: "CA",
-		region_name: 2.5,
+		region_name: "Carribean",
 		region_people_number: 2 * PEOPLE_MULTI,
-		region_pref: "Support",
+		region_pref: 2.5,
 		region_market: 1.5,
 		region_demand: 4,
 		//region_trend: "Low",
@@ -506,6 +506,9 @@ Meteor.startup(() => {
 
 
 
+
+
+
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -617,7 +620,7 @@ Meteor.startup(() => {
 
 	   	console.log("-------------------------------   END   ----------------------------------");
 
-	}, 30000);
+	}, 10000);
 
 
 });

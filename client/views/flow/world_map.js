@@ -75,17 +75,10 @@ function getGradientData(game, region_id){
 };
 
 
-Template.world_map.onCreated(function() {
-    var self = this;
-    self.subscribe("games", function(){
-    	Tracker.autorun(function () {
-
-    	});
-    });
-});
 
 
 Template.world_map.onRendered(function(){
+	var self = this;
 
 	selected_region.set(null);
 
@@ -177,7 +170,9 @@ Template.world_map.onRendered(function(){
         }
     ];
 
-    Tracker.autorun(function () {
+    Tracker.autorun(function (c) {
+    	self.c = c;
+    	//console.log("I am on WorldMap");
     	var game = Games.findOne({});
 
 	    sets.forEach(function (set) {
@@ -389,6 +384,7 @@ Template.world_map.helpers({
 			}else if (world_region_demand - world_region_market > 1) {
 				world_region_trend = "High";
 			}
+
 			
 			return world = {
 				region_name: "World",
@@ -1135,4 +1131,11 @@ Template.region.helpers({
 	// 		return total_market > 0 ? 'up' : 'down';
 	// 	}
 	// },
+});
+
+
+
+Template.world_map.onDestroyed(function(){
+    var self = this;
+    self.c.stop();
 });

@@ -2,6 +2,19 @@
   <div class="wrapper wrapper-content animated fadeInUp">
     {{>company_menu}}
     {{#if has_company}}
+        {{>company_profile}}
+    {{else}}
+        {{>company_registration}}
+    {{/if}}
+
+    </div>
+</template>
+
+
+
+
+
+<template name="company_profile">
     <div class="row">
             <div class="col-lg-9">
                     <div class="ibox">
@@ -204,10 +217,4 @@
                     </div>
             </div>
         </div>
-
-    {{else}}
-        {{>company_registration}}
-    {{/if}}
-
-    </div>
 </template>

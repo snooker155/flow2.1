@@ -1,6 +1,7 @@
 Template.segment_info.onRendered(function(){
-
-    Tracker.autorun(function () {
+    var self = this;
+    Tracker.autorun(function (c) {
+        self.c = c;
         var game = Games.findOne({});
 
         $(".sparklines").sparkline('html', {
@@ -9,7 +10,7 @@ Template.segment_info.onRendered(function(){
             lineColor: 'green',
             fillColor: '#fff'
         });
-    });
+
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -17,17 +18,20 @@ Template.segment_info.onRendered(function(){
     ////////////////////////////////////////////////////////////////////////////
 
 
-
-Tracker.autorun(function () {
-    var game = Games.findOne({});
-
     var data1 = [];
     var data2 = [];
+    var last_time_period = 0;
 
     game.customers_history.forEach(function (customer) {
         data1.push([gd(2012, 1, customer.time_period), customer.current_users]);
         data2.push([gd(2012, 1, customer.time_period), customer.avg_income]);
+        last_time_period = customer.time_period;
     });
+
+    for(var i = data1.length; i < 20; i++){
+        data1.push([gd(2012, 1, i), 0]);
+    }
+
 
     // console.log(data1);
     // console.log(data2);
@@ -489,3 +493,9 @@ Template.segment_info.helpers({
 
 });
 
+
+
+Template.segment_info.onDestroyed(function(){
+    var self = this;
+    self.c.stop();
+});

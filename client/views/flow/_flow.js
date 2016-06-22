@@ -12,7 +12,7 @@ if (Meteor.isClient) {
 
   // Meteor.subscribe("customers");
 
-  Meteor.subscribe("games");
+  //Meteor.subscribe("games");
 
 }
 

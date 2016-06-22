@@ -348,16 +348,16 @@ Tracker.autorun(function () {
 
 
 Template.world_info.helpers({
-	players: function () {
-		var game = Games.findOne({});
-		var shares_arr = [];
-        for(var player in game.players){
-	        if(game.players[player].regions !== undefined){
-		        shares_arr.push(game.players[player]);
-	    	}
-     	}
-        return shares_arr;
-	},
+	// players: function () {
+	// 	var game = Games.findOne({});
+	// 	var shares_arr = [];
+ //        for(var player in game.players){
+	//         if(game.players[player].regions !== undefined){
+	// 	        shares_arr.push(game.players[player]);
+	//     	}
+ //     	}
+ //        return shares_arr;
+	// },
 
 	regions: function () {
 		var game = Games.findOne({});

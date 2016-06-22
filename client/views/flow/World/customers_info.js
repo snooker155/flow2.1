@@ -168,16 +168,31 @@ function drawGraph(){
 
 
 Template.customers_info.onCreated(function() {
-    // var self = this;
-    // self.subscribe("games", function(){
-    //     Tracker.autorun(function () {
-    //         $("#graph").html("");
-    //         drawGraph();
-    //     });
-    //     //drawGraph();
-    // });
+    var self = this;
+    Tracker.autorun(function (c) {
+        self.game = Games.findOne({});
+        //console.log("Now i am here");
+        self.c = c;
+        var game_subscription = self.subscribe("games");
+        if(game_subscription.ready()){
+            $("#graph").html("");
+            drawGraph();
+        }else{
+            console.log('Loading...');
+        }
+    });
+
+    self.getGame = function(){
+        return Games.findOne({});
+    }
 });
 
+
+
+Template.customers_info.onDestroyed(function() {
+    var self = this;
+    self.c.stop();
+});
 
 
 
@@ -333,7 +348,7 @@ Template.customers_info.onRendered(function(){
 
 Template.customers_info.helpers({
     total_income: function () {
-        var game = Games.findOne({});
+        var game = Template.instance().getGame();
         var total_income = 0;
         game.customers.forEach(function (customer) {
             total_income += customer.customer_income;

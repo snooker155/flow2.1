@@ -16,7 +16,8 @@ Router.route('/', {
   action: function () {
     //this.render('gameScreen');
     if(Meteor.userId()){
-      this.render('outer');
+      //this.render('outer');
+      this.render('gameScreen');
       this.layout('gameLayout');
     }else{
       Router.go('/login');
@@ -86,7 +87,7 @@ Router.route('/world', function () {
 
 Router.route('/segment', function () {
   if(Meteor.userId()){
-    this.render('segment_outer');
+    this.render('segment_info');
     this.layout('gameLayout');
   }else{
     Router.go('/login');
@@ -105,7 +106,9 @@ Router.route('/news', function () {
 
 Router.route('/customers', function () {
   if(Meteor.userId()){
-    this.render('outer3');
+    //Session.set("game", Games.findOne({}));
+    //this.render('outer3');
+    this.render('customers_info');
     this.layout('gameLayout');
   }else{
     Router.go('/login');

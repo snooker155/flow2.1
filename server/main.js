@@ -500,20 +500,9 @@ Meteor.startup(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 	var interval = Meteor.setInterval(function(){
 
-	   	console.log("-------------------------------  START  ----------------------------------");
+	   	console.log("-----------------------------  START  --------------------------------");
 
 	   	var game = Games.findOne({});
 
@@ -534,6 +523,14 @@ Meteor.startup(() => {
 
 	   	game.changeCustomersNumber(3);
 
+	   	game.changeRegionActivity(1);
+
+	   	game.changeProductPrice(2);
+
+	   	game.changeRegionConservLevel(0.003);
+
+	   	game.changeRegionPref(1);
+
 	   	/////////////////////////////
 
 
@@ -544,9 +541,9 @@ Meteor.startup(() => {
 
 
 
-	   	console.log("-----------------------------   UPDATE   ---------------------------------");
+	   	console.log("---------------------------   UPDATE   -------------------------------");
 
-	   	console.log("-----------------------------   "+ game.time_period +"   ---------------------------------");
+	   	console.log("---------------------------   "+ game.time_period +"   -------------------------------");
 
 	   	game.time_period += 1;
 
@@ -622,7 +619,7 @@ Meteor.startup(() => {
 
 
 
-	   	console.log("-------------------------------   END   ----------------------------------");
+	   	console.log("-----------------------------   END   --------------------------------");
 
 	}, 10000);
 

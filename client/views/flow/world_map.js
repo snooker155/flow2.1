@@ -372,7 +372,7 @@ Template.world_map.helpers({
 				world_region_demand += game.regions[region].region_demand;
 				world_base_income_rate += game.regions[region].base_income_rate;
 				//world_base_price_rate += game.regions[region].base_price_rate;
-				world_level_of_conservatism += game.regions[region].level_of_conservatism;
+				world_level_of_conservatism += game.regions[region].base_level_of_conservatism;
 			};
 
 			if(world_region_demand - world_region_market < 0){
@@ -395,7 +395,7 @@ Template.world_map.helpers({
 				region_demand: world_region_demand,
 				base_income_rate: parseFloat((world_base_income_rate / number_of_regions).toFixed(2)),
 				//base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
-				level_of_conservatism: parseFloat((world_level_of_conservatism / number_of_regions).toFixed(3)),
+				base_level_of_conservatism: parseFloat((world_level_of_conservatism / number_of_regions).toFixed(3)),
 			};
 		}
 	},

@@ -108,7 +108,7 @@ Meteor.startup(() => {
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["AF", "OR", "IN"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN"],
 	});
 
 	Products.insert({
@@ -124,43 +124,43 @@ Meteor.startup(() => {
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["NA", "SA", "CA"],
+        product_regions: ["NA", "SA", "CA", "CE", "NE", "RU"],
 	});
 
 
-	Products.insert({
-		product_id: 3,
-		product_name: "Prod " + 3,
-		product_price: 12,
-		product_color: "magenta",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_2"},
-			{prop_name: "prop_3"},
-		],
-		product_quantity: 50,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["AS", "SP", "IN"],
-	});
+	// Products.insert({
+	// 	product_id: 3,
+	// 	product_name: "Prod " + 3,
+	// 	product_price: 12,
+	// 	product_color: "magenta",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_2"},
+	// 		{prop_name: "prop_3"},
+	// 	],
+	// 	product_quantity: 50,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["AS", "SP", "IN"],
+	// });
 
 
-	Products.insert({
-		product_id: 4,
-		product_name: "Prod " + 4,
-		product_price: 20,
-		product_color: "pink",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1"},
-			{prop_name: "prop_2"},
-			{prop_name: "prop_3"},
-		],
-		product_quantity: 25,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["CE", "NE", "RU"],
-	});
+	// Products.insert({
+	// 	product_id: 4,
+	// 	product_name: "Prod " + 4,
+	// 	product_price: 20,
+	// 	product_color: "pink",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_1"},
+	// 		{prop_name: "prop_2"},
+	// 		{prop_name: "prop_3"},
+	// 	],
+	// 	product_quantity: 25,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["CE", "NE", "RU"],
+	// });
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ Meteor.startup(() => {
 		base_income_rate: 21,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.07,
+		base_level_of_conservatism: 0.07,
 	});
 
 	Regions.insert({
@@ -194,7 +194,7 @@ Meteor.startup(() => {
 		base_income_rate: 23,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.08,
+		base_level_of_conservatism: 0.08,
 	});
 
 	Regions.insert({
@@ -208,7 +208,7 @@ Meteor.startup(() => {
 		base_income_rate: 9,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.03,
+		base_level_of_conservatism: 0.03,
 	});
 
 	Regions.insert({
@@ -222,7 +222,7 @@ Meteor.startup(() => {
 		base_income_rate: 18,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.04,
 	});
 
 	Regions.insert({
@@ -236,7 +236,7 @@ Meteor.startup(() => {
 		base_income_rate: 25,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.02,
+		base_level_of_conservatism: 0.02,
 	});
 
 	Regions.insert({
@@ -250,7 +250,7 @@ Meteor.startup(() => {
 		base_income_rate: 16,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.05,
+		base_level_of_conservatism: 0.05,
 	});
 
 	Regions.insert({
@@ -264,7 +264,7 @@ Meteor.startup(() => {
 		base_income_rate: 14,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.04,
 	});
 
 	Regions.insert({
@@ -278,7 +278,7 @@ Meteor.startup(() => {
 		base_income_rate: 15,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.06,
+		base_level_of_conservatism: 0.06,
 	});
 
 	Regions.insert({
@@ -292,7 +292,7 @@ Meteor.startup(() => {
 		base_income_rate: 10,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.03,
+		base_level_of_conservatism: 0.03,
 	});
 
 	Regions.insert({
@@ -306,7 +306,7 @@ Meteor.startup(() => {
 		base_income_rate: 13,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.07,
+		base_level_of_conservatism: 0.07,
 	});
 
 	Regions.insert({
@@ -320,7 +320,7 @@ Meteor.startup(() => {
 		base_income_rate: 20,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.04,
 	});
 
 
@@ -352,7 +352,7 @@ Meteor.startup(() => {
 
 
     Regions.find().forEach(function (region) {
-  		var level_of_conservatism = 0,
+  		var base_level_of_conservatism = 0,
   			new_level_of_conservatism = 0
   			customer_income = 0,
   			new_customer_income = 0;
@@ -371,7 +371,7 @@ Meteor.startup(() => {
 				customer_region: region.region_id,
 				customer_pref: region.region_pref,
 				//customer_money: 2000 + Math.floor((Math.random() * 500) + 100),
-				base_customer_conservatism: region.level_of_conservatism,
+				base_customer_conservatism: region.base_level_of_conservatism,
 				customer_conservatism: null,
 				customer_product_conservatism: {},
 				customer_income: new_customer_income,
@@ -426,7 +426,7 @@ Meteor.startup(() => {
 			region_people_number: region.region_people_number,
 			base_income_rate: region.base_income_rate,
 			//base_price_rate: region.base_price_rate,
-			level_of_conservatism: region.level_of_conservatism,
+			base_level_of_conservatism: region.base_level_of_conservatism,
     	}
     });
 
@@ -509,6 +509,8 @@ Meteor.startup(() => {
 
 
 
+
+
 	var interval = Meteor.setInterval(function(){
 
 	   	console.log("-------------------------------  START  ----------------------------------");
@@ -528,7 +530,9 @@ Meteor.startup(() => {
 
 	   	/////  WORLD CHANGES  ///////
 
-	   	game.changeIncome();
+	   	game.changeIncome(0.005);
+
+	   	game.changeCustomersNumber(3);
 
 	   	/////////////////////////////
 

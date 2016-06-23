@@ -123,6 +123,11 @@ Template.company_profile.onCreated(function() {
                     data2.push([gd(2012, 1, company.time_period), company.company_revenue]);
                 });
 
+                for(var i = data1.length; i < 20; i++){
+                    data1.push([gd(2012, 1, i), 0]);
+                }
+
+
                 drawPlotGraph(data1, data2);
             }
         }

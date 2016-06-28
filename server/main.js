@@ -519,17 +519,35 @@ Meteor.startup(() => {
 
 	   	/////  WORLD CHANGES  ///////
 
-	   	game.changeIncome(0.005);
+	   	// game.changeIncome(0.005);
 
-	   	game.changeCustomersNumber(3);
+	   	// game.changeCustomersNumber(3);
 
-	   	game.changeRegionActivity(1);
+	   	// game.changeRegionActivity(1);
 
-	   	game.changeProductPrice(2);
+	   	// game.changeProductPrice(2);
 
-	   	game.changeRegionConservLevel(0.003);
+	   	// game.changeRegionConservLevel(0.003);
 
-	   	game.changeRegionPref(1);
+	   	// game.changeRegionPref(1);
+
+
+	   	if(game.getRegionConserv("RU") >= 0.15){  //// set crisis in Russia
+
+	   		console.log("----------------------   Crisis in Russia   --------------------------");
+
+	   		//game.changeIncome(-0.05, "RU");
+
+		   	//game.changeCustomersNumber(1, "RU");
+
+		   	//game.changeRegionActivity(1, "RU");
+
+		   	//game.changeProductPrice(1, "Prod 2");
+
+		   	//game.changeRegionConservLevel(-0.001, "RU");
+
+		   	game.changeRegionPref(-0.1, "RU");
+	   	}
 
 	   	/////////////////////////////
 

@@ -352,7 +352,24 @@ Template.world_map.helpers({
 	selected_region(){
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			return game.regions[selected_region.get()];
+			var region_conservatism = 0;
+			var customer_count = 0;
+			game.customers.forEach(function (customer) {
+				if(customer.customer_region == selected_region.get()){
+					customer_count++;
+					region_conservatism += customer.customer_conservatism;
+				}
+			});
+			region_conservatism = region_conservatism / customer_count;
+			var region = {
+				base_income_rate: parseFloat(game.regions[selected_region.get()].base_income_rate.toFixed(2)),
+				base_level_of_conservatism: parseFloat(region_conservatism.toFixed(4)),
+				region_id: game.regions[selected_region.get()].region_id,
+				region_name: game.regions[selected_region.get()].region_name,
+				region_people_number: game.regions[selected_region.get()].region_people_number,
+				region_pref: parseFloat(game.regions[selected_region.get()].region_pref.toFixed(3)),
+			};
+			return region;
 		}else{
 			var world_people_number = 0,
 				world_pref = 0,
@@ -365,14 +382,21 @@ Template.world_map.helpers({
 
 			var number_of_regions = Regions.find({}).count();
 
+			var total_conservatism = 0;
+	        game.customers.forEach(function (customer) {
+	            total_conservatism += customer.customer_conservatism;
+	        });
+	        total_conservatism = total_conservatism / game.customers.length;
+
 			for (var region in game.regions){
+
 				world_people_number += game.regions[region].region_people_number;
 				world_pref += game.regions[region].region_pref;
 				world_region_market += game.regions[region].region_market;
 				world_region_demand += game.regions[region].region_demand;
 				world_base_income_rate += game.regions[region].base_income_rate;
 				//world_base_price_rate += game.regions[region].base_price_rate;
-				world_level_of_conservatism += game.regions[region].base_level_of_conservatism;
+				//world_level_of_conservatism += total_conservatism;
 			};
 
 			if(world_region_demand - world_region_market < 0){
@@ -388,14 +412,14 @@ Template.world_map.helpers({
 			
 			return world = {
 				region_name: "World",
-				region_pref: parseFloat((world_pref / number_of_regions).toFixed(2)),
+				region_pref: parseFloat((world_pref / number_of_regions).toFixed(3)),
 				region_trend: world_region_trend,
 				region_people_number: world_people_number,
 				region_market: world_region_market,
 				region_demand: world_region_demand,
 				base_income_rate: parseFloat((world_base_income_rate / number_of_regions).toFixed(2)),
 				//base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
-				base_level_of_conservatism: parseFloat((world_level_of_conservatism / number_of_regions).toFixed(3)),
+				base_level_of_conservatism: parseFloat((total_conservatism).toFixed(4)),
 			};
 		}
 	},
@@ -1139,3 +1163,4 @@ Template.world_map.onDestroyed(function(){
     var self = this;
     self.c.stop();
 });
+

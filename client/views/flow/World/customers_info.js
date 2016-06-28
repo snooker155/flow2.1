@@ -373,7 +373,7 @@ Template.customers_info.helpers({
         game.customers.forEach(function (customer) {
             total_conservatism += customer.customer_conservatism;
         });
-        return parseFloat((total_conservatism / game.customers.length).toFixed(2)); ;
+        return parseFloat((total_conservatism / game.customers.length).toFixed(4)); ;
     },
 
     total_user_activity: function () {

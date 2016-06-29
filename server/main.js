@@ -531,23 +531,118 @@ Meteor.startup(() => {
 
 	   	// game.changeRegionPref(1);
 
+	   	//game.changeIncome(-0.05, "RU");
 
-	   	if(game.getRegionConserv("RU") >= 0.15){  //// set crisis in Russia
+		//game.changeCustomersNumber(1, "RU");
+
+		//game.changeRegionActivity(1, "RU");
+
+		//game.changeProductPrice(1, "Prod 2");
+
+		//game.changeRegionConservLevel(-0.001, "RU");
+
+
+	   	if(game.getRegionConserv("RU") >= 0.07){  //// set crisis in Russia
 
 	   		console.log("----------------------   Crisis in Russia   --------------------------");
 
-	   		//game.changeIncome(-0.05, "RU");
+		   	if(game.getRegionPref("RU") <= game.regions["RU"].region_pref * 2 && game.getAvgPrice("RU") < 15){
+		   		game.changeRegionPref(0.05, "RU");
+		   	}
 
-		   	//game.changeCustomersNumber(1, "RU");
+		   	if(game.getAvgPrice("RU") < 25){
+		   		game.changeProductPrice(0.25, "Prod 2");
+		   	}
 
-		   	//game.changeRegionActivity(1, "RU");
-
-		   	//game.changeProductPrice(1, "Prod 2");
-
-		   	//game.changeRegionConservLevel(-0.001, "RU");
-
-		   	game.changeRegionPref(-0.1, "RU");
 	   	}
+
+
+
+	   	if(game.getAvgPrice("RU") >= 16){  //// set inflation in Russia
+
+	   		console.log("----------------------   Inflation in Russia   --------------------------");
+
+	   		//game.changeIncome(-0.02, "RU");
+
+	   		if(game.getRegionPref("RU") > 1){
+	   			if(game.getRegionPref("RU") > game.regions["RU"].region_pref){
+	   				game.changeRegionPref(-0.05, "RU");
+	   				game.changeIncome(-0.02, "RU");
+	   			}else if(game.getRegionPref("RU") > game.regions["RU"].region_pref * 0.5){
+	   				game.changeRegionPref(-0.02, "RU");
+	   				game.changeIncome(-0.01, "RU");
+	   			}else if(game.getRegionPref("RU") > game.regions["RU"].region_pref * 0.25){
+	   				game.changeRegionPref(-0.01, "RU");
+	   				game.changeIncome(-0.005, "RU");
+	   			}
+	   		}
+
+		   	// if(game.getRegionConserv("RU") > 0.01 ){
+		   	// 	game.changeRegionConservLevel(-0.005, "RU");
+		   	// 	game.changeRegionPref(0.3, "RU");
+		   	// 	game.changeIncome(-0.02, "RU");
+		   	// }
+		   	
+	   	}
+
+
+
+	   	if(game.getAverageIncome("RU") <= 10){  //// set Customers' ability in Russia
+
+	   		console.log("------------   Customers' ability reducing in Russia   ----------------");
+
+	   		//game.changeRegionConservLevel(0.05, "RU");
+
+	   		if(game.getRegionConserv("RU") < 0.6){
+		   		//game.changeCustomersNumber(1, "RU");
+		   		game.changeRegionPref(-0.05, "RU");
+		   		//game.changeRegionConservLevel(-0.005, "RU");
+		   		//game.changeIncome(0.2, "RU");
+		   	}else{
+		   		game.changeRegionActivity(0, "RU");
+		   	}
+		   	
+	   	}
+
+
+
+
+	   	if(game.getRegionPref("RU") > 3.5){  //// set Overexpectations reducing in Russia
+
+	   		console.log("------------   Overexpectations reducing in Russia   ----------------");
+
+	   		//game.changeRegionConservLevel(0.1, "RU");
+
+	   		if(game.getAvgPrice("RU") >= 20){
+		   		//game.changeCustomersNumber(1, "RU");
+		   		//game.changeRegionPref(-0.1, "RU");
+		   		game.changeRegionConservLevel(0.02, "RU");
+		   		//game.changeProductPrice(-2, "Prod 2");
+		   	}else{
+		   		game.changeIncome(-0.02, "RU");
+		   	}
+		   	
+	   	}
+
+
+
+	   	if(game.getRegionConserv("RU") > game.regions["RU"].base_level_of_conservatism){
+		   	if(game.getRegionPref("RU") <= 1){      /////// set Economic growth in Russia
+		   		console.log("------------  Economic growth in Russia   ----------------");
+
+		   		game.changeRegionConservLevel(-0.005, "RU");
+
+		   		game.changeIncome(0.025, "RU");
+
+		   		if(game.getAverageIncome("RU") <= 17 && game.getAvgPrice("RU") >= 8){
+			   		game.changeProductPrice(-1, "Prod 2");
+			   		//game.changeIncome(0.05, "RU");
+			   	}
+		   	}
+	   	}
+
+
+
 
 	   	/////////////////////////////
 

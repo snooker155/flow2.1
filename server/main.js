@@ -542,11 +542,11 @@ Meteor.startup(() => {
 		//game.changeRegionConservLevel(-0.001, "RU");
 
 
-	   	if(game.getRegionConserv("RU") >= 0.07){  //// set crisis in Russia
+	   	if(game.getRegionConserv("RU") >= 0.08){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
 
 	   		console.log("----------------------   Crisis in Russia   --------------------------");
 
-		   	if(game.getRegionPref("RU") <= game.regions["RU"].region_pref * 2 && game.getAvgPrice("RU") < 15){
+		   	if(game.getRegionPref("RU") <= 3 * 2 && game.getAvgPrice("RU") < 15){  /// 3 = region_pref for "RU" region
 		   		game.changeRegionPref(0.05, "RU");
 		   	}
 
@@ -565,14 +565,14 @@ Meteor.startup(() => {
 	   		//game.changeIncome(-0.02, "RU");
 
 	   		if(game.getRegionPref("RU") > 1){
-	   			if(game.getRegionPref("RU") > game.regions["RU"].region_pref){
+	   			if(game.getRegionPref("RU") > 3){    /// 3 = region_pref for "RU" region
 	   				game.changeRegionPref(-0.05, "RU");
 	   				game.changeIncome(-0.02, "RU");
-	   			}else if(game.getRegionPref("RU") > game.regions["RU"].region_pref * 0.5){
-	   				game.changeRegionPref(-0.02, "RU");
+	   			}else if(game.getRegionPref("RU") > 3 * 0.5){    /// 3 = region_pref for "RU" region
+	   				game.changeRegionPref(-0.05, "RU");
 	   				game.changeIncome(-0.01, "RU");
-	   			}else if(game.getRegionPref("RU") > game.regions["RU"].region_pref * 0.25){
-	   				game.changeRegionPref(-0.01, "RU");
+	   			}else if(game.getRegionPref("RU") > 3 * 0.25){   /// 3 = region_pref for "RU" region
+	   				game.changeRegionPref(-0.05, "RU");
 	   				game.changeIncome(-0.005, "RU");
 	   			}
 	   		}
@@ -619,20 +619,20 @@ Meteor.startup(() => {
 		   		game.changeRegionConservLevel(0.02, "RU");
 		   		//game.changeProductPrice(-2, "Prod 2");
 		   	}else{
-		   		game.changeIncome(-0.02, "RU");
+		   		game.changeIncome(-0.015, "RU");
 		   	}
 		   	
 	   	}
 
 
 
-	   	if(game.getRegionConserv("RU") > game.regions["RU"].base_level_of_conservatism){
+	   	if(game.getRegionConserv("RU") > 0.04){  /// 0.07 = base_level_of_conservatism for "RU" region
 		   	if(game.getRegionPref("RU") <= 1){      /////// set Economic growth in Russia
 		   		console.log("------------  Economic growth in Russia   ----------------");
 
 		   		game.changeRegionConservLevel(-0.005, "RU");
 
-		   		game.changeIncome(0.025, "RU");
+		   		game.changeIncome(0.02, "RU");
 
 		   		if(game.getAverageIncome("RU") <= 17 && game.getAvgPrice("RU") >= 8){
 			   		game.changeProductPrice(-1, "Prod 2");

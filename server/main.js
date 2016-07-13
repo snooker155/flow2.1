@@ -375,7 +375,6 @@ Meteor.startup(() => {
 				customer_conservatism: null,
 				customer_product_conservatism: {},
 				customer_income: new_customer_income,
-				customer_pref: region.region_pref,
 				customer_activity: 1,
 				customer_product: "",
 				//customer_product_quantity: 0,

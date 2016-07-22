@@ -9,6 +9,7 @@ if (Meteor.isClient) {
   Meteor.subscribe("departments");
   Meteor.subscribe("products");
   Meteor.subscribe("features");
+  Meteor.subscribe("generations");
 
   // Meteor.subscribe("customers");
 

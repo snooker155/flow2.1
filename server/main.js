@@ -25,6 +25,11 @@ Meteor.startup(() => {
 		Features.remove(feature._id);
 	});
 
+	Generations.find().fetch().forEach(function (generation) {
+		Generations.remove(generation._id);
+	});
+
+
 
 
 
@@ -490,12 +495,121 @@ Meteor.startup(() => {
 
 
 
+////////////////////////////////////////////////////////////////////////
+////////////////////////                       /////////////////////////
+////////////////////////      GENERATIONS      /////////////////////////
+////////////////////////                       /////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
+	var CUSTOMERS_NUMBER = 1000;
+	var FEATRUES_NUMBER = 20;
+	var PRODUCTS_NUMBER = 6;
+
+	var products = [];
+	var customers = [];
+	var features = [];
 
 
 
+	for (var i = 0; i < FEATRUES_NUMBER; i++){
+
+		features.push({
+			feature_id: i,
+			feature_name: "prop_"+i,
+		});
+
+	}
 
 
 
+	for (var i = 0; i < PRODUCTS_NUMBER; i++){
+
+		var prop = [];
+
+		for(var j = 0; j < Math.floor(Math.random() * (features.length - 10.1) + 1); j++){
+			prop.push({
+				prop_name: "prop_"+Math.floor(Math.random() * (features.length - 0.001)),
+			})
+		}
+
+		//var product_price = Math.pow(5, prop.length);
+		var product_price = 3
+		if(prop.length > 0){
+			product_price = 5 * prop.length;
+		}
+
+
+		products.push({
+			product_id: i,
+			product_name: "Prod " + i,
+			//product_price: 10 + Math.floor(Math.random() * 20),
+			product_price: product_price,
+			//product_color: "lightblue",
+			prop: prop,
+			product_creator: "Bot",
+	        product_status: "Completed",
+	        //product_share: 0,
+	        product_util: 0,
+		});
+
+
+	}
+
+
+
+	for(var i = 0; i < CUSTOMERS_NUMBER; i++){
+
+		var needed = [];
+
+		for(var j = 0; j < 10; j++){
+			needed.push({
+				value: 0,
+				weight: Math.floor(Math.random() * 10),  
+				prop: {
+					prop_0: 0,
+					prop_1: 1,
+					prop_2: 2,
+					prop_3: 3,
+					prop_4: 4,
+					prop_5: 5,
+					prop_6: 6,
+					prop_7: 7,
+					prop_8: 8,
+					prop_9: 9,
+					prop_10: 10,
+					prop_11: 11,
+					prop_12: 12,
+					prop_13: 13,
+					prop_14: 14,
+					prop_15: 15,
+					prop_16: 16,
+					prop_17: 17,
+					prop_18: 18,
+					prop_19: 19,
+				}
+			})
+		}
+
+
+		customers.push({
+			customer_id: i,
+			customer_income: 20 + Math.floor(Math.random() * 3),
+			customer_product: "",
+			needed: needed,
+		});
+	}
+
+
+	Generations.insert({
+		customers_arr: customers,
+		products_arr: products,
+		features_arr: features,
+		generation_n: 1,
+	});
+
+
+	var time_count = 1;
 
 
 
@@ -730,10 +844,49 @@ Meteor.startup(() => {
 	   	});
 
 
+	   	var target_util = 0;
+		//while(target_util != 162){
+
+		   	console.log("------------------------  START GENERATIONS ---------------------------");
+
+		   	time_count++;
+
+		   	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
+		   	// var generation = Generations.find({}).fetch();
+		   	// generation = generation.sort(function(a,b){return a.generation_n < b.generation_n})[0];
+
+		   	//console.log(generation);
+
+		   	generation.crossover();
+		   	generation.mutation();
+		   	generation.estimation();
+		   	generation.selection();
+
+		    //console.log(generation.products_arr);
+
+		    generation.products_arr.forEach(function (product) {
+		    	if(target_util < product.product_util){
+		    		target_util = product.product_util;
+		    	}
+		    });
+
+		   	Generations.insert({
+		   		features_arr: generation.features_arr,
+		   		customers_arr: generation.customers_arr,
+		   		products_arr: generation.products_arr,
+		   		generation_n: time_count,
+		   	});
+
+
+
+		   	console.log("------------------------   END GENERATIONS  ---------------------------");
+		//};
+
+
 
 	   	console.log("-----------------------------   END   --------------------------------");
 
-	}, 10000);
+	}, 30000);
 
 
 });

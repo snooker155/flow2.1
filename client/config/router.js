@@ -104,6 +104,17 @@ Router.route('/news', function () {
 });
 
 
+Router.route('/products', function () {
+  if(Meteor.userId()){
+    //Session.set("game", Games.findOne({}));
+    //this.render('outer3');
+    this.render('products_info');
+    this.layout('gameLayout');
+  }else{
+    Router.go('/login');
+  }
+});
+
 Router.route('/customers', function () {
   if(Meteor.userId()){
     //Session.set("game", Games.findOne({}));

@@ -22,6 +22,9 @@
   Meteor.publish("features", function() {
     return Features.find();
   });
+  Meteor.publish("generations", function() {
+    return Generations.find();
+  });
   // Meteor.publish("customers", function() {
   //   return Customers.find();
   // });

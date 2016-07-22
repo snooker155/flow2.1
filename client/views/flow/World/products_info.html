@@ -1,0 +1,99 @@
+<template name="products_info">
+  {{>world}}
+	<h1 style="text-align: center; color: white;">Welcome to Genetic!</h1>
+
+    {{> customers_stat products=all_products}}
+    {{> products products=all_products}}
+
+</template>
+
+
+<template name="customers_stat">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h2>Customers stat</h2>
+        </div>
+        <div class="ibox-content">
+          <div class="row">
+            <div class="col-md-6">
+              <h3>Customers number: <strong>{{customers_number}}</strong></h3>
+            </div>
+            <div class="col-md-6">
+              <h3>Generation number: <strong>{{generation_n}}</strong></h3>
+            </div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Util</th>
+                <!-- <th>Share</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              {{#each products}}
+                <tr>
+                  <td>{{product_name}}</td>
+                  <td><strong>{{product_util}}</strong></td>
+                  <!-- <td><strong>{{product_share}}%</strong></td> -->
+                </tr>
+              {{/each}}
+                <!-- <tr>
+                  <td><strong>SUM:</strong></td>
+                  <td></td>
+                  <td><strong>{{share_sum}}%</strong></td>
+                </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="products">
+  <div class="row">
+    <div class="col-md-12">
+<!--       <div class="ibox">
+        <div class="ibox-title"> -->
+          <h2 style="text-align: center; color: white;">Products</h2>
+<!--         </div>
+        <div class="ibox-content"> -->
+          <div class="row">
+            {{#each products}}
+              {{>product}}
+            {{/each}}
+          </div>
+<!--         </div>
+      </div> -->
+    </div>
+  </div>
+</template>
+
+
+<template name="product">
+  <div class="col-md-2">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h2>{{product_name}}</h2>
+      </div>
+      <div class="ibox-content">
+        <!-- <h3>Product share: <strong>{{product_share}}%</strong></h3> -->
+        <h3>Util: <strong>{{product_util}}</strong></h3>
+        <h3>Price: <strong>{{product_price}}</strong></h3>
+        <table class="table">
+          <tbody>
+            {{#each prop}}
+              <tr>
+                <td>Name:</td>
+                <td><strong>{{prop_name}}</strong></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>

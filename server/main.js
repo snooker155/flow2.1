@@ -601,12 +601,12 @@ Meteor.startup(() => {
 	}
 
 
-	Generations.insert({
-		customers_arr: customers,
-		products_arr: products,
-		features_arr: features,
-		generation_n: 1,
-	});
+	// Generations.insert({
+	// 	customers_arr: customers,
+	// 	products_arr: products,
+	// 	features_arr: features,
+	// 	generation_n: 1,
+	// });
 
 
 	var time_count = 1;
@@ -844,43 +844,43 @@ Meteor.startup(() => {
 	   	});
 
 
-	   	var target_util = 0;
-		//while(target_util != 162){
+	 //   	var target_util = 0;
+		// //while(target_util != 162){
 
-		   	console.log("------------------------  START GENERATIONS ---------------------------");
+		//    	console.log("------------------------  START GENERATIONS ---------------------------");
 
-		   	time_count++;
+		//    	time_count++;
 
-		   	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
-		   	// var generation = Generations.find({}).fetch();
-		   	// generation = generation.sort(function(a,b){return a.generation_n < b.generation_n})[0];
+		//    	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
+		//    	// var generation = Generations.find({}).fetch();
+		//    	// generation = generation.sort(function(a,b){return a.generation_n < b.generation_n})[0];
 
-		   	//console.log(generation);
+		//    	//console.log(generation);
 
-		   	generation.crossover();
-		   	generation.mutation();
-		   	generation.estimation();
-		   	generation.selection();
+		//    	generation.crossover();
+		//    	generation.mutation();
+		//    	generation.estimation();
+		//    	generation.selection();
 
-		    //console.log(generation.products_arr);
+		//     //console.log(generation.products_arr);
 
-		    generation.products_arr.forEach(function (product) {
-		    	if(target_util < product.product_util){
-		    		target_util = product.product_util;
-		    	}
-		    });
+		//     generation.products_arr.forEach(function (product) {
+		//     	if(target_util < product.product_util){
+		//     		target_util = product.product_util;
+		//     	}
+		//     });
 
-		   	Generations.insert({
-		   		features_arr: generation.features_arr,
-		   		customers_arr: generation.customers_arr,
-		   		products_arr: generation.products_arr,
-		   		generation_n: time_count,
-		   	});
+		//    	Generations.insert({
+		//    		features_arr: generation.features_arr,
+		//    		customers_arr: generation.customers_arr,
+		//    		products_arr: generation.products_arr,
+		//    		generation_n: time_count,
+		//    	});
 
 
 
-		   	console.log("------------------------   END GENERATIONS  ---------------------------");
-		//};
+		//    	console.log("------------------------   END GENERATIONS  ---------------------------");
+		// //};
 
 
 

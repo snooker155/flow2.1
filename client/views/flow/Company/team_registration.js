@@ -11,13 +11,14 @@ Template.team_registration.onCreated(function(){
     // var company = game.companies[Meteor.user().username];
     // var n = company.company_level + 1;
     employees_array = [];
-    var n = Departments.find().count();
+    var departments = Departments.find().fetch();
     var price_for_employee = 0;
     var employee_number = 0;
     var max_employee_number = 10;
-    for (i=0; i<n; i++){
+    for (i=0; i<departments.length; i++){
         employees_array.push({
             id: i,
+            value: i,
             number: i+1,
             department_name: null,
             employee_level: 1,
@@ -36,13 +37,6 @@ Template.team_registration.onCreated(function(){
 
 
 
-// var department_description_name = new ReactiveVar("Choose");
-
-// var department_description = new ReactiveVar("");
-
-
-
-
 Template.team_registration.helpers({
 
     available_departments: function(){
@@ -51,7 +45,18 @@ Template.team_registration.helpers({
     },
 
     departments: function(){
-        return Departments.find();
+        console.log(this);
+        var departments = Departments.find().fetch();
+        var selectable_departments = [];
+        for(var i = 0; i < departments.length; i++){
+            if(this.department_name != departments[i].department_name){
+                selectable_departments.push(departments[i]);
+            }
+            if($("#department_name"+i)[0]){
+                console.log($("#department_name"+i)[0].value);
+            }
+        }
+        return selectable_departments;
     },
 
     new_employee_number_plus_enabled:function(){
@@ -104,20 +109,15 @@ Template.team_registration.events({
         var department_name = event.target.value;
         var department = Departments.findOne({department_name: department_name});
         if (department){
-            //console.log(this);
             this.price_for_employee = parseInt(department.employee_price);
             this.sum_of_department = this.price_for_employee * this.employee_number;
             this.department_name = department.department_name;
             employees_arrayDep.changed();
-            // department_description_name.set(department.department_name);
-            // department_description.set(department.department_description);
         }else{
             this.price_for_employee = 0;
             this.sum_of_department = this.price_for_employee * this.employee_number;
             this.department_name = null;
             employees_arrayDep.changed();
-            // department_description_name.set("Test");
-            // department_description.set("Test");
         }
 
     },

@@ -24,7 +24,7 @@ Template.product_registration.onCreated(function(){
     features.forEach(function (feature) {
         features_array.push({
             id: i,
-            value: i+1,
+            value: i,
             //company_name: Companies.findOne({owner: Meteor.userId()}).company_name,
             feature_name: null,
             feature_level: feature_level,
@@ -63,9 +63,18 @@ Template.product_registration.helpers({
     },
 
     features: function(){
-        // var company = Companies.findOne({ owner: Meteor.userId() });
-        // return Features.find({neccessary_level: { $lte: company.company_level }});
-        return Features.find({});
+        var features = Features.find({}).fetch();
+        var selectable_features = [];
+        for(var i = 0; i < features.length; i++){
+            if(this.id != i){
+                if($("#feature_name"+i).val() != features[i].feature_name){
+                    selectable_features.push(features[i]);
+                }
+            }else{
+                selectable_features.push(features[i]);
+            }
+        }
+        return selectable_features;
     },
 
     feature_costs(){

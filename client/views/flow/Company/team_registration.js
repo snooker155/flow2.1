@@ -45,15 +45,15 @@ Template.team_registration.helpers({
     },
 
     departments: function(){
-        console.log(this);
         var departments = Departments.find().fetch();
         var selectable_departments = [];
         for(var i = 0; i < departments.length; i++){
-            if(this.department_name != departments[i].department_name){
+            if(this.id != i){
+                if($("#department_name"+i).val() != departments[i].department_name){
+                    selectable_departments.push(departments[i]);
+                }
+            }else{
                 selectable_departments.push(departments[i]);
-            }
-            if($("#department_name"+i)[0]){
-                console.log($("#department_name"+i)[0].value);
             }
         }
         return selectable_departments;

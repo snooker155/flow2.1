@@ -26,7 +26,7 @@ var getSunburstData = function(game){
 		game.products.forEach(function (product) {
 		  	var count = 0;
 			game.customers.forEach(function (customer) {
-				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
+				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
 					if(customer.customer_region == region){
 						count++;
 					}
@@ -35,11 +35,11 @@ var getSunburstData = function(game){
 			
 			if(count > 0){
 				//increment += parseFloat((count / region_customer_number * 100).toFixed(2));
-				increment += Math.floor(count / region_customer_number * 100);
+				//increment += Math.floor(count / region_customer_number * 100);
 				region_state.push({
 					name: product.product_name,
 					color: product.product_color,
-					size: increment,
+					size: count,
 				});
 			}
 		});
@@ -58,21 +58,21 @@ var getSunburstData = function(game){
 
 		if(inactive_count > 0){
 			//increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
-			increment += Math.floor(inactive_count / region_customer_number * 100);
+			//increment += Math.floor(inactive_count / region_customer_number * 100);
 			region_state.push({
 				name: "Inactive",
 				color: "red",
-				size: increment,
+				size: inactive_count,
 			});
 		}
 
 		if(notselected_count > 0){
 			//increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
-			increment += Math.floor(notselected_count / region_customer_number * 100);
+			//increment += Math.floor(notselected_count / region_customer_number * 100);
 			region_state.push({
 				name: "Free",
 				color: "lightblue",
-				size: increment,
+				size: notselected_count,
 			});
 		}
 
@@ -108,17 +108,17 @@ var getSunburstData = function(game){
 		// 	}
 		// }
 
-		if(region_state[1]){
+		//if(region_state[1]){
 			regions_state.push({
 				name: region,
 				children: region_state,
 			});
-		}else{
-			regions_state.push({
-				name: region,
-				size: game.regions[region].region_people_number,
-			});
-		}
+		// }else{
+		// 	regions_state.push({
+		// 		name: region,
+		// 		size: game.regions[region].region_people_number,
+		// 	});
+		// }
 	}
 	//console.log(regions_state1);
 	return regions_state1;
@@ -394,6 +394,91 @@ Template.world_info.helpers({
 	},
 
 
+	// products:function(){
+ //    	var game = Games.findOne({});
+ //    	var products = [];
+ //        var free_share = 0;
+ //        var inactive_share = 0;
+ //        var total_customer = 0;
+ //    	game.products.forEach(function (product) {
+ //            if(product.product_status != "In production"){
+ //                var product_share = 0;
+ //                var total_product_customers = 0;
+ //                total_customer = 0;
+ //                game.customers.forEach(function (customer) {
+ //                	if(selected_region.get() == "World"){
+ //                		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
+ //                    	    total_product_customers++;
+ //                    	}
+ //                    	total_customer++;
+                		
+ //                	}else{
+ //                		if(customer.customer_region == selected_region.get()){
+ //                    		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
+ //                    		    total_product_customers++;
+ //                    		}
+ //                    		total_customer++;
+ //                    	}
+ //                	}
+ //                });
+ //                total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
+ //                product_share = Math.floor(total_product_customers / total_customer * 100);
+ //                products.push({
+ //                    product_name: product.product_name,
+ //                    product_color: product.product_color,
+ //                    product_share: product_share,
+ //                });
+ //            }
+ //        });
+	
+	// 	total_customer = 0;
+ //        game.customers.forEach(function (customer) {
+ //        	if(selected_region.get() == "World"){
+ //        		if(customer.customer_activity != 1){
+ //            	    inactive_share++;
+ //            	}
+
+ //            	if(customer.customer_activity == 1 && !customer.customer_product){
+ //            	    free_share++;
+ //            	}
+
+ //            	total_customer++;
+       
+ //        	}else{
+ //            	if(customer.customer_region == selected_region.get()){
+ //        			if(customer.customer_activity != 1){
+ //            		    inactive_share++;
+ //            		}
+
+ //            		if(customer.customer_activity == 1 && !customer.customer_product){
+ //            		    free_share++;
+ //            		}
+ //        			total_customer++;
+ //        		}
+ //        	}
+ //        });
+	// 	total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
+ //        products.push({
+ //            product_name: "Free",
+ //            product_color: "lightblue",
+ //            product_share: Math.floor(free_share / total_customer * 100),
+ //        });
+
+ //        products.push({
+ //            product_name: "Inactive",
+ //            product_color: "red",
+ //            product_share: Math.floor(inactive_share / total_customer * 100),
+ //        });
+ //    	return products;
+ //    },
+});
+
+
+
+
+
+
+Template.region_info.helpers({
 	products:function(){
     	var game = Games.findOne({});
     	var products = [];

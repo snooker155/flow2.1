@@ -243,6 +243,7 @@ Template.product_registration.events({
                             neccessary_department: feature.neccessary_department,
                             progress: feature.progress,
                             start_period: game.time_period,
+                            product_id: game.products[game.products.length - 1].product_id + 1,
                         })
                     }else{
                         can_create = false;
@@ -257,10 +258,12 @@ Template.product_registration.events({
 
     
             if(can_create){
-                var regions = [];
-                company.company_region.forEach(function (region) {
-                    regions.push(region);
-                });
+                // var regions = [];
+                // company.company_region.forEach(function (region) {
+                //     regions.push(region);
+                // });
+
+                var regions = ["NA", "SA", "CA", "CE", "NE", "RU", "AF", "OR", "IN", "AS", "SP", "IN"];
 
                 product = {
                     product_id: game.products[game.products.length - 1].product_id + 1,
@@ -273,6 +276,7 @@ Template.product_registration.events({
                     product_creator: company.company_name,
                     product_status: "In production",
                     product_regions: regions,
+                    product_editable: false,
                 }
 
                 game.products.push(product);
@@ -295,6 +299,8 @@ Template.product_registration.events({
 
 
                 Meteor.call('updateGame', game);
+
+                $("#collapse").attr("class", "collapse");
 
             }
         }

@@ -55,106 +55,27 @@ Template.game_product.helpers({
         return features;
     },
 
-    // product_name: function(){
-    //     var game = Games.findOne({});
-    //     var product = null;
-    //     game.products.forEach(function(product) {
-    //         if(product.product_creator == game.companies[Meteor.user().username].company_name){
-    //             product = product;
-    //         }
-    //     });
-    //     if(product){
-    //         console.log(product);
-    //         return product.product_name;
-    //     }
-    // },
 
-    // feature_description_name: function(){
-    //     return feature_description_name.get();
-    // },
-
-    // feature_description: function(){
-    //     return feature_description.get();
-    // },
-
-    // feature_completed: function(){
-    //     if(this.progress == 100){
-    //         return true;
-    //     }else{
-    //         return false;
-    //     }
-    // },
-
-    // progress_value: function(){
-    //   var progress = this.progress;
-    //   if (this.updated_time != 0){
-    //     var createdAt = this.updated_time;
-    //   }else{
-    //      var createdAt = this.createdAt;
-    //   }
-    //   var id = this._id;
-    //   var time_to_achieve = this.time_to_achieve;
-    //   var basictime = 100;
-    //   if(this.is_stop){
-    //     return Math.round(progress);
-    //   }else{
-    //     if (progress !== 100){
-    //         if(progress < 100){
-    //             //console.log('progress_start');
-    //             var date = new Date();
-    //             Meteor.setTimeout(function(){
-    //                 //console.log(((date - createdAt)/(time_to_achieve*basictime)).toFixed(2));
-    //                 //Meteor.call('updateFeatureProgress', id, (progress + ((date - createdAt)/(time_to_achieve*basictime))));
-
-    //               },(time_to_achieve*basictime));
-    //               //},(1000));
-    //             //console.log('progress_end');
-    //             return Math.round(progress);
-    //         }
-    //         else {
-    //             //Meteor.call('updateFeatureProgress', id, 100);
-    //             progress = 100;
-    //             return progress;
-    //         }
-    //     }else{
-    //         return progress;
-    //     }
-    //   }
-    // },
-
-
-    // progress_bar_value: function(){
-    //     return Math.round(this.progress);
-    // },
-
-
-
-
-    // test_progress: function(){
-    //     var test_date = new Date();
-    //     if (test_progress.get() < 100){
-    //         Meteor.setTimeout(function(){
-    //             //console.log('123');
-    //             test_progress.set(((test_date - test_createdAt)/(10*100)).toFixed(2));
-    //           },(1000));
-    //         return Math.round(test_progress.get());
-    //     }else{
-    //         return 100;
-    //     }
-    // },
-
-
-    // production_progress: function(){
-    //     var game = Games.findOne({});
-    //     var self = this;
-    //     if((game.time_period - self.start_period) / self.time_to_achieve > 1){
-    //         return 100;
-    //     }else{ 
-    //         return Math.round((game.time_period - self.start_period) / self.time_to_achieve * 100);
-    //     }
-    // },
-
-
+    product_production_progress(){
+        var game = Games.findOne({});
+        var self = this;
+        var total_time_to_achieve = 0;
+        var total_start_period = 0;
+        self.prop.forEach(function (property) {
+            total_time_to_achieve += property.time_to_achieve;
+            if(total_start_period < property.start_period){
+                total_start_period = property.start_period;
+            }
+        });
+        // console.log(total_time_to_achieve);
+        // console.log(total_start_period);
+        // console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
+        if(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100) >= 100){
+            return 100;
+        }else{
+            return Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100); 
+        }
+    },
 
 
     prop_costs: function(){
@@ -272,12 +193,14 @@ Template.game_product.events({
     "click #delete_product": function(event){
         event.preventDefault();
 
+        var self = this;
+
         var game = Games.findOne({});
 
         var count = 0;
 
         game.products.forEach(function (product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+            if(product.product_id == self.product_id){
                 game.products.splice(count, 1);
             }
             count++;
@@ -286,18 +209,42 @@ Template.game_product.events({
         Meteor.call('updateGame', game);
     },
 
-    // "click #feature_row": function(){
-    //     event.preventDefault();
-    //     var feature_name = this.feature_name;
-    //     var feature = Features.findOne({feature_name: feature_name});
-    //     if (feature){
-    //         feature_description_name.set(feature.feature_name);
-    //         feature_description.set(feature.feature_description);
-    //     }else{
-    //         feature_description_name.set("Test");
-    //         feature_description.set("Test");
-    //     }
-    // },
+    "click #edit_product": function(){
+        event.preventDefault();
+
+        var self = this;
+        var game = Games.findOne({});
+
+        game.products.forEach(function (product) {
+            if(product.product_id == self.product_id){
+                product.product_editable = true;
+            }
+        });
+
+        Meteor.call('updateGame', game);
+    },
+
+
+    "click #save_product": function(){
+        event.preventDefault();
+
+        var self = this;
+        var game = Games.findOne({});
+
+        var product_name = $("#product_name"+self.product_id).val();
+        var product_price = $("#product_price"+self.product_id).val() * 1;
+
+        game.products.forEach(function (product) {
+            if(product.product_id == self.product_id){
+                product.product_name = product_name;
+                product.product_price = product_price;
+                product.product_editable = false;
+            }
+        });
+
+        Meteor.call('updateGame', game);
+    },
+
 
 
     'change #feature_name': function(event, template){
@@ -313,8 +260,6 @@ Template.game_product.events({
             this.neccessary_employees_number = feature.neccessary_employees_number * this.feature_level;
             this.available_employees_number = Employees.findOne({owner: Meteor.userId(), department_name: feature.neccessary_department}).employee_number;
             features_arrayDep.changed();
-            // feature_description_name.set(feature.feature_name);
-            // feature_description.set(feature.feature_description);
         }else{
             this.feature_price = 0;
             this.feature_sum = this.feature_price * this.feature_level;
@@ -324,20 +269,17 @@ Template.game_product.events({
             this.neccessary_employees_number = 0;
             this.available_employees_number = 0;
             features_arrayDep.changed();
-            // feature_description_name.set("Test");
-            // feature_description.set("Test");
         }
     },
 
 
     "click #feature_level_plus": function(event){
         var self =  this;
-        //console.log(self);
         var game = Games.findOne({});
         var selected_product = null;
 
         game.products.forEach(function (product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+            if(product.product_id == self.product_id){
                 selected_product = product;
             }
         });
@@ -356,20 +298,6 @@ Template.game_product.events({
         Meteor.call('updateGame', game);
     },
 
-
-    // "click #new_feature_level_decrease": function(event){
-    //     this.feature_level -= 1;
-    //     this.feature_sum = this.feature_price * this.feature_level;
-    //     this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number * this.feature_level;
-    //     features_arrayDep.changed();
-    // },
-
-    // "click #new_feature_level_increase": function(event){
-    //     this.feature_level += 1;
-    //     this.feature_sum = this.feature_price * this.feature_level;
-    //     this.neccessary_employees_number = Features.findOne({feature_name: this.feature_name}).neccessary_employees_number  * this.feature_level;
-    //     features_arrayDep.changed();
-    // },
 
 
     // "click #publish": function(){
@@ -408,14 +336,13 @@ Template.game_product.events({
     'click #delete_prop': function(){
         event.preventDefault();
         var self = this;
-
         var game = Games.findOne({});
 
         var count = 0;
         var selected_product = null;
 
         game.products.forEach(function (product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+            if(product.product_id == self.product_id){
                 selected_product = product;
             }
         });

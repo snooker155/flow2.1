@@ -64,7 +64,7 @@ function drawPlotGraph(data1, data2){
                 },
                 yaxes: [{
                     position: "left",
-                    max: 30000,
+                    max: 50000,
                     color: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -72,7 +72,7 @@ function drawPlotGraph(data1, data2){
                     axisLabelPadding: 3
                 }, {
                     position: "right",
-                    max: 2500,
+                    max: 3500,
                     clolor: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,

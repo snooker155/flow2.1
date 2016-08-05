@@ -11,7 +11,7 @@ function getGradientData(game, region_id){
 	game.products.forEach(function (product) {
 	  	var count = 0;
 		game.customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == product._id){
+			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
 				if(customer.customer_region == region_id){
 					count++;
 				}
@@ -426,7 +426,14 @@ Template.world_map.helpers({
 
 
 	products(){
-		return Games.findOne({}).products;
+		var game = Games.findOne({});
+		var products = [];
+		game.products.forEach(function (product) {
+			if(product.product_status == "Completed"){
+				products.push(product);
+			}
+		});
+		return products;
 	},
 
 	product_customers(){
@@ -434,7 +441,7 @@ Template.world_map.helpers({
 		var customers = Games.findOne({}).customers;
 		var count = 0;
 		customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == self._id){
+			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
 				if(selected_region.get()){
 					if(customer.customer_region == selected_region.get()){
 						count++;
@@ -452,7 +459,7 @@ Template.world_map.helpers({
 		var customers = Games.findOne({}).customers;
 		var count = 0;
 		customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product._id == self._id){
+			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
 				if(selected_region.get()){
 					if(customer.customer_region == selected_region.get()){
 						count++;	
@@ -462,7 +469,7 @@ Template.world_map.helpers({
 				}
 			}
 		});
-		return count * self.product_price;
+		return Math.floor(count * self.product_price);
 	},
 
 	avg_income(){

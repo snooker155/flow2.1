@@ -65,6 +65,7 @@ Meteor.startup(() => {
 
 
 	Features.insert({
+		feature_id: 1,
 		feature_name: "prop_1",
 		time_to_achieve: 5,
 		feature_price: 250,
@@ -75,6 +76,7 @@ Meteor.startup(() => {
 	});
 
 	Features.insert({
+		feature_id: 2,
 		feature_name: "prop_2",
 		time_to_achieve: 7,
 		feature_price: 350,
@@ -85,6 +87,7 @@ Meteor.startup(() => {
 	});
 
 	Features.insert({
+		feature_id: 3,
 		feature_name: "prop_3",
 		time_to_achieve: 10,
 		feature_price: 450,
@@ -101,35 +104,38 @@ Meteor.startup(() => {
 	///////////////////////////////////////////////////////////////////////
 
 	Products.insert({
-		product_id: 1,
-		product_name: "Prod 1",
+		product_id: 0,
+		product_name: "Prod 0",
 		product_price: 8,
 		product_color: "orange",
 		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1"},
+		prop: [{
+				prop_name: "prop_1",
+				prop_level: 1},
 			//{prop_name: "prop_2"},
 		],
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN"],
+        product_util: 0,
 	});
 
 	Products.insert({
-		product_id: 2,
-		product_name: "Prod 2",
+		product_id: 1,
+		product_name: "Prod 1",
 		product_price: 12,
 		product_color: "lightgreen",
 		//product_quality: 1 + Math.floor(Math.random() * 10),
 		prop: [
-			{prop_name: "prop_1"},
-			{prop_name: "prop_2"},
+			{prop_name: "prop_1", prop_level: 1},
+			{prop_name: "prop_2", prop_level: 1},
 		],
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
         product_regions: ["NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
 	});
 
 
@@ -434,6 +440,12 @@ Meteor.startup(() => {
     	}
     });
 
+	var features = [];
+
+	Features.find().fetch().forEach(function (feature) {
+		features.push(feature);
+	});
+
 
 
 	var game_id = Games.insert({
@@ -441,6 +453,7 @@ Meteor.startup(() => {
     	players: [],
      	regions: regions,
      	customers: customers,
+     	features: features,
      	companies: {},
      	news: [],
      	customers_history: [],
@@ -485,6 +498,7 @@ Meteor.startup(() => {
 		customers_history: game.customers_history,
 		avg_price_history: game.avg_price_history,
 		news: game.news,
+		features: game.features,
 		companies: game.companies,
 		products: game.products,
 		regions: game.regions,
@@ -502,103 +516,103 @@ Meteor.startup(() => {
 ////////////////////////////////////////////////////////////////////////
 
 
-	var CUSTOMERS_NUMBER = 1000;
-	var FEATRUES_NUMBER = 20;
-	var PRODUCTS_NUMBER = 6;
+	// var CUSTOMERS_NUMBER = 1000;
+	// var FEATRUES_NUMBER = 20;
+	// var PRODUCTS_NUMBER = 6;
 
-	var products = [];
-	var customers = [];
-	var features = [];
-
-
-
-	for (var i = 0; i < FEATRUES_NUMBER; i++){
-
-		features.push({
-			feature_id: i,
-			feature_name: "prop_"+i,
-		});
-
-	}
+	// var products = [];
+	// var customers = [];
+	// var features = [];
 
 
 
-	for (var i = 0; i < PRODUCTS_NUMBER; i++){
+	// for (var i = 0; i < FEATRUES_NUMBER; i++){
 
-		var prop = [];
+	// 	features.push({
+	// 		feature_id: i,
+	// 		feature_name: "prop_"+i,
+	// 	});
 
-		for(var j = 0; j < Math.floor(Math.random() * (features.length - 10.1) + 1); j++){
-			prop.push({
-				prop_name: "prop_"+Math.floor(Math.random() * (features.length - 0.001)),
-			})
-		}
-
-		//var product_price = Math.pow(5, prop.length);
-		var product_price = 3
-		if(prop.length > 0){
-			product_price = 5 * prop.length;
-		}
-
-
-		products.push({
-			product_id: i,
-			product_name: "Prod " + i,
-			//product_price: 10 + Math.floor(Math.random() * 20),
-			product_price: product_price,
-			//product_color: "lightblue",
-			prop: prop,
-			product_creator: "Bot",
-	        product_status: "Completed",
-	        //product_share: 0,
-	        product_util: 0,
-		});
-
-
-	}
+	// }
 
 
 
-	for(var i = 0; i < CUSTOMERS_NUMBER; i++){
+	// for (var i = 0; i < PRODUCTS_NUMBER; i++){
 
-		var needed = [];
+	// 	var prop = [];
 
-		for(var j = 0; j < 10; j++){
-			needed.push({
-				value: 0,
-				weight: Math.floor(Math.random() * 10),  
-				prop: {
-					prop_0: 0,
-					prop_1: 1,
-					prop_2: 2,
-					prop_3: 3,
-					prop_4: 4,
-					prop_5: 5,
-					prop_6: 6,
-					prop_7: 7,
-					prop_8: 8,
-					prop_9: 9,
-					prop_10: 10,
-					prop_11: 11,
-					prop_12: 12,
-					prop_13: 13,
-					prop_14: 14,
-					prop_15: 15,
-					prop_16: 16,
-					prop_17: 17,
-					prop_18: 18,
-					prop_19: 19,
-				}
-			})
-		}
+	// 	for(var j = 0; j < Math.floor(Math.random() * (features.length - 10.1) + 1); j++){
+	// 		prop.push({
+	// 			prop_name: "prop_"+Math.floor(Math.random() * (features.length - 0.001)),
+	// 		})
+	// 	}
+
+	// 	//var product_price = Math.pow(5, prop.length);
+	// 	var product_price = 3
+	// 	if(prop.length > 0){
+	// 		product_price = 5 * prop.length;
+	// 	}
 
 
-		customers.push({
-			customer_id: i,
-			customer_income: 20 + Math.floor(Math.random() * 3),
-			customer_product: "",
-			needed: needed,
-		});
-	}
+	// 	products.push({
+	// 		product_id: i,
+	// 		product_name: "Prod " + i,
+	// 		//product_price: 10 + Math.floor(Math.random() * 20),
+	// 		product_price: product_price,
+	// 		//product_color: "lightblue",
+	// 		prop: prop,
+	// 		product_creator: "Bot",
+	//         product_status: "Completed",
+	//         //product_share: 0,
+	//         product_util: 0,
+	// 	});
+
+
+	// }
+
+
+
+	// for(var i = 0; i < CUSTOMERS_NUMBER; i++){
+
+	// 	var needed = [];
+
+	// 	for(var j = 0; j < 10; j++){
+	// 		needed.push({
+	// 			value: 0,
+	// 			weight: Math.floor(Math.random() * 10),  
+	// 			prop: {
+	// 				prop_0: 0,
+	// 				prop_1: 1,
+	// 				prop_2: 2,
+	// 				prop_3: 3,
+	// 				prop_4: 4,
+	// 				prop_5: 5,
+	// 				prop_6: 6,
+	// 				prop_7: 7,
+	// 				prop_8: 8,
+	// 				prop_9: 9,
+	// 				prop_10: 10,
+	// 				prop_11: 11,
+	// 				prop_12: 12,
+	// 				prop_13: 13,
+	// 				prop_14: 14,
+	// 				prop_15: 15,
+	// 				prop_16: 16,
+	// 				prop_17: 17,
+	// 				prop_18: 18,
+	// 				prop_19: 19,
+	// 			}
+	// 		})
+	// 	}
+
+
+	// 	customers.push({
+	// 		customer_id: i,
+	// 		customer_income: 20 + Math.floor(Math.random() * 3),
+	// 		customer_product: "",
+	// 		needed: needed,
+	// 	});
+	// }
 
 
 	// Generations.insert({
@@ -618,6 +632,13 @@ Meteor.startup(() => {
 	   	console.log("-----------------------------  START  --------------------------------");
 
 	   	var game = Games.findOne({});
+
+
+	 	// game.crossover();
+		// game.mutation();
+		// game.estimation();
+		// game.selection();
+
 
 	   	game.customers.forEach(function (customer) {
 
@@ -655,104 +676,106 @@ Meteor.startup(() => {
 		//game.changeRegionConservLevel(-0.001, "RU");
 
 
-	   	if(game.getRegionConserv("RU") >= 0.08){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
+	   	// if(game.getRegionConserv("RU") >= 0.08){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
 
-	   		console.log("----------------------   Crisis in Russia   --------------------------");
+	   	// 	console.log("----------------------   Crisis in Russia   --------------------------");
 
-		   	if(game.getRegionPref("RU") <= 3 * 2 && game.getAvgPrice("RU") < 15){  /// 3 = region_pref for "RU" region
-		   		game.changeRegionPref(0.05, "RU");
-		   	}
+		   // 	if(game.getRegionPref("RU") <= 3 * 2 && game.getAvgPrice("RU") < 15){  /// 3 = region_pref for "RU" region
+		   // 		game.changeRegionPref(0.05, "RU");
+		   // 	}
 
-		   	if(game.getAvgPrice("RU") < 25){
-		   		game.changeProductPrice(0.25, "Prod 2");
-		   	}
+		   // 	if(game.getAvgPrice("RU") < 25){
+		   // 		game.changeProductPrice(0.25, "Prod 2");
+		   // 	}
 
-	   	}
+	   	// }
 
 
 
-	   	if(game.getAvgPrice("RU") >= 16){  //// set inflation in Russia
 
-	   		console.log("----------------------   Inflation in Russia   --------------------------");
 
-	   		//game.changeIncome(-0.02, "RU");
+	   	// if(game.getAvgPrice("RU") >= 16){  //// set inflation in Russia
 
-	   		if(game.getRegionPref("RU") > 1){
-	   			if(game.getRegionPref("RU") > 3){    /// 3 = region_pref for "RU" region
-	   				game.changeRegionPref(-0.05, "RU");
-	   				game.changeIncome(-0.02, "RU");
-	   			}else if(game.getRegionPref("RU") > 3 * 0.5){    /// 3 = region_pref for "RU" region
-	   				game.changeRegionPref(-0.05, "RU");
-	   				game.changeIncome(-0.01, "RU");
-	   			}else if(game.getRegionPref("RU") > 3 * 0.25){   /// 3 = region_pref for "RU" region
-	   				game.changeRegionPref(-0.05, "RU");
-	   				game.changeIncome(-0.005, "RU");
-	   			}
-	   		}
+	   	// 	console.log("----------------------   Inflation in Russia   --------------------------");
 
-		   	// if(game.getRegionConserv("RU") > 0.01 ){
-		   	// 	game.changeRegionConservLevel(-0.005, "RU");
-		   	// 	game.changeRegionPref(0.3, "RU");
-		   	// 	game.changeIncome(-0.02, "RU");
-		   	// }
+	   	// 	//game.changeIncome(-0.02, "RU");
+
+	   	// 	if(game.getRegionPref("RU") > 1){
+	   	// 		if(game.getRegionPref("RU") > 3){    /// 3 = region_pref for "RU" region
+	   	// 			game.changeRegionPref(-0.05, "RU");
+	   	// 			game.changeIncome(-0.02, "RU");
+	   	// 		}else if(game.getRegionPref("RU") > 3 * 0.5){    /// 3 = region_pref for "RU" region
+	   	// 			game.changeRegionPref(-0.05, "RU");
+	   	// 			game.changeIncome(-0.01, "RU");
+	   	// 		}else if(game.getRegionPref("RU") > 3 * 0.25){   /// 3 = region_pref for "RU" region
+	   	// 			game.changeRegionPref(-0.05, "RU");
+	   	// 			game.changeIncome(-0.005, "RU");
+	   	// 		}
+	   	// 	}
+
+		   // 	// if(game.getRegionConserv("RU") > 0.01 ){
+		   // 	// 	game.changeRegionConservLevel(-0.005, "RU");
+		   // 	// 	game.changeRegionPref(0.3, "RU");
+		   // 	// 	game.changeIncome(-0.02, "RU");
+		   // 	// }
 		   	
-	   	}
+	   	// }
 
 
 
-	   	if(game.getAverageIncome("RU") <= 10){  //// set Customers' ability in Russia
+	   	// if(game.getAverageIncome("RU") <= 10){  //// set Customers' ability in Russia
 
-	   		console.log("------------   Customers' ability reducing in Russia   ----------------");
+	   	// 	console.log("------------   Customers' ability reducing in Russia   ----------------");
 
-	   		//game.changeRegionConservLevel(0.05, "RU");
+	   	// 	//game.changeRegionConservLevel(0.05, "RU");
 
-	   		if(game.getRegionConserv("RU") < 0.6){
-		   		//game.changeCustomersNumber(1, "RU");
-		   		game.changeRegionPref(-0.05, "RU");
-		   		//game.changeRegionConservLevel(-0.005, "RU");
-		   		//game.changeIncome(0.2, "RU");
-		   	}else{
-		   		game.changeRegionActivity(0, "RU");
-		   	}
+	   	// 	if(game.getRegionConserv("RU") < 0.6){
+		   // 		//game.changeCustomersNumber(1, "RU");
+		   // 		game.changeRegionPref(-0.05, "RU");
+		   // 		//game.changeRegionConservLevel(-0.005, "RU");
+		   // 		//game.changeIncome(0.2, "RU");
+		   // 	}else{
+		   // 		game.changeRegionActivity(0, "RU");
+		   // 	}
 		   	
-	   	}
+	   	// }
 
 
 
 
-	   	if(game.getRegionPref("RU") > 3.5){  //// set Overexpectations reducing in Russia
+	   	// if(game.getRegionPref("RU") > 3.5){  //// set Overexpectations reducing in Russia
 
-	   		console.log("------------   Overexpectations reducing in Russia   ----------------");
+	   	// 	console.log("------------   Overexpectations reducing in Russia   ----------------");
 
-	   		//game.changeRegionConservLevel(0.1, "RU");
+	   	// 	//game.changeRegionConservLevel(0.1, "RU");
 
-	   		if(game.getAvgPrice("RU") >= 20){
-		   		//game.changeCustomersNumber(1, "RU");
-		   		//game.changeRegionPref(-0.1, "RU");
-		   		game.changeRegionConservLevel(0.02, "RU");
-		   		//game.changeProductPrice(-2, "Prod 2");
-		   	}else{
-		   		game.changeIncome(-0.015, "RU");
-		   	}
+	   	// 	if(game.getAvgPrice("RU") >= 20){
+		   // 		//game.changeCustomersNumber(1, "RU");
+		   // 		//game.changeRegionPref(-0.1, "RU");
+		   // 		game.changeRegionConservLevel(0.02, "RU");
+		   // 		//game.changeProductPrice(-2, "Prod 2");
+		   // 	}else{
+		   // 		game.changeIncome(-0.015, "RU");
+		   // 	}
 		   	
-	   	}
+	   	// }
 
 
 
-	   	if(game.getRegionConserv("RU") > 0.04){  /// 0.07 = base_level_of_conservatism for "RU" region
-		   	if(game.getRegionPref("RU") <= 1){      /////// set Economic growth in Russia
-		   		console.log("------------  Economic growth in Russia   ----------------");
+	   	// if(game.getRegionConserv("RU") > 0.04){  /// 0.07 = base_level_of_conservatism for "RU" region
+		   // 	if(game.getRegionPref("RU") <= 1){      /////// set Economic growth in Russia
+		   // 		console.log("------------  Economic growth in Russia   ----------------");
 
-		   		game.changeRegionConservLevel(-0.005, "RU");
+		   // 		game.changeRegionConservLevel(-0.005, "RU");
 
-		   		game.changeIncome(0.02, "RU");
+		   // 		game.changeIncome(0.02, "RU");
 
-		   		if(game.getAverageIncome("RU") <= 17 && game.getAvgPrice("RU") >= 8){
-			   		game.changeProductPrice(-1, "Prod 2");
-			   		//game.changeIncome(0.05, "RU");
-			   	}
-		   	}
-	   	}
+		   // 		if(game.getAverageIncome("RU") <= 17 && game.getAvgPrice("RU") >= 8){
+			  //  		game.changeProductPrice(-1, "Prod 2");
+			  //  		//game.changeIncome(0.05, "RU");
+			  //  	}
+		   // 	}
+	   	// }
 
 
 
@@ -829,12 +852,53 @@ Meteor.startup(() => {
 		game_new.setCompaniesHistory();
 
 
-	   	Games.update(game._id,{
+	   	//var target_util = 0;
+		//while(target_util != 162){
+
+		   	console.log("------------------------  START GENERATIONS ---------------------------");
+
+		   	//time_count++;
+
+		   	//var generation = Generations.findOne({}, {sort: {generation_n: -1}});
+		   	// var generation = Generations.find({}).fetch();
+		   	// generation = generation.sort(function(a,b){return a.generation_n < b.generation_n})[0];
+
+		   	//console.log(generation);
+
+		   	// game_new.crossover();
+		   	// game_new.mutation();
+		   	// game_new.estimation();
+		   	// game_new.selection();
+
+		    //console.log(generation.products_arr);
+
+		    // game_new.products.forEach(function (product) {
+		    // 	if(target_util < product.product_util){
+		    // 		target_util = product.product_util;
+		    // 	}
+		    // });
+
+		   	// Generations.insert({
+		   	// 	features_arr: generation.features_arr,
+		   	// 	customers_arr: generation.customers_arr,
+		   	// 	products_arr: generation.products_arr,
+		   	// 	generation_n: time_count,
+		   	// });
+
+
+
+		   	console.log("------------------------   END GENERATIONS  ---------------------------");
+		//};
+
+
+
+		Games.update(game._id,{
 	   		players: game.players,
 	   		customers: game.customers,
 	   		customers_history: game.customers_history,
 	   		avg_price_history: game.avg_price_history,
 	   		news: game.news,
+	   		features: game.features,
 	   		companies: game_new.companies,
 	   		products: game.products,
 	   		regions: game.regions,
@@ -844,49 +908,10 @@ Meteor.startup(() => {
 	   	});
 
 
-	 //   	var target_util = 0;
-		// //while(target_util != 162){
-
-		//    	console.log("------------------------  START GENERATIONS ---------------------------");
-
-		//    	time_count++;
-
-		//    	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
-		//    	// var generation = Generations.find({}).fetch();
-		//    	// generation = generation.sort(function(a,b){return a.generation_n < b.generation_n})[0];
-
-		//    	//console.log(generation);
-
-		//    	generation.crossover();
-		//    	generation.mutation();
-		//    	generation.estimation();
-		//    	generation.selection();
-
-		//     //console.log(generation.products_arr);
-
-		//     generation.products_arr.forEach(function (product) {
-		//     	if(target_util < product.product_util){
-		//     		target_util = product.product_util;
-		//     	}
-		//     });
-
-		//    	Generations.insert({
-		//    		features_arr: generation.features_arr,
-		//    		customers_arr: generation.customers_arr,
-		//    		products_arr: generation.products_arr,
-		//    		generation_n: time_count,
-		//    	});
-
-
-
-		//    	console.log("------------------------   END GENERATIONS  ---------------------------");
-		// //};
-
-
 
 	   	console.log("-----------------------------   END   --------------------------------");
 
-	}, 30000);
+	}, 15000);
 
 
 });

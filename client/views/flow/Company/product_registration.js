@@ -133,21 +133,10 @@ Template.product_registration.helpers({
         }
     },
 
-    // feature_level_increase_enabled:function(){
-    //     return this.feature_level<this.max_feature_level?"":"disabled";
-    // },
-
-    // feature_level_decrease_enabled:function(){
-    //     return this.feature_level>0?"":"disabled";
-    // },
-
-    // feature_description_name: function(){
-    //     return feature_description_name.get();
-    // },
-
-    // feature_description: function(){
-    //     return feature_description.get();
-    // },
+    number_id(){
+        var self = this;
+        return self.value + 1;
+    },
 
 });
 
@@ -188,6 +177,39 @@ Template.product_registration.events({
         }
 
         product_array = features_array;
+    },
+
+
+    "click #add_feature": function(event, template){
+        event.preventDefault();
+        var game = Games.findOne({});
+        var self = this;
+
+        features_array.push({
+            id: features_array.length,
+            value: features_array.length,
+            //company_name: Companies.findOne({owner: Meteor.userId()}).company_name,
+            feature_name: null,
+            feature_level: 0,
+            max_feature_level: 0,
+            feature_price: 0,
+            time_to_achieve: 0,
+            neccessary_employees_number: 0,
+            neccessary_department: 0,
+            progress: 0,
+            //feature_sum: feature_price * feature_level,
+        });
+        features_arrayDep.changed();
+    },
+
+    "click #remove_feature": function(event, template){
+        event.preventDefault();
+        var game = Games.findOne({});
+        var self = this;
+
+
+        features_array.splice((features_array.length-1),1);
+        features_arrayDep.changed();
     },
 
     // "click #feature_level_increase": function(){

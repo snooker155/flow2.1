@@ -60,7 +60,7 @@
                                         <tbody>
                                             {{#each features_list}}
                                                 <tr>
-                                                    <td>{{value}}</td>
+                                                    <td>{{number_id}}</td>
                                                     <td>
                                                         <select class="form-control required feature_name" name="feature_name{{value}}" id="feature_name{{value}}" aria-required="true">
                                                             <option value="" selected>Select feature</option>
@@ -75,24 +75,16 @@
                                                     <td>{{current_employees_number}}</td>
                                                     <td>$ {{feature_price}}</td>
                                                     <td>
-                                                        <!-- <div class="row">
-                                                            <div class="col-md-3">
-                                                                <a href="#" id="feature_level_decrease" class="btn btn-white btn-xs {{feature_level_decrease_enabled}}"><i class="fa fa-lg fa-minus"></i></a>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p class="text-center" id="feature_number">{{feature_level}} / {{max_feature_level}}</p>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <a href="#" id="feature_level_increase" class="btn btn-white btn-xs {{feature_level_increase_enabled}}"><i class="fa fa-lg fa-plus"></i></a>
-                                                            </div>
-                                                        </div> -->
                                                         {{feature_level}} ({{max_feature_level}})
                                                     </td>
                                                     <td><strong>$ {{feature_costs}}</strong></td>
                                                 </tr>
                                             {{/each}}
                                             <tr>
-                                                <td></td>
+                                                <td>
+                                                    <button id="add_feature" class="btn btn-sm btn-primary">Add feature</button>
+                                                    <button id="remove_feature" class="btn btn-sm btn-primary">Remove feature</button>
+                                                </td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

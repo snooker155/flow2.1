@@ -53,7 +53,7 @@ Template.game_team.helpers({
 
         var company = Games.findOne({}).companies[Meteor.user().username];
         if (Departments.find().count() - company.company_team.length > 0 ){
-            var n = Departments.find().count() - company.company_team.length;
+            var n = company.company_level + 2 - company.company_team.length;
         }else{
             var n = 0;
         }

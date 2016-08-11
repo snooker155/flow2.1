@@ -15,7 +15,8 @@ Template.team_registration.onCreated(function(){
     var price_for_employee = 0;
     var employee_number = 0;
     var max_employee_number = 10;
-    for (i=0; i<departments.length; i++){
+    var company = game.companies[Meteor.user().username];
+    for (i=0; i<company.company_level+2; i++){
         employees_array.push({
             id: i,
             value: i,

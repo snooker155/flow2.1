@@ -1,9 +1,7 @@
 
 
-var features_array = [];
-var features_arrayDep = new Tracker.Dependency();
-
-var n_features_old = new ReactiveVar(0);
+var features_obj = {};
+var features_objDep = new Tracker.Dependency();
 
 // var feature_description_name = new ReactiveVar("Choose");
 
@@ -13,16 +11,15 @@ var n_features_old = new ReactiveVar(0);
 //var test_progress = new ReactiveVar(0);
 
 
-
-Template.game_product.onRendered(function(){
-
-});
-
-
 Template.game_product.onCreated(function(){
 
 });
 
+
+
+Template.game_product.onRendered(function(){
+
+});
 
 
 
@@ -50,9 +47,20 @@ Template.game_product.helpers({
         return company_products;
     },
 
-    features_lists: function(){
-        var features = Features.find({});
-        return features;
+    features: function(){
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        var properties = [];
+        var selected_product = null;
+        game.products.forEach(function(product) {
+            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+                selected_product = product;
+            }
+        });
+        selected_product.prop.forEach(function (property) {
+            properties.push(property.prop_name);
+        });
+        return Features.find({feature_name: {$nin: properties}, neccessary_level: { $lte: company.company_level } });
     },
 
 
@@ -62,7 +70,9 @@ Template.game_product.helpers({
         var total_time_to_achieve = 0;
         var total_start_period = 0;
         self.prop.forEach(function (property) {
-            total_time_to_achieve += property.time_to_achieve;
+            if(total_time_to_achieve < property.time_to_achieve){
+                total_time_to_achieve = property.time_to_achieve;
+            }
             if(total_start_period < property.start_period){
                 total_start_period = property.start_period;
             }
@@ -70,10 +80,10 @@ Template.game_product.helpers({
         // console.log(total_time_to_achieve);
         // console.log(total_start_period);
         // console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
-        if(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100) >= 100){
+        if(Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100) >= 100){
             return 100;
         }else{
-            return Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100); 
+            return Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100); 
         }
     },
 
@@ -90,59 +100,74 @@ Template.game_product.helpers({
         }
     },
 
+    available_employees_number(){
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        var current_employees_number = null;
+        company.company_team.forEach(function (dep) {
+            if(self.neccessary_department == dep.department_name){
+                current_employees_number = dep.employee_number - dep.employee_number_at_work;
+            }
+        });
+        if(current_employees_number){
+            return current_employees_number;
+        }else{
+            //return "Not exist department";
+            return 0;
+        }
+    },
+
 
 
     // is_published: function(){
     //     return this.is_published;
     // },
 
-    // new_features_lists: function(){
-    //     var game = Games.findOne({});
-    //     var company = game.comapnies[Meteor.user().username];
-    //     var product = false;
-    //     game.products.forEach(function(product) {
-    //         console.log(product.product_creator == game.companies[Meteor.user().username].company_name);
-    //         if(product.product_creator == game.companies[Meteor.user().username].company_name){
-    //             product = product;
-    //         }
-    //     });
-    //     if (Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count() > 0 ){
-    //          var n = Features.find({neccessary_level: { $lte: company.company_level }}).count() - Feature_lists.find({owner: Meteor.userId()}).count();
-    //     }else{
-    //         var n = 0;
-    //     }
-    //     if(n_features_old.get() != n){
-    //         features_array = [];
-    //         var feature_price = 0;
-    //         var feature_level = 1;
-    //         var max_feature_level = 10;
-    //         var time_to_achieve = 0;
-    //         var progress = 0;
-    //         var neccessary_employees_number = 0;
-    //         var available_employees_number = 0;
-    //         for (i=0; i<n; i++){
-    //             features_array.push({
-    //                 id: i,
-    //                 value: i+1,
-    //                 company_name: company.company_name,
-    //                 product_id: product.product_id,
-    //                 feature_name: null,
-    //                 feature_level: feature_level,
-    //                 max_feature_level: max_feature_level,
-    //                 feature_price: feature_price,
-    //                 time_to_achieve: time_to_achieve,
-    //                 neccessary_employees_number: neccessary_employees_number,
-    //                 available_employees_number: available_employees_number,
-    //                 progress: progress,
-    //                 feature_sum: feature_price * feature_level,
-    //             });
-    //         }
-    //         n_features_old.set(n);
-    //     }
-    //     //console.log(features_array);
-    //     features_arrayDep.depend();
-    //     return features_array;
-    // },
+    new_features_lists: function(){
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        if (Features.find({neccessary_level: { $lte: company.company_level }}).count() - self.prop.length > 0 ){
+            var n = company.company_level + 2 - self.prop.length;
+        }else{
+            var n = 0;
+        }
+        if(!features_obj[self.product_name]){
+            features_obj[self.product_name] = [];
+        }
+        if(features_obj[self.product_name].length != n){
+            var features_array = [];
+            var feature_price = 0;
+            var feature_level = 1;
+            var max_feature_level = 3;
+            var time_to_achieve = 0;
+            var progress = 0;
+            var neccessary_employees_number = 0;
+            var available_employees_number = 0;
+            for (j=0; j<n; j++){
+                features_array.push({
+                    id: self.prop[self.prop.length - 1].id + 1,
+                    value: self.prop[self.prop.length - 1].id + 1,
+                    //company_name: company.company_name,
+                    product_id: self.product_id,
+                    prop_name: null,
+                    prop_level: feature_level,
+                    max_prop_level: max_feature_level,
+                    prop_price: feature_price,
+                    time_to_achieve: time_to_achieve,
+                    neccessary_department: null,
+                    neccessary_employees_number: neccessary_employees_number,
+                    available_employees_number: available_employees_number,
+                    progress: progress,
+                    prop_sum: feature_price * feature_level,
+                });
+            }
+            features_obj[self.product_name] = features_array;
+        }
+        features_objDep.depend();
+        return features_obj[self.product_name];
+    },
 
 
     // features: function(){
@@ -247,28 +272,31 @@ Template.game_product.events({
 
 
 
-    'change #feature_name': function(event, template){
+    'change .feature_name': function(event, template){
         event.preventDefault();
-        var feature_name = event.target.value;
-        var feature = Features.findOne({feature_name: feature_name});
+        var self = this;
+        var prop_name = event.target.value;
+        var feature = Features.findOne({feature_name: prop_name});
         if (feature){
-            this.feature_price = parseInt(feature.feature_price);
-            this.feature_sum = this.feature_price * this.feature_level;
-            this.feature_name = feature.feature_name;
-            this.time_to_achieve = feature.time_to_achieve;
-            this.progress = 0;
-            this.neccessary_employees_number = feature.neccessary_employees_number * this.feature_level;
-            this.available_employees_number = Employees.findOne({owner: Meteor.userId(), department_name: feature.neccessary_department}).employee_number;
-            features_arrayDep.changed();
+            self.prop_price = feature.feature_price;
+            self.prop_level = 1;
+            self.max_feature_level = feature.max_feature_level,
+            self.prop_name = feature.feature_name;
+            self.time_to_achieve = feature.time_to_achieve;
+            self.progress = 0;
+            self.neccessary_employees_number = feature.neccessary_employees_number * self.prop_level;
+            self.neccessary_department = feature.neccessary_department;
+            features_objDep.changed();
         }else{
-            this.feature_price = 0;
-            this.feature_sum = this.feature_price * this.feature_level;
-            this.feature_name = null;
-            this.time_to_achieve = 0;
-            this.progress = 0;
-            this.neccessary_employees_number = 0;
-            this.available_employees_number = 0;
-            features_arrayDep.changed();
+            self.feature_price = 0;
+            self.feature_level = 0;
+            self.feature_name = null;
+            self.time_to_achieve = 0;
+            self.progress = 0;
+            self.neccessary_employees_number = 0;
+            self.neccessary_department = null;
+            //self.available_employees_number = 0;
+            features_objDep.changed();
         }
     },
 
@@ -276,6 +304,7 @@ Template.game_product.events({
     "click #feature_level_plus": function(event){
         var self =  this;
         var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
         var selected_product = null;
 
         game.products.forEach(function (product) {
@@ -293,6 +322,8 @@ Template.game_product.events({
             }
         });
 
+        company.setToWork(self.neccessary_department, self.neccessary_employees_number);
+
         //console.log(self);
 
         Meteor.call('updateGame', game);
@@ -307,19 +338,42 @@ Template.game_product.events({
     // },
 
 
-    // "click #create_new_feature": function(event, template){
-    //     event.preventDefault();
+    "click #create_new_feature": function(event, template){
+        event.preventDefault();
+        var self = this;
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        var selected_product = null;
+        game.products.forEach(function (product) {
+            if(product.product_id == self.product_id){
+                selected_product = product;
+            }
+        });
 
-    //     //console.log(this.product_id);
-    //     //console.log(features_array[this.id]);
+        if(template.$("#new_feature"+self.value).valid()){
+            if(company.has_department(self.neccessary_department)){
+                if(company.has_employees_number(self.neccessary_department, self.neccessary_employees_number)){
+                    self.start_period = game.time_period;
+                    selected_product.prop.push(self);
+                    selected_product.product_status = "In production";
+                    features_objDep.changed();
 
+                    //console.log(selected_product.prop);
 
-    //     if(template.$("#new_feature"+this.value).valid()){
+                    company.setToWork(self.neccessary_department, self.neccessary_employees_number);
 
-    //         //Meteor.call('addFeatureList', this.product_id, features_array[this.id], function (error, result) {});
+                    Meteor.call('updateGame', game);
+                }else{
+                    can_create = false;
+                    alert("Not enough employees in department \""+self.neccessary_department+"\".\n\nRequire "+self.neccessary_employees_number+", has "+company.getDepEmployeeNumber(self.neccessary_department)+".");
+                }
+            }else{
+                can_create = false;
+                alert("Company does not have the neccessary department \""+self.neccessary_department+"\".");
+            }
 
-    //     }
-    // },
+        }
+    },
 
     // 'click #stop': function(event){
     //     event.preventDefault();

@@ -9,6 +9,11 @@ Template.company_stat.helpers({
 		return game.companies[Meteor.user().username].company_name;
 	},
 
+	company_level: function () {
+		var game = Games.findOne({});
+		return game.companies[Meteor.user().username].company_level;
+	},
+
 	company_balance: function () {
 		var game = Games.findOne({});
 		return parseFloat(game.companies[Meteor.user().username].company_balance.toFixed(2));
@@ -45,7 +50,9 @@ Template.company_stat.helpers({
 		var total_time_to_achieve = 0;
 		var total_start_period = 0;
 		self.prop.forEach(function (property) {
-			total_time_to_achieve += property.time_to_achieve;
+			if(total_time_to_achieve < property.time_to_achieve){
+                total_time_to_achieve = property.time_to_achieve;
+            }
 			if(total_start_period < property.start_period){
 				total_start_period = property.start_period;
 			}
@@ -53,10 +60,10 @@ Template.company_stat.helpers({
 		// console.log(total_time_to_achieve);
 		// console.log(total_start_period);
 		// console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
-		if(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100) >= 100){
+		if(Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100) >= 100){
 			return 100;
 		}else{
-			return Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100);	
+			return Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100);	
 		}
 	},
 

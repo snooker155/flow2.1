@@ -55,6 +55,21 @@ Meteor.startup(() => {
 		employee_price: 20,
 	});
 
+	Departments.insert({
+		department_name: "Marketing",
+		employee_price: 150,
+	});
+
+	Departments.insert({
+		department_name: "Sales",
+		employee_price: 200,
+	});
+
+	Departments.insert({
+		department_name: "R&D",
+		employee_price: 350,
+	});
+
 
 
 
@@ -67,12 +82,12 @@ Meteor.startup(() => {
 	Features.insert({
 		feature_id: 1,
 		feature_name: "prop_1",
-		time_to_achieve: 5,
-		feature_price: 250,
-		neccessary_employees_number: 2,
-		neccessary_department: "Support",
+		time_to_achieve: 10,
+		feature_price: 450,
+		neccessary_employees_number: 4,
+		neccessary_department: "Technology",
 		max_feature_level: 3,
-		//neccessary_level: 1,
+		neccessary_level: 0,
 	});
 
 	Features.insert({
@@ -83,19 +98,100 @@ Meteor.startup(() => {
 		neccessary_employees_number: 3,
 		neccessary_department: "Design",
 		max_feature_level: 3,
-		//neccessary_level: 1,
+		neccessary_level: 0,
 	});
 
 	Features.insert({
 		feature_id: 3,
 		feature_name: "prop_3",
+		time_to_achieve: 5,
+		feature_price: 250,
+		neccessary_employees_number: 2,
+		neccessary_department: "Support",
+		max_feature_level: 3,
+		neccessary_level: 1,
+	});
+
+	Features.insert({
+		feature_id: 4,
+		feature_name: "prop_4",
 		time_to_achieve: 10,
-		feature_price: 450,
+		feature_price: 350,
 		neccessary_employees_number: 4,
 		neccessary_department: "Technology",
 		max_feature_level: 3,
-		//neccessary_level: 1,
+		neccessary_level: 2,
 	});
+
+
+	Features.insert({
+		feature_id: 5,
+		feature_name: "prop_5",
+		time_to_achieve: 10,
+		feature_price: 450,
+		neccessary_employees_number: 4,
+		neccessary_department: "Marketing",
+		max_feature_level: 3,
+		neccessary_level: 2,
+	});
+
+
+	Features.insert({
+		feature_id: 6,
+		feature_name: "prop_6",
+		time_to_achieve: 10,
+		feature_price: 550,
+		neccessary_employees_number: 4,
+		neccessary_department: "Marketing",
+		max_feature_level: 3,
+		neccessary_level: 3,
+	});
+
+
+	Features.insert({
+		feature_id: 7,
+		feature_name: "prop_7",
+		time_to_achieve: 10,
+		feature_price: 650,
+		neccessary_employees_number: 4,
+		neccessary_department: "Sales",
+		max_feature_level: 3,
+		neccessary_level: 3,
+	});
+
+	Features.insert({
+		feature_id: 8,
+		feature_name: "prop_8",
+		time_to_achieve: 10,
+		feature_price: 750,
+		neccessary_employees_number: 4,
+		neccessary_department: "Sales",
+		max_feature_level: 3,
+		neccessary_level: 4,
+	});
+
+	Features.insert({
+		feature_id: 9,
+		feature_name: "prop_9",
+		time_to_achieve: 10,
+		feature_price: 1500,
+		neccessary_employees_number: 4,
+		neccessary_department: "R&D",
+		max_feature_level: 3,
+		neccessary_level: 4,
+	});
+
+	Features.insert({
+		feature_id: 10,
+		feature_name: "prop_10",
+		time_to_achieve: 30,
+		feature_price: 45000,
+		neccessary_employees_number: 5,
+		neccessary_department: "R&D",
+		max_feature_level: 10,
+		neccessary_level: 5,
+	});
+
 
 
 
@@ -778,15 +874,12 @@ Meteor.startup(() => {
 	   	// }
 
 
-
-
 	   	/////////////////////////////
 
 
 
 		game.setPriceHistory();	   		
 	   	game.setCustomersHistory(game.time_period);
-
 
 
 
@@ -826,6 +919,8 @@ Meteor.startup(() => {
 	   			target_company.company_team.forEach(function (dep) {
 	   				dep.employee_number_at_work = 0;
 	   			});
+
+	   			target_company.company_level += 1;
 
 	   			target_company.company_activities.push({
 		           status: "Complete",

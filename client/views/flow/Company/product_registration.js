@@ -8,9 +8,10 @@ var features_arrayDep = new Tracker.Dependency();
 Template.product_registration.onCreated(function(){
 
     features_array = [];
-    // var company = Companies.findOne({ owner: Meteor.userId() })
-    // var features = Features.find({neccessary_level: { $lte: company.company_level } });
-    var features = Features.find({});
+    var game = Games.findOne({});
+    var company = game.companies[Meteor.user().username];
+    var features = Features.find({neccessary_level: { $lte: company.company_level } });
+    //var features = Features.find({});
     //console.log(features.fetch());
     var feature_price = 0;
     var feature_level = 0;
@@ -21,7 +22,7 @@ Template.product_registration.onCreated(function(){
     var neccessary_department = null;
     //var available_employees_number = 0;
     var i = 0;
-    features.forEach(function (feature) {
+    for (j=0; j<company.company_level+2; j++){
         features_array.push({
             id: i,
             value: i,
@@ -37,7 +38,7 @@ Template.product_registration.onCreated(function(){
             //feature_sum: feature_price * feature_level,
         });
         i++;
-    });
+    }
 
 
 });
@@ -63,7 +64,9 @@ Template.product_registration.helpers({
     },
 
     features: function(){
-        var features = Features.find({}).fetch();
+        var game = Games.findOne({});
+        var company = game.companies[Meteor.user().username];
+        var features = Features.find({neccessary_level: { $lte: company.company_level } }).fetch();
         var selectable_features = [];
         for(var i = 0; i < features.length; i++){
             if(this.id != i){
@@ -95,13 +98,19 @@ Template.product_registration.helpers({
         var game = Games.findOne({});
         var company = game.companies[Meteor.user().username];
         var current_employees_number = null;
+        var target_dep = null;
         company.company_team.forEach(function (dep) {
             if(self.neccessary_department == dep.department_name){
-                current_employees_number = dep.employee_number;
+                target_dep = dep;
+                current_employees_number = dep.employee_number - dep.employee_number_at_work;
             }
         });
-        if(current_employees_number){
-            return current_employees_number;
+        if(target_dep){
+            if(current_employees_number > 0){
+                return current_employees_number;
+            }else{
+                return 0;
+            }
         }else{
             return "Not exist department";
         }
@@ -136,6 +145,17 @@ Template.product_registration.helpers({
     number_id(){
         var self = this;
         return self.value + 1;
+    },
+
+    can_add(){
+        var game = Games.findOne({});
+        features_arrayDep.depend();
+        return features_array.length < game.companies[Meteor.user().username].company_level + 2;
+    },
+
+    can_remove(){
+        features_arrayDep.depend();
+        return features_array.length > 1;
     },
 
 });
@@ -195,7 +215,7 @@ Template.product_registration.events({
             feature_price: 0,
             time_to_achieve: 0,
             neccessary_employees_number: 0,
-            neccessary_department: 0,
+            neccessary_department: null,
             progress: 0,
             //feature_sum: feature_price * feature_level,
         });
@@ -238,6 +258,7 @@ Template.product_registration.events({
         var product = {};
         var prop = [];
         var can_create = true;
+        var product_costs = 0;
 
         var product_name = template.$("#product_name").val();
         var product_price = template.$("#product_price").val();
@@ -267,6 +288,8 @@ Template.product_registration.events({
                             start_period: game.time_period,
                             product_id: game.products[game.products.length - 1].product_id + 1,
                         })
+
+                        product_costs += feature.feature_price;
                     }else{
                         can_create = false;
                         alert("Not enough employees in department \""+feature.neccessary_department+"\".\n\nRequire "+feature.neccessary_employees_number+", has "+company.getDepEmployeeNumber(feature.neccessary_department)+".");
@@ -311,6 +334,7 @@ Template.product_registration.events({
                     company.setToWork(feature.neccessary_department, feature.neccessary_employees_number);
                 });
 
+                company.company_balance -= product_costs;
 
                 company.company_activities.push({
                     status: "In production",

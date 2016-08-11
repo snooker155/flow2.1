@@ -81,11 +81,14 @@
                                                 </tr>
                                             {{/each}}
                                             <tr>
-                                                <td>
-                                                    <button id="add_feature" class="btn btn-sm btn-primary">Add feature</button>
-                                                    <button id="remove_feature" class="btn btn-sm btn-primary">Remove feature</button>
+                                                <td colspan="2">
+                                                    {{#if can_add}}
+                                                        <button id="add_feature" class="btn btn-sm btn-primary">Add feature</button>
+                                                    {{/if}}
+                                                    {{#if can_remove}}
+                                                        <button id="remove_feature" class="btn btn-sm btn-primary">Remove feature</button>
+                                                    {{/if}}
                                                 </td>
-                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

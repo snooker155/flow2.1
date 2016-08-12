@@ -43,10 +43,18 @@ Template.game_team.helpers({
     departments: function(){
         var company = Games.findOne({}).companies[Meteor.user().username];
         var departments = [];
+        var bad_departments = [];
         company.company_team.forEach(function (employee) {
             departments.push(employee.department_name);
+            bad_departments.push(employee.department_name);
         });
-        return Departments.find({department_name: {$nin: departments}});
+        var all_departments = Departments.find().fetch();
+        all_departments.forEach(function (dep) {
+            if(dep.neccessary_departments != null && _.intersection(dep.neccessary_departments, departments).length != dep.neccessary_departments.length){
+               bad_departments.push(dep.department_name); 
+            }
+        });
+        return Departments.find({department_name: {$nin: bad_departments}});
     },
 
     new_employees: function(){

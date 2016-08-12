@@ -42,32 +42,38 @@ Meteor.startup(() => {
 	Departments.insert({
 		department_name: "Technology",
 		employee_price: 100,
+		neccessary_departments: null,
 	});
 
 
 	Departments.insert({
 		department_name: "Design",
 		employee_price: 50,
+		neccessary_departments: null,
 	});
 
 	Departments.insert({
 		department_name: "Support",
 		employee_price: 20,
+		neccessary_departments: ["Technology"],
 	});
 
 	Departments.insert({
 		department_name: "Marketing",
 		employee_price: 150,
+		neccessary_departments: ["Design"],
 	});
 
 	Departments.insert({
 		department_name: "Sales",
 		employee_price: 200,
+		neccessary_departments: ["Support","Marketing"],
 	});
 
 	Departments.insert({
 		department_name: "R&D",
 		employee_price: 350,
+		neccessary_departments: ["Technology","Marketing","Sales"],
 	});
 
 
@@ -82,34 +88,37 @@ Meteor.startup(() => {
 	Features.insert({
 		feature_id: 1,
 		feature_name: "prop_1",
-		time_to_achieve: 10,
+		time_to_achieve: 5,
 		feature_price: 450,
 		neccessary_employees_number: 4,
 		neccessary_department: "Technology",
 		max_feature_level: 3,
 		neccessary_level: 0,
+		neccessary_features_name: null,
 	});
 
 	Features.insert({
 		feature_id: 2,
 		feature_name: "prop_2",
-		time_to_achieve: 7,
+		time_to_achieve: 3,
 		feature_price: 350,
 		neccessary_employees_number: 3,
 		neccessary_department: "Design",
 		max_feature_level: 3,
 		neccessary_level: 0,
+		neccessary_features_name: null,
 	});
 
 	Features.insert({
 		feature_id: 3,
 		feature_name: "prop_3",
-		time_to_achieve: 5,
+		time_to_achieve: 2,
 		feature_price: 250,
 		neccessary_employees_number: 2,
 		neccessary_department: "Support",
 		max_feature_level: 3,
 		neccessary_level: 1,
+		neccessary_features_name: null,
 	});
 
 	Features.insert({
@@ -121,6 +130,7 @@ Meteor.startup(() => {
 		neccessary_department: "Technology",
 		max_feature_level: 3,
 		neccessary_level: 2,
+		neccessary_features_name: ["prop_1"],
 	});
 
 
@@ -133,6 +143,7 @@ Meteor.startup(() => {
 		neccessary_department: "Marketing",
 		max_feature_level: 3,
 		neccessary_level: 2,
+		neccessary_features_name: null,
 	});
 
 
@@ -145,6 +156,7 @@ Meteor.startup(() => {
 		neccessary_department: "Marketing",
 		max_feature_level: 3,
 		neccessary_level: 3,
+		neccessary_features_name: ["prop_2","prop_5"],
 	});
 
 
@@ -157,6 +169,7 @@ Meteor.startup(() => {
 		neccessary_department: "Sales",
 		max_feature_level: 3,
 		neccessary_level: 3,
+		neccessary_features_name: ["prop_3"],
 	});
 
 	Features.insert({
@@ -168,6 +181,7 @@ Meteor.startup(() => {
 		neccessary_department: "Sales",
 		max_feature_level: 3,
 		neccessary_level: 4,
+		neccessary_features_name: ["prop_3","prop_7"],
 	});
 
 	Features.insert({
@@ -179,17 +193,19 @@ Meteor.startup(() => {
 		neccessary_department: "R&D",
 		max_feature_level: 3,
 		neccessary_level: 4,
+		neccessary_features_name: ["prop_1","prop_4","prop_6"],
 	});
 
 	Features.insert({
 		feature_id: 10,
 		feature_name: "prop_10",
 		time_to_achieve: 30,
-		feature_price: 45000,
+		feature_price: 4500,
 		neccessary_employees_number: 5,
 		neccessary_department: "R&D",
 		max_feature_level: 10,
 		neccessary_level: 5,
+		neccessary_features_name: ["prop_1","prop_4","prop_6","prop_8","prop_9"],
 	});
 
 
@@ -205,15 +221,14 @@ Meteor.startup(() => {
 		product_price: 8,
 		product_color: "orange",
 		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [{
-				prop_name: "prop_1",
-				prop_level: 1},
-			//{prop_name: "prop_2"},
-		],
+		prop: [
+			{prop_name: "prop_1", prop_level: 1},
+			{prop_name: "prop_2", prop_level: 1},
+			],
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
 	});
 
@@ -225,49 +240,111 @@ Meteor.startup(() => {
 		//product_quality: 1 + Math.floor(Math.random() * 10),
 		prop: [
 			{prop_name: "prop_1", prop_level: 1},
-			{prop_name: "prop_2", prop_level: 1},
-		],
+			{prop_name: "prop_2", prop_level: 2},
+			],
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["NA", "SA", "CA", "CE", "NE", "RU"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
+
+	Products.insert({
+		product_id: 2,
+		product_name: "Prod 2",
+		product_price: 20,
+		product_color: "#d5c5c8",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 3},
+			{prop_name: "prop_2", prop_level: 2},
+			{prop_name: "prop_4", prop_level: 2},
+			],
+		product_quantity: 75,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
+
+	Products.insert({
+		product_id: 3,
+		product_name: "Prod " + 3,
+		product_price: 12,
+		product_color: "magenta",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+		],
+		product_quantity: 50,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
 	});
 
 
-	// Products.insert({
-	// 	product_id: 3,
-	// 	product_name: "Prod " + 3,
-	// 	product_price: 12,
-	// 	product_color: "magenta",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_2"},
-	// 		{prop_name: "prop_3"},
-	// 	],
-	// 	product_quantity: 50,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["AS", "SP", "IN"],
-	// });
+	Products.insert({
+		product_id: 4,
+		product_name: "Prod " + 4,
+		product_price: 20,
+		product_color: "pink",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+		],
+		product_quantity: 25,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
+	Products.insert({
+		product_id: 5,
+		product_name: "Prod " + 5,
+		product_price: 25,
+		product_color: "#90ceff",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+			{prop_name: "prop_4", prop_level: 1},
+			{prop_name: "prop_6", prop_level: 1},
+		],
+		product_quantity: 15,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
-	// Products.insert({
-	// 	product_id: 4,
-	// 	product_name: "Prod " + 4,
-	// 	product_price: 20,
-	// 	product_color: "pink",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_1"},
-	// 		{prop_name: "prop_2"},
-	// 		{prop_name: "prop_3"},
-	// 	],
-	// 	product_quantity: 25,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["CE", "NE", "RU"],
-	// });
+	Products.insert({
+		product_id: 6,
+		product_name: "Prod " + 6,
+		product_price: 30,
+		product_color: "#f6f930",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+			{prop_name: "prop_4", prop_level: 1},
+			{prop_name: "prop_5", prop_level: 3},
+			{prop_name: "prop_6", prop_level: 1},
+			{prop_name: "prop_7", prop_level: 1},
+			{prop_name: "prop_8", prop_level: 1},
+		],
+		product_quantity: 10,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -496,6 +573,13 @@ Meteor.startup(() => {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
 							prop_3: Math.floor(Math.random() * 4),
+							prop_4: Math.floor(Math.random() * 4),
+							prop_5: Math.floor(Math.random() * 4),
+							prop_6: Math.floor(Math.random() * 4),
+							prop_7: Math.floor(Math.random() * 4),
+							prop_8: Math.floor(Math.random() * 4),
+							prop_9: Math.floor(Math.random() * 4),
+							prop_10: Math.floor(Math.random() * 4),
 						}
 					},
 					{
@@ -505,6 +589,13 @@ Meteor.startup(() => {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
 							prop_3: Math.floor(Math.random() * 4),
+							prop_4: Math.floor(Math.random() * 4),
+							prop_5: Math.floor(Math.random() * 4),
+							prop_6: Math.floor(Math.random() * 4),
+							prop_7: Math.floor(Math.random() * 4),
+							prop_8: Math.floor(Math.random() * 4),
+							prop_9: Math.floor(Math.random() * 4),
+							prop_10: Math.floor(Math.random() * 4),
 						}
 					},
 					{	
@@ -514,6 +605,13 @@ Meteor.startup(() => {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
 							prop_3: Math.floor(Math.random() * 4),
+							prop_4: Math.floor(Math.random() * 4),
+							prop_5: Math.floor(Math.random() * 4),
+							prop_6: Math.floor(Math.random() * 4),
+							prop_7: Math.floor(Math.random() * 4),
+							prop_8: Math.floor(Math.random() * 4),
+							prop_9: Math.floor(Math.random() * 4),
+							prop_10: Math.floor(Math.random() * 4),
 						}
 					},
 				],

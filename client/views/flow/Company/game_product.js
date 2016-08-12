@@ -48,19 +48,28 @@ Template.game_product.helpers({
     },
 
     features: function(){
+        var self = this;
         var game = Games.findOne({});
         var company = game.companies[Meteor.user().username];
         var properties = [];
+        var bad_properties = [];
         var selected_product = null;
         game.products.forEach(function(product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+            if(product.product_id == self.product_id){
                 selected_product = product;
             }
         });
         selected_product.prop.forEach(function (property) {
             properties.push(property.prop_name);
+            bad_properties.push(property.prop_name);
         });
-        return Features.find({feature_name: {$nin: properties}, neccessary_level: { $lte: company.company_level } });
+        var all_features = Features.find().fetch();
+        all_features.forEach(function (feat) {
+            if(feat.neccessary_features_name != null && _.intersection(feat.neccessary_features_name, properties).length != feat.neccessary_features_name.length){
+               bad_properties.push(feat.feature_name); 
+            }
+        });
+        return Features.find({feature_name: {$nin: bad_properties}, neccessary_level: { $lte: company.company_level } });
     },
 
 
@@ -313,20 +322,24 @@ Template.game_product.events({
             }
         });
 
-        selected_product.prop.forEach(function (property) {
-            if(property.id == self.id){
-                property.prop_level += 1;
-                property.progress = 0;
-                property.start_period = game.time_period;
-                selected_product.product_status = "In production";
-            }
-        });
+        if(company.has_employees_number(self.neccessary_department, self.neccessary_employees_number)){
+            selected_product.prop.forEach(function (property) {
+                if(property.id == self.id){
+                    property.prop_level += 1;
+                    property.progress = 0;
+                    property.start_period = game.time_period;
+                    selected_product.product_status = "In production";
+                }
+            });
 
-        company.setToWork(self.neccessary_department, self.neccessary_employees_number);
+            company.setToWork(self.neccessary_department, self.neccessary_employees_number);
 
-        //console.log(self);
+            Meteor.call('updateGame', game);
+        }else{
+            can_create = false;
+            alert("Not enough employees in department \""+self.neccessary_department+"\".\n\nRequire "+self.neccessary_employees_number+", has "+company.getDepEmployeeNumber(self.neccessary_department)+".");
+        }
 
-        Meteor.call('updateGame', game);
     },
 
 

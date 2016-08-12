@@ -66,15 +66,22 @@ Template.product_registration.helpers({
     features: function(){
         var game = Games.findOne({});
         var company = game.companies[Meteor.user().username];
-        var features = Features.find({neccessary_level: { $lte: company.company_level } }).fetch();
+        var all_features = Features.find().fetch();
+        var features = [];
+        all_features.forEach(function (feat) {
+            if(feat.neccessary_features_id != null){
+               features.push(feat.feature_id); 
+            }
+        });
+        var available_features = Features.find({neccessary_level: { $lte: company.company_level }, feature_id: {$nin: features}}).fetch();
         var selectable_features = [];
-        for(var i = 0; i < features.length; i++){
+        for(var i = 0; i < available_features.length; i++){
             if(this.id != i){
-                if($("#feature_name"+i).val() != features[i].feature_name){
-                    selectable_features.push(features[i]);
+                if($("#feature_name"+i).val() != available_features[i].feature_name){
+                    selectable_features.push(available_features[i]);
                 }
             }else{
-                selectable_features.push(features[i]);
+                selectable_features.push(available_features[i]);
             }
         }
         return selectable_features;

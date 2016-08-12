@@ -46,15 +46,22 @@ Template.team_registration.helpers({
     },
 
     departments: function(){
-        var departments = Departments.find().fetch();
+        var all_departments = Departments.find().fetch();
+        var departments = [];
+        all_departments.forEach(function (dep) {
+            if(dep.neccessary_departments != null){
+               departments.push(dep.department_name); 
+            }
+        });
+        var available_departments = Departments.find({department_name: {$nin: departments}}).fetch();
         var selectable_departments = [];
-        for(var i = 0; i < departments.length; i++){
+        for(var i = 0; i < available_departments.length; i++){
             if(this.id != i){
-                if($("#department_name"+i).val() != departments[i].department_name){
-                    selectable_departments.push(departments[i]);
+                if($("#department_name"+i).val() != available_departments[i].department_name){
+                    selectable_departments.push(available_departments[i]);
                 }
             }else{
-                selectable_departments.push(departments[i]);
+                selectable_departments.push(available_departments[i]);
             }
         }
         return selectable_departments;

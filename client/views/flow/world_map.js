@@ -602,218 +602,62 @@ Template.world_map.helpers({
 
 	prop_pop(){
 		var game = Games.findOne({});
-		var count_prop_1 = 0, 
-			count_prop_2 = 0, 
-			count_prop_3 = 0, 
-			count_prop_4 = 0, 
-			count_prop_5 = 0, 
-			count_prop_6 = 0, 
-			count_prop_7 = 0, 
-			count_prop_8 = 0,
-			count_prop_9 = 0, 
-			count_prop_10 = 0;
-		var count_prop_1_needed_1 = 0,
-			count_prop_1_needed_2 = 0,
-			count_prop_1_needed_3 = 0,
-			count_prop_2_needed_1 = 0,
-			count_prop_2_needed_2 = 0,
-			count_prop_2_needed_3 = 0,
-			count_prop_3_needed_1 = 0,
-			count_prop_3_needed_2 = 0,
-			count_prop_3_needed_3 = 0;
-			count_prop_4_needed_1 = 0,
-			count_prop_4_needed_2 = 0,
-			count_prop_4_needed_3 = 0;
-			count_prop_5_needed_1 = 0,
-			count_prop_5_needed_2 = 0,
-			count_prop_5_needed_3 = 0;
-			count_prop_6_needed_1 = 0,
-			count_prop_6_needed_2 = 0,
-			count_prop_6_needed_3 = 0;
-			count_prop_7_needed_1 = 0,
-			count_prop_7_needed_2 = 0,
-			count_prop_7_needed_3 = 0;
-			count_prop_8_needed_1 = 0,
-			count_prop_8_needed_2 = 0,
-			count_prop_8_needed_3 = 0;
-			count_prop_9_needed_1 = 0,
-			count_prop_9_needed_2 = 0,
-			count_prop_9_needed_3 = 0;
-			count_prop_10_needed_1 = 0,
-			count_prop_10_needed_2 = 0,
-			count_prop_10_needed_3 = 0;
-		var customers_count = 0;
-		var i = 1;
+		var count_prop_needed = 0;
+		var j = 0;
+		var prop_arr = [];
+
 		if(selected_region.get()){
-			game.customers.forEach(function (customer) {
-				if(customer.customer_region == selected_region.get()){
-					i = 1;
-					customer.needed.forEach(function (need) {
-						count_prop_1 += need.prop["prop_1"];
-						count_prop_2 += need.prop["prop_2"];
-						count_prop_3 += need.prop["prop_3"];
-						count_prop_4 += need.prop["prop_4"];
-						count_prop_5 += need.prop["prop_5"];
-						count_prop_6 += need.prop["prop_6"];
-						count_prop_7 += need.prop["prop_7"];
-						count_prop_8 += need.prop["prop_8"];
-						count_prop_9 += need.prop["prop_9"];
-						count_prop_10 += need.prop["prop_10"];
-						if(i == 1){
-							count_prop_1_needed_1 += need.prop["prop_1"];
-							count_prop_2_needed_1 += need.prop["prop_2"];
-							count_prop_3_needed_1 += need.prop["prop_3"];
-							count_prop_4_needed_1 += need.prop["prop_4"];
-							count_prop_5_needed_1 += need.prop["prop_5"];
-							count_prop_6_needed_1 += need.prop["prop_6"];
-							count_prop_7_needed_1 += need.prop["prop_7"];
-							count_prop_8_needed_1 += need.prop["prop_8"];
-							count_prop_9_needed_1 += need.prop["prop_9"];
-							count_prop_10_needed_1 += need.prop["prop_10"];
-						}else if(i == 2){
-							count_prop_1_needed_2 += need.prop["prop_1"];
-							count_prop_2_needed_2 += need.prop["prop_2"];
-							count_prop_3_needed_2 += need.prop["prop_3"];
-							count_prop_4_needed_2 += need.prop["prop_4"];
-							count_prop_5_needed_2 += need.prop["prop_5"];
-							count_prop_6_needed_2 += need.prop["prop_6"];
-							count_prop_7_needed_2 += need.prop["prop_7"];
-							count_prop_8_needed_2 += need.prop["prop_8"];
-							count_prop_9_needed_2 += need.prop["prop_9"];
-							count_prop_10_needed_2 += need.prop["prop_10"];
-						}else if(i == 3){
-							count_prop_1_needed_3 += need.prop["prop_1"];
-							count_prop_2_needed_3 += need.prop["prop_2"];
-							count_prop_3_needed_3 += need.prop["prop_3"];
-							count_prop_4_needed_3 += need.prop["prop_4"];
-							count_prop_5_needed_3 += need.prop["prop_5"];
-							count_prop_6_needed_3 += need.prop["prop_6"];
-							count_prop_7_needed_3 += need.prop["prop_7"];
-							count_prop_8_needed_3 += need.prop["prop_8"];
-							count_prop_9_needed_3 += need.prop["prop_9"];
-							count_prop_10_needed_3 += need.prop["prop_10"];
-						}
-						i++;
-					});
-					customers_count++;
+			game.features.forEach(function (feature) {
+				var prop_needed_arr = [];
+				for(var x = 0; x < game.customers[0].needed.length; x++){
+					prop_needed_arr[x] = 0;
 				}
+				var count_prop = 0;
+				game.customers.forEach(function (customer) {
+					if(customer.customer_region == selected_region.get()){
+						j = 0;
+						customer.needed.forEach(function (need) {
+							count_prop += need.prop[feature.feature_name];
+							prop_needed_arr[j] += need.prop[feature.feature_name];
+							j++;
+						});
+					}
+				});
+				for(var y = 0; y < prop_needed_arr.length; y++){
+					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / game.customers.length).toFixed(2));
+				}
+				prop_arr.push({
+					prop_name: feature.feature_name,
+					prop_count: count_prop,
+					prop_needed_arr: prop_needed_arr,
+				});
 			});
 		}else{
-			game.customers.forEach(function (customer) {
-				i = 1;
-				customer.needed.forEach(function (need) {
-						count_prop_1 += need.prop["prop_1"];
-						count_prop_2 += need.prop["prop_2"];
-						count_prop_3 += need.prop["prop_3"];
-						count_prop_4 += need.prop["prop_4"];
-						count_prop_5 += need.prop["prop_5"];
-						count_prop_6 += need.prop["prop_6"];
-						count_prop_7 += need.prop["prop_7"];
-						count_prop_8 += need.prop["prop_8"];
-						count_prop_9 += need.prop["prop_9"];
-						count_prop_10 += need.prop["prop_10"];
-						if(i == 1){
-							count_prop_1_needed_1 += need.prop["prop_1"];
-							count_prop_2_needed_1 += need.prop["prop_2"];
-							count_prop_3_needed_1 += need.prop["prop_3"];
-							count_prop_4_needed_1 += need.prop["prop_4"];
-							count_prop_5_needed_1 += need.prop["prop_5"];
-							count_prop_6_needed_1 += need.prop["prop_6"];
-							count_prop_7_needed_1 += need.prop["prop_7"];
-							count_prop_8_needed_1 += need.prop["prop_8"];
-							count_prop_9_needed_1 += need.prop["prop_9"];
-							count_prop_10_needed_1 += need.prop["prop_10"];
-						}else if(i == 2){
-							count_prop_1_needed_2 += need.prop["prop_1"];
-							count_prop_2_needed_2 += need.prop["prop_2"];
-							count_prop_3_needed_2 += need.prop["prop_3"];
-							count_prop_4_needed_2 += need.prop["prop_4"];
-							count_prop_5_needed_2 += need.prop["prop_5"];
-							count_prop_6_needed_2 += need.prop["prop_6"];
-							count_prop_7_needed_2 += need.prop["prop_7"];
-							count_prop_8_needed_2 += need.prop["prop_8"];
-							count_prop_9_needed_2 += need.prop["prop_9"];
-							count_prop_10_needed_2 += need.prop["prop_10"];
-						}else if(i == 3){
-							count_prop_1_needed_3 += need.prop["prop_1"];
-							count_prop_2_needed_3 += need.prop["prop_2"];
-							count_prop_3_needed_3 += need.prop["prop_3"];
-							count_prop_4_needed_3 += need.prop["prop_4"];
-							count_prop_5_needed_3 += need.prop["prop_5"];
-							count_prop_6_needed_3 += need.prop["prop_6"];
-							count_prop_7_needed_3 += need.prop["prop_7"];
-							count_prop_8_needed_3 += need.prop["prop_8"];
-							count_prop_9_needed_3 += need.prop["prop_9"];
-							count_prop_10_needed_3 += need.prop["prop_10"];
-						}
-						i++;
+			game.features.forEach(function (feature) {
+				var prop_needed_arr = [];
+				for(var x = 0; x < game.customers[0].needed.length; x++){
+					prop_needed_arr[x] = 0;
+				}
+				var count_prop = 0;
+				game.customers.forEach(function (customer) {
+					j = 0;
+					customer.needed.forEach(function (need) {
+						count_prop += need.prop[feature.feature_name];
+						prop_needed_arr[j] += need.prop[feature.feature_name];
+						j++;
 					});
-					customers_count++;
+				});
+				for(var y = 0; y < prop_needed_arr.length; y++){
+					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / game.customers.length).toFixed(2));
+				}
+				prop_arr.push({
+					prop_name: feature.feature_name,
+					prop_count: parseFloat((count_prop / game.customers.length).toFixed(2)),
+					prop_needed_arr: prop_needed_arr,
+				});
 			});
 		}
-		var prop = [{
-			prop_name: "prop_1",
-			prop_count: parseFloat((count_prop_1 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_1_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_1_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_1_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_2",
-			prop_count: parseFloat((count_prop_2 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_2_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_2_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_2_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_3",
-			prop_count: parseFloat((count_prop_3 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_3_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_3_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_3_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_4",
-			prop_count: parseFloat((count_prop_4 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_4_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_4_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_4_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_5",
-			prop_count: parseFloat((count_prop_5 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_5_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_5_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_5_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_6",
-			prop_count: parseFloat((count_prop_6 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_6_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_6_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_6_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_7",
-			prop_count: parseFloat((count_prop_7 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_7_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_7_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_7_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_8",
-			prop_count: parseFloat((count_prop_8 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_8_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_8_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_8_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_9",
-			prop_count: parseFloat((count_prop_9 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_9_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_9_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_9_needed_3 / customers_count).toFixed(2)),
-		},{
-			prop_name: "prop_10",
-			prop_count: parseFloat((count_prop_10 / customers_count).toFixed(2)),
-			prop_needed_1: parseFloat((count_prop_10_needed_1 / customers_count).toFixed(2)),
-			prop_needed_2: parseFloat((count_prop_10_needed_2 / customers_count).toFixed(2)),
-			prop_needed_3: parseFloat((count_prop_10_needed_3 / customers_count).toFixed(2)),
-		}];
-		return prop;
-
+		return prop_arr;
 	},
 
 

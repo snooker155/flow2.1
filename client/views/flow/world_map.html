@@ -88,9 +88,9 @@
                       <tr>
                         <td>{{prop_name}}</td>
                         <td>{{prop_count}}</td>
-                        <td>{{prop_needed_1}}</td>
-                        <td>{{prop_needed_2}}</td>
-                        <td>{{prop_needed_3}}</td>
+                        {{#each prop_needed_arr}}
+                          <td>{{this}}</td>
+                        {{/each}}
                       </tr>
                     {{/each}}
                   </tbody>

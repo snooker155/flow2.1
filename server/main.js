@@ -636,7 +636,7 @@ Meteor.startup(() => {
 
 	var features = [];
 
-	Features.find().fetch().forEach(function (feature) {
+	Features.find({}).fetch().forEach(function (feature) {
 		features.push(feature);
 	});
 

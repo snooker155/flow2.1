@@ -19,6 +19,7 @@
         news: game.news,
         companies: game.companies,
         products: game.products,
+        features: game.features,
         regions: game.regions,
         game_name: game.game_name,
         status: game.status,

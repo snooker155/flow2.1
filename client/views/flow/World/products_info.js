@@ -6,24 +6,24 @@ import './products_info.html';
 
 Template.products_info.onCreated(function() {
     var self = this;
-        var generation_subscription = self.subscribe("generations");
-        if(generation_subscription.ready()){
+        var games_subscription = self.subscribe("games");
+        if(games_subscription.ready()){
 			console.log('Loaded!');
         }else{
             console.log('Loading...');
         }
 
-    self.getGeneration = function(){
-        return Generations.findOne({}, {sort: {generation_n: -1}});
+    self.getGame = function(){
+        return Games.findOne({});
     }
 });
 
 
 Template.products_info.helpers({
   all_products() {
-  	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
-    if(generation){
-    	return generation.products_arr;
+  	var game = Games.findOne({});
+    if(game){
+    	return game.products;
     }
   },
 });
@@ -31,16 +31,16 @@ Template.products_info.helpers({
 
 Template.customers_stat.helpers({
   customers_number(){
-  	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
-  	if(generation){
-    	return generation.customers_arr.length;
+  	var game = Games.findOne({});
+  	if(game){
+    	return game.customers.length;
     }
   },
 
-  generation_n(){
-	var generation = Generations.findOne({}, {sort: {generation_n: -1}});
-	if(generation){
-    	return generation.generation_n;
+  game_n(){
+	var game = Games.findOne({});
+	if(game){
+    	return game.time_period;
     }
   },
 

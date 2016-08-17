@@ -530,6 +530,7 @@ Meteor.startup(() => {
 			product_creator: product.product_creator,
         	product_status: product.product_status,
         	product_regions: product.product_regions,
+        	product_util: product.product_util,
 		});
 
 	});

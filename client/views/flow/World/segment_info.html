@@ -6,10 +6,10 @@
                 <div class="ibox-content">
                     <div class="p-w-md m-t-sm">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="row">
 
-                                <div class="col-sm-4">
+                                <div class="col-md-4">
                                     <h1 class="m-b-xs">
                                         $ {{current_world_avg_price}}
                                     </h1>
@@ -19,23 +19,23 @@
                                     <!-- {{> sparkline type="line" array=current_avg_price_array options=options1}} -->
                                     <div id="current_world_avg_price_graph" class="sparklines" values='{{current_avg_price_array}}'></div>
                                     <div class="row">
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">Average (10)</small>
                                             <h4>$ {{avg_price_10}}</h4>
                                         </div>
 
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">% Rise</small>
                                             <h4>{{price_rise}}%</h4>
                                         </div>
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">Last period</small>
                                             <h4>$ {{last_period_avg_price}}</h4>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-md-4">
                                     <h1 class="m-b-xs">
                                         {{current_world_users}}
                                     </h1>
@@ -45,31 +45,31 @@
                                     <!-- {{> sparkline type="line" array=current_user_number_array options=options2}} -->
                                     <div id="current_world_avg_price_graph" class="sparklines" values='{{current_user_number_array}}'></div>
                                     <div class="row">
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">Fulfilment</small>
                                             <h4>{{ratio_potential_current_users}}%</h4>
                                         </div>
 
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">% New users</small>
                                             <h4>{{new_users}}%</h4>
                                         </div>
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <small class="stats-label">Last period</small>
                                             <h4>{{last_period_world_users}}</h4>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-md-4">
 
                                     <div class="row m-t-xs">
-                                        <div class="col-xs-6">
+                                        <div class="col-md-6">
                                             <h5 class="m-b-xs">Demand</h5>
                                             <h1 class="no-margins">$ {{world_demand}}</h1>
                                             <!-- <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div> -->
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-md-6">
                                             <h5 class="m-b-xs">Market</h5>
                                             <h1 class="no-margins">$ {{world_market}}</h1>
                                             <!-- <div class="font-bold text-navy">98% <i class="fa fa-bolt"></i></div> -->
@@ -186,6 +186,10 @@
                                 </div>
                             </div> -->
 
+                        </div>
+
+                        <div class="col-md-4">
+                            {{>news_flow}}
                         </div>
                     </div>
                     

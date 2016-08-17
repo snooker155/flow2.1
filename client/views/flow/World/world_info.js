@@ -286,7 +286,7 @@ var game = Games.findOne({});
 	    var timeout_in = setTimeout(function(){
 	    	semaphore.set(0);
 	    	clearTimeout(timeout_in);
-	    }, 2000);
+	    }, 5000);
 	clearTimeout(timeout);
 	}, 300);
 
@@ -313,10 +313,11 @@ function computeTextRotation(d) {//set text'ss origin to the centroid
   //we have to make sure to set these before calling arc.centroid
   d.innerRadius = (width/8); // Set Inner Coordinate
   d.outerRadius = (width/4); // Set Outer Coordinate
+  var c = arc.centroid(d);
   if(d.name == "World") {
   	return "translate(0,0)rotate(" + angle(d, 0, 0) + ")";
   }else if(d.name != selected_region.get()) {
-  	return "translate(" + arc.centroid(d) + ")rotate(" + angle(d, -90, 90) + ")";
+  	return "translate(" + (c[0]*0.95) +"," + (c[1]*0.95) + ")rotate(" + angle(d, -90, 90) + ")";
   }else{
   	return "translate(0,60)rotate(" + angle(d, 0, 0) + ")";
   }
@@ -328,9 +329,134 @@ function computeTextRotation(d) {//set text'ss origin to the centroid
 Tracker.autorun(function () {
 	var game = Games.findOne({});
 	if(semaphore.get() == 0){
+		var total_number = 0;
+		var data = getSunburstData(game)
+		data.children.forEach(function (child) {
+			total_number += child.children.length;
+		});
   		var g = svg.selectAll("g");
-  		g.select("path").data(partition.nodes(getSunburstData(game))).transition().duration(200).attr("d", arc);
-    	g.select("text").data(partition.nodes(getSunburstData(game))).transition().attr("transform", function(d) { return computeTextRotation(d) });
+  		if(g[0].length - 1 != total_number + data.children.length){
+  			svg.selectAll("g").remove();
+
+			var g = svg.selectAll("g")
+			    .data(partition.nodes(getSunburstData(game)))
+			    .enter().append("g").attr("id", function(d, i) {return "part"+i; } );
+
+			var path = g.append("path")
+			    .attr("d", arc)
+			    .style("fill", function(d) { 
+			    	return d.color ? d.color : "#337ab7";
+			    })
+			    .on("click", click);
+
+			var text = g.append("text")
+			            .attr("dy", function(d) {
+			           	  if(d.name != selected_region.get()){
+			              	return ".35em";
+			          	  }else{
+			          	  	return 7;
+			          	  }
+			            })
+			            .attr("dx", function(d) {
+			           	  if(d.name != selected_region.get()){
+			              	var a = angle(d, 0, 0);
+			              	return a < 0 ? "-16px" : "16px";
+			          	  }else{
+			          	  	return 2;
+			          	  }
+			            })
+			            .attr("text-anchor", function(d) {
+			              if(d.name != selected_region.get()){
+			              	var a = angle(d, 0, 0);
+			              	return a < 0 ? "start" : "end";
+			              }else{
+			          	  	return "middle";
+			          	  }
+			            })
+			            .attr("transform", function(d) {return computeTextRotation(d)})
+			  			.style("cursor", "default")
+			  			.style("-webkit-user-select", "none")
+			  			.style("z-index", -1)
+			            .style("fill", "Black")
+			            .style("font", function(d) {
+			           	  if(d.name != selected_region.get()){
+			              	return "normal 16px Arial";
+			          	  }else{
+			          	  	return "bold 16px Arial";
+			          	  }
+			            })
+			            .text(function(d) { return d.name; })
+			            .on("click", click);
+			function click(d) {
+			  	semaphore.set(1);
+			  	var timeout = setTimeout(function(){
+				  	if(d.name){
+					  	if(d.name == "World"){
+					  		selected_region.set("World");
+					  	}else{
+					  		selected_region.set(d.name);	
+					  	}
+				  	}else{
+				  		selected_region.set("World");
+				  	}
+
+				    // fade out all text elements
+				    text.transition().attr("opacity", 0);
+
+				    path.transition()
+				      .delay(100)
+				      .duration(750)
+				      .attrTween("d", arcTween(d))
+				      .each("end", function(e, i) {
+				          // check if the animated element's data e lies within the visible angle span given in d
+				          if (e.x >= d.x && e.x < (d.x + d.dx)) {
+				            // get a selection of the associated text element
+				            var arcText = d3.select(this.parentNode).select("text");
+				            // fade in the text element and recalculate positions
+				            arcText.transition().duration(750)
+				              .attr("opacity", 1)
+				              .attr("transform", function(d) { return computeTextRotation(d) });
+				          }
+				      });
+				    var timeout_in = setTimeout(function(){
+				    	semaphore.set(0);
+				    	clearTimeout(timeout_in);
+				    }, 2000);
+				clearTimeout(timeout);
+				}, 300);
+
+			  }
+
+
+			//Interpolate the scales!
+			function arcTween(d) {
+			  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+			      yd = d3.interpolate(y.domain(), [d.y, 1]),
+			      yr = d3.interpolate(y.range(), [d.y ? 40 : 0, radius]);
+			  return function(d, i) {
+			    return i
+			        ? function(t) { return arc(d); }
+			        : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+			  };
+			}
+
+			function computeTextRotation(d) {//set text'ss origin to the centroid
+			  //we have to make sure to set these before calling arc.centroid
+			  d.innerRadius = (width/8); // Set Inner Coordinate
+			  d.outerRadius = (width/4); // Set Outer Coordinate
+			  if(d.name == "World") {
+			  	return "translate(0,0)rotate(" + angle(d, 0, 0) + ")";
+			  }else if(d.name != selected_region.get()) {
+			  	return "translate(" + arc.centroid(d) + ")rotate(" + angle(d, -90, 90) + ")";
+			  }else{
+			  	return "translate(0,60)rotate(" + angle(d, 0, 0) + ")";
+			  }
+			  //return (x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180;
+			}
+  		}else{
+  			g.select("path").data(partition.nodes(getSunburstData(game))).transition().duration(200).attr("d", arc);
+    		g.select("text").data(partition.nodes(getSunburstData(game))).transition().attr("transform", function(d) { return computeTextRotation(d) });
+    	}
 	}
 
 });

@@ -6,7 +6,7 @@ Template.news_info.onRendered(function(){
 
 
 
-Template.news_info.helpers({
+Template.news_flow.helpers({
     news: function(){
         var game = Games.findOne({});
         //console.log(game.news);

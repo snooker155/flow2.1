@@ -241,15 +241,16 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Product</th>
+              <th style="width:3%;">Product</th>
               <th>Price</th>
               <th>Conserv</th>
               <th>Utility</th>
               <th>Graph Utility</th>
               <th>Conserv Utility</th>
-              <th>Needed 1</th>
+              <th>Product value</th>
+              <!-- <th>Needed 1</th>
               <th>Needed 2</th>
-              <th>Needed 3</th>
+              <th>Needed 3</th> -->
             </tr>
           </thead>
           <tbody>
@@ -263,11 +264,12 @@
                 <td>{{product_utility}}</td>
                 <td>{{product_graph_utility}}</td>
                 <td>{{product_conserv_utility}}</td>
-                {{#each product_needed}}
+                <td>{{product_value}}</td>
+                <!-- {{#each product_needed}}
                   <td>
                     {{value}}% ({{weight}}) <br> {{prop.prop_1}} / {{prop.prop_2}} / {{prop.prop_3}}
                   </td>  
-                {{/each}}
+                {{/each}} -->
               </tr>
             {{/each}}
           </tbody>

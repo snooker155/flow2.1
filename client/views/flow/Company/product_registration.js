@@ -315,7 +315,8 @@ Template.product_registration.events({
                 //     regions.push(region);
                 // });
 
-                var regions = ["NA", "SA", "CA", "CE", "NE", "RU", "AF", "OR", "IN", "AS", "SP", "IN"];
+                // var regions = ["NA", "SA", "CA", "CE", "NE", "RU", "AF", "OR", "IN", "AS", "SP", "IN"];
+                var regions = ["RU"];
 
                 product = {
                     product_id: game.products[game.products.length - 1].product_id + 1,

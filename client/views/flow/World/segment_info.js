@@ -23,13 +23,13 @@ Template.segment_info.onRendered(function(){
     var last_time_period = 0;
 
     game.customers_history.forEach(function (customer) {
-        data1.push([gd(2012, 1, customer.time_period), customer.current_users]);
-        data2.push([gd(2012, 1, customer.time_period), customer.avg_income]);
+        data1.push([customer.time_period, customer.current_users]);
+        data2.push([customer.time_period, customer.avg_income]);
         last_time_period = customer.time_period;
     });
 
     for(var i = data1.length; i < 20; i++){
-        data1.push([gd(2012, 1, i), 0]);
+        data1.push([i, 0]);
     }
 
 
@@ -45,8 +45,8 @@ Template.segment_info.onRendered(function(){
                     bars: {
                         show: true,
                         align: "center",
-                        barWidth: 24 * 60 * 60 * 600,
-                        lineWidth:0
+                        barWidth: 0.5,
+                        lineWidth: 0
                     }
 
                 }, {
@@ -80,10 +80,10 @@ Template.segment_info.onRendered(function(){
 
             var options = {
                 xaxis: {
-                    mode: "time",
-                    tickSize: [3, "day"],
+                    tickSize: 1,
                     tickLength: 0,
-                    axisLabel: "Date",
+                    tickDecimals: 0,
+                    axisLabel: "Period",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Arial',

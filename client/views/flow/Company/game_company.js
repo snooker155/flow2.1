@@ -17,7 +17,7 @@ function drawPlotGraph(data1, data2){
                     bars: {
                         show: true,
                         align: "center",
-                        barWidth: 24 * 60 * 60 * 600,
+                        barWidth: 0.5,
                         lineWidth:0
                     }
 
@@ -52,10 +52,10 @@ function drawPlotGraph(data1, data2){
 
             var options = {
                 xaxis: {
-                    mode: "time",
-                    tickSize: [3, "day"],
+                    tickSize: 1,
                     tickLength: 0,
-                    axisLabel: "Date",
+                    tickDecimals: 0,
+                    axisLabel: "Period",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Arial',
@@ -97,11 +97,6 @@ function drawPlotGraph(data1, data2){
 };
 
 
-function gd(year, month, day) {
-    return new Date(year, month - 1, day).getTime();
-}
-
-
 Template.company_profile.onCreated(function() {
     var self = this;
     //console.log(self);
@@ -119,16 +114,18 @@ Template.company_profile.onCreated(function() {
 
             if(self.game.companies[Meteor.user().username]){
                 self.game.companies[Meteor.user().username].company_history.forEach(function (company) {
-                    data1.push([gd(2012, 1, company.time_period), company.company_balance]);
-                    data2.push([gd(2012, 1, company.time_period), company.company_revenue]);
+                    data1.push([Math.floor(company.time_period), company.company_balance]);
+                    data2.push([Math.floor(company.time_period), company.company_revenue]);
                 });
 
                 for(var i = data1.length; i < 20; i++){
-                    data1.push([gd(2012, 1, i), 0]);
+                    data1.push([i, 0]);
                 }
 
 
                 drawPlotGraph(data1, data2);
+                console.log(data1);
+                console.log(data2);
             }
         }
     });

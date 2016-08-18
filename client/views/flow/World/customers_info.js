@@ -514,7 +514,13 @@ Template.customers_info.helpers({
 
     customers(){
         var game = Games.findOne({});
-        return game.customers;
+        var target_cusotmers = [];
+        game.customers.forEach(function (customer) {
+            if(customer.customer_region == "RU"){
+                target_cusotmers.push(customer);
+            }
+        });
+        return target_cusotmers;
     },
 });
 
@@ -548,6 +554,7 @@ Template.customer.helpers({
                     product_utility: self.getSubjectiveUtility(product),
                     product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
                     product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
+                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])) / product.product_price).toFixed(3)),
                     product_needed: self.updateNeeded(product),
                 });
             }else{
@@ -559,6 +566,7 @@ Template.customer.helpers({
                     product_utility: self.getSubjectiveUtility(product),
                     product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
                     product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
+                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])) / product.product_price).toFixed(3)),
                     product_needed: self.updateNeeded(product),
                 });
             }

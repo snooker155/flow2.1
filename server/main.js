@@ -228,7 +228,8 @@ Meteor.startup(() => {
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_regions: ["RU"],
         product_util: 0,
 	});
 
@@ -240,111 +241,113 @@ Meteor.startup(() => {
 		//product_quality: 1 + Math.floor(Math.random() * 10),
 		prop: [
 			{prop_name: "prop_1", prop_level: 1},
-			{prop_name: "prop_2", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
 			],
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_regions: ["RU"],
         product_util: 0,
 	});
 
 	Products.insert({
 		product_id: 2,
 		product_name: "Prod 2",
-		product_price: 20,
+		product_price: 15,
 		product_color: "#d5c5c8",
 		//product_quality: 1 + Math.floor(Math.random() * 10),
 		prop: [
-			{prop_name: "prop_1", prop_level: 3},
-			{prop_name: "prop_2", prop_level: 2},
-			{prop_name: "prop_4", prop_level: 2},
+			{prop_name: "prop_1", prop_level: 1},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 1},
 			],
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_regions: ["RU"],
         product_util: 0,
 	});
 
-	Products.insert({
-		product_id: 3,
-		product_name: "Prod " + 3,
-		product_price: 12,
-		product_color: "magenta",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_2", prop_level: 1},
-			{prop_name: "prop_3", prop_level: 2},
-		],
-		product_quantity: 50,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_util: 0,
-	});
+	// Products.insert({
+	// 	product_id: 3,
+	// 	product_name: "Prod " + 3,
+	// 	product_price: 12,
+	// 	product_color: "magenta",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_2", prop_level: 1},
+	// 		{prop_name: "prop_3", prop_level: 2},
+	// 	],
+	// 	product_quantity: 50,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+ //        product_util: 0,
+	// });
 
 
-	Products.insert({
-		product_id: 4,
-		product_name: "Prod " + 4,
-		product_price: 20,
-		product_color: "pink",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1", prop_level: 2},
-			{prop_name: "prop_2", prop_level: 1},
-			{prop_name: "prop_3", prop_level: 2},
-		],
-		product_quantity: 25,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_util: 0,
-	});
+	// Products.insert({
+	// 	product_id: 4,
+	// 	product_name: "Prod " + 4,
+	// 	product_price: 20,
+	// 	product_color: "pink",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_1", prop_level: 2},
+	// 		{prop_name: "prop_2", prop_level: 1},
+	// 		{prop_name: "prop_3", prop_level: 2},
+	// 	],
+	// 	product_quantity: 25,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+ //        product_util: 0,
+	// });
 
-	Products.insert({
-		product_id: 5,
-		product_name: "Prod " + 5,
-		product_price: 25,
-		product_color: "#90ceff",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1", prop_level: 2},
-			{prop_name: "prop_2", prop_level: 1},
-			{prop_name: "prop_3", prop_level: 2},
-			{prop_name: "prop_4", prop_level: 1},
-			{prop_name: "prop_6", prop_level: 1},
-		],
-		product_quantity: 15,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_util: 0,
-	});
+	// Products.insert({
+	// 	product_id: 5,
+	// 	product_name: "Prod " + 5,
+	// 	product_price: 25,
+	// 	product_color: "#90ceff",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_1", prop_level: 2},
+	// 		{prop_name: "prop_2", prop_level: 1},
+	// 		{prop_name: "prop_3", prop_level: 2},
+	// 		{prop_name: "prop_4", prop_level: 1},
+	// 		{prop_name: "prop_6", prop_level: 1},
+	// 	],
+	// 	product_quantity: 15,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+ //        product_util: 0,
+	// });
 
-	Products.insert({
-		product_id: 6,
-		product_name: "Prod " + 6,
-		product_price: 30,
-		product_color: "#f6f930",
-		//product_quality: 1 + Math.floor(Math.random() * 10),
-		prop: [
-			{prop_name: "prop_1", prop_level: 2},
-			{prop_name: "prop_2", prop_level: 1},
-			{prop_name: "prop_3", prop_level: 2},
-			{prop_name: "prop_4", prop_level: 1},
-			{prop_name: "prop_5", prop_level: 3},
-			{prop_name: "prop_6", prop_level: 1},
-			{prop_name: "prop_7", prop_level: 1},
-			{prop_name: "prop_8", prop_level: 1},
-		],
-		product_quantity: 10,
-		product_creator: "Bot",
-        product_status: "Completed",
-        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_util: 0,
-	});
+	// Products.insert({
+	// 	product_id: 6,
+	// 	product_name: "Prod " + 6,
+	// 	product_price: 30,
+	// 	product_color: "#f6f930",
+	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
+	// 	prop: [
+	// 		{prop_name: "prop_1", prop_level: 2},
+	// 		{prop_name: "prop_2", prop_level: 1},
+	// 		{prop_name: "prop_3", prop_level: 2},
+	// 		{prop_name: "prop_4", prop_level: 1},
+	// 		{prop_name: "prop_5", prop_level: 3},
+	// 		{prop_name: "prop_6", prop_level: 1},
+	// 		{prop_name: "prop_7", prop_level: 1},
+	// 		{prop_name: "prop_8", prop_level: 1},
+	// 	],
+	// 	product_quantity: 10,
+	// 	product_creator: "Bot",
+ //        product_status: "Completed",
+ //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+ //        product_util: 0,
+	// });
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -497,7 +500,7 @@ Meteor.startup(() => {
 		region_id: "RU",
 		region_name: "Russia",
 		region_people_number: 5 * PEOPLE_MULTI,
-		region_pref: 3,
+		region_pref: 2,
 		region_market: 1.5,
 		region_demand: 4,
 		//region_trend: "Low",
@@ -569,7 +572,8 @@ Meteor.startup(() => {
 				needed: [
 					{
 						value: 0, 
-						weight: Math.floor(Math.random() * 10), 
+						//weight: Math.floor(Math.random() * 10),
+						weight: Math.floor(Math.random() * 4),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
@@ -585,7 +589,8 @@ Meteor.startup(() => {
 					},
 					{
 						value: 0, 
-						weight: Math.floor(Math.random() * 10), 
+						//weight: Math.floor(Math.random() * 10),
+						weight: Math.floor(Math.random() * 4),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
@@ -601,7 +606,8 @@ Meteor.startup(() => {
 					},
 					{	
 						value: 0, 
-						weight: Math.floor(Math.random() * 10), 
+						// weight: Math.floor(Math.random() * 10),
+						weight: Math.floor(Math.random() * 4),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),

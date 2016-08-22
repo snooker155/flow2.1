@@ -527,7 +527,7 @@ Meteor.startup(() => {
 			product_region: "",
 			product_price_history: [],
 			product_color: product.product_color,
-			//product_quality: product.,
+			//product_quality: product.product_quality,
 			prop: product.prop,
 			product_quantity: product.product_quantity,
 			product_creator: product.product_creator,
@@ -550,8 +550,8 @@ Meteor.startup(() => {
 	    	// new_level_of_conservatism = Math.random() / 10;
 	    	// level_of_conservatism += new_level_of_conservatism;
 
-	    	//new_customer_income = region.base_income_rate + Math.floor(Math.random() * 20);
-	    	new_customer_income = region.base_income_rate;
+	    	new_customer_income = region.base_income_rate + Math.floor(Math.random() * 20);
+	    	//new_customer_income = region.base_income_rate;
 	    	customer_income += new_customer_income;
 
 	     	customers.push({
@@ -573,7 +573,7 @@ Meteor.startup(() => {
 					{
 						value: 0, 
 						//weight: Math.floor(Math.random() * 10),
-						weight: Math.floor(Math.random() * 4),
+						weight: Math.floor(Math.random() * 5),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
@@ -590,7 +590,7 @@ Meteor.startup(() => {
 					{
 						value: 0, 
 						//weight: Math.floor(Math.random() * 10),
-						weight: Math.floor(Math.random() * 4),
+						weight: Math.floor(Math.random() * 5),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
@@ -607,7 +607,7 @@ Meteor.startup(() => {
 					{	
 						value: 0, 
 						// weight: Math.floor(Math.random() * 10),
-						weight: Math.floor(Math.random() * 4),
+						weight: Math.floor(Math.random() * 5),
 						prop: {
 							prop_1: Math.floor(Math.random() * 4),
 							prop_2: Math.floor(Math.random() * 4),
@@ -852,44 +852,67 @@ Meteor.startup(() => {
 	   	});
 
 
-	   	/////  WORLD CHANGES  ///////
-
-	   	// game.changeIncome(0.005);
-
-	   	// game.changeCustomersNumber(3);
-
-	   	// game.changeRegionActivity(1);
-
-	   	// game.changeProductPrice(2);
-
-	   	// game.changeRegionConservLevel(0.003);
-
-	   	// game.changeRegionPref(1);
-
-	   	//game.changeIncome(-0.05, "RU");
-
-		//game.changeCustomersNumber(1, "RU");
-
-		//game.changeRegionActivity(1, "RU");
-
-		//game.changeProductPrice(1, "Prod 2");
-
-		//game.changeRegionConservLevel(-0.001, "RU");
+	   	//////////////////////////////////////////////////////////
+	   	///////      WORLD CHANGES   /////////////////////////////
+	   	//////////////////////////////////////////////////////////
 
 
-	   	// if(game.getRegionConserv("RU") >= 0.08){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
+	   	if(game.getRegionConserv("RU") >= 0.08 
+	   		&& game.getRegionConserv("RU") < 0.3
+	   		&& game.getRegionPref("RU") < 4
+	   		&& game.getAvgPrice("RU") < 20
+	   		&& game.getAverageIncome("RU") >= 25){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
 
-	   	// 	console.log("----------------------   Crisis in Russia   --------------------------");
+	   		console.log("----------------------   Recession in Russia   --------------------------");
 
-		   // 	if(game.getRegionPref("RU") <= 3 * 2 && game.getAvgPrice("RU") < 15){  /// 3 = region_pref for "RU" region
-		   // 		game.changeRegionPref(0.05, "RU");
-		   // 	}
+		   	game.changeRegionPref(0.025, "RU");
 
-		   // 	if(game.getAvgPrice("RU") < 25){
-		   // 		game.changeProductPrice(0.25, "Prod 2");
-		   // 	}
+	   	}
 
-	   	// }
+	   	if(game.getRegionConserv("RU") >= 0.3 
+	   		&& game.getRegionPref("RU") >= 4
+	   		&& game.getAvgPrice("RU") < 20
+	   		&& game.getAverageIncome("RU") >= 15){
+
+	   		console.log("----------------------   Crisis in Russia   --------------------------");
+
+		   	game.changeProductPrice(0.1);
+
+		   	if(game.getAvgPrice("RU") >= 10){
+				game.changeIncome(-0.01, "RU");
+			}
+
+	   	}
+
+	   	if(game.getRegionConserv("RU") >= 0.05 
+	   		&& game.getRegionPref("RU") >= 4
+	   		&& game.getAvgPrice("RU") >= 20
+	   		&& game.getAverageIncome("RU") < 25){
+
+	   		console.log("----------------------   Recovery in Russia   --------------------------");
+
+		   	game.changeRegionPref(-0.025, "RU");
+
+		   	if(game.getRegionPref("RU") >= 1.5){
+		   		game.changeRegionConservLevel(-0.005, "RU");
+		   	}
+
+	   	}
+
+	   	if(game.getRegionConserv("RU") < 0.05
+	   		&& game.getRegionPref("RU") < 1.5){
+
+	   		console.log("----------------------   Extremum in Russia   --------------------------");
+
+		   	game.changeIncome(0.01, "RU");
+
+		   	if(game.getAverageIncome("RU") >= 30){
+		   		game.changeProductPrice(0.1);
+		   	}
+
+	   	}
+
+
 
 
 
@@ -979,7 +1002,9 @@ Meteor.startup(() => {
 	   	// }
 
 
-	   	/////////////////////////////
+	   	///////////////////////////////////////////////////////////////////////////////////////
+	   	///////////////////////////////////////////////////////////////////////////////////////
+	   	///////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1111,7 +1136,7 @@ Meteor.startup(() => {
 
 	   	console.log("-----------------------------   END   --------------------------------");
 
-	}, 15000);
+	}, 5000);
 
 
 });

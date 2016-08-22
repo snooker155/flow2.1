@@ -436,6 +436,11 @@ Template.world_map.helpers({
 		return products;
 	},
 
+	product_price(){
+		var self = this;
+		return parseFloat(this.product_price.toFixed(2));
+	},
+
 	product_customers(){
 		var self = this;
 		var customers = Games.findOne({}).customers;
@@ -613,6 +618,7 @@ Template.world_map.helpers({
 					prop_needed_arr[x] = 0;
 				}
 				var count_prop = 0;
+				var customer_number_in_region = 0;
 				game.customers.forEach(function (customer) {
 					if(customer.customer_region == selected_region.get()){
 						j = 0;
@@ -621,14 +627,15 @@ Template.world_map.helpers({
 							prop_needed_arr[j] += need.prop[feature.feature_name];
 							j++;
 						});
+						customer_number_in_region++;
 					}
 				});
 				for(var y = 0; y < prop_needed_arr.length; y++){
-					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / game.customers.length).toFixed(2));
+					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / customer_number_in_region).toFixed(2));
 				}
 				prop_arr.push({
 					prop_name: feature.feature_name,
-					prop_count: count_prop,
+					prop_count: parseFloat((count_prop / customer_number_in_region).toFixed(2)),
 					prop_needed_arr: prop_needed_arr,
 				});
 			});

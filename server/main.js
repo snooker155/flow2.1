@@ -852,14 +852,16 @@ Meteor.startup(() => {
 	   	});
 
 
+
+
 	   	//////////////////////////////////////////////////////////
 	   	///////      WORLD CHANGES   /////////////////////////////
 	   	//////////////////////////////////////////////////////////
 
 
 	   	if(game.getRegionConserv("RU") >= 0.08 
-	   		&& game.getRegionConserv("RU") < 0.3
-	   		&& game.getRegionPref("RU") < 4
+	   		&& (game.getRegionConserv("RU") < 0.12
+	   		|| game.getRegionPref("RU") < 4)
 	   		&& game.getAvgPrice("RU") < 20
 	   		&& game.getAverageIncome("RU") >= 25){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
 
@@ -869,23 +871,23 @@ Meteor.startup(() => {
 
 	   	}
 
-	   	if(game.getRegionConserv("RU") >= 0.3 
-	   		&& game.getRegionPref("RU") >= 4
-	   		&& game.getAvgPrice("RU") < 20
-	   		&& game.getAverageIncome("RU") >= 15){
+	   	if((game.getRegionConserv("RU") >= 0.12 
+	   		|| game.getRegionPref("RU") >= 4)
+	   		&& (game.getAvgPrice("RU") < 20
+	   		&& game.getAverageIncome("RU") >= 25)){
 
 	   		console.log("----------------------   Crisis in Russia   --------------------------");
 
-		   	game.changeProductPrice(0.1);
+		   	game.changeProductPrice(0.3);
 
 		   	if(game.getAvgPrice("RU") >= 10){
-				game.changeIncome(-0.01, "RU");
+				game.changeIncome(-0.02, "RU");
 			}
 
 	   	}
 
-	   	if(game.getRegionConserv("RU") >= 0.05 
-	   		&& game.getRegionPref("RU") >= 4
+	   	if((game.getRegionConserv("RU") >= 0.05 
+	   		|| game.getRegionPref("RU") >= 0.5)
 	   		&& game.getAvgPrice("RU") >= 20
 	   		&& game.getAverageIncome("RU") < 25){
 
@@ -893,21 +895,21 @@ Meteor.startup(() => {
 
 		   	game.changeRegionPref(-0.025, "RU");
 
-		   	if(game.getRegionPref("RU") >= 1.5){
-		   		game.changeRegionConservLevel(-0.005, "RU");
+		   	if(game.getRegionPref("RU") >= 0.5){
+		   		game.changeRegionConservLevel(-0.002, "RU");
 		   	}
 
 	   	}
 
 	   	if(game.getRegionConserv("RU") < 0.05
-	   		&& game.getRegionPref("RU") < 1.5){
+	   		|| game.getRegionPref("RU") < 1.5){
 
 	   		console.log("----------------------   Extremum in Russia   --------------------------");
 
-		   	game.changeIncome(0.01, "RU");
+		   	game.changeIncome(0.03, "RU");
 
-		   	if(game.getAverageIncome("RU") >= 30){
-		   		game.changeProductPrice(0.1);
+		   	if(game.getAverageIncome("RU") >= 25){
+		   		game.changeProductPrice(-0.7);
 		   	}
 
 	   	}

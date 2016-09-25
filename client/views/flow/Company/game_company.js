@@ -232,7 +232,7 @@ Template.company_profile.helpers({
 
     revenue_in_period(){
         var game = Template.instance().getGame();
-        return game.companies[Meteor.user().username].getRevenue(game);
+        return parseFloat(game.companies[Meteor.user().username].getRevenue(game).toFixed(2));
     },
 
     balance_in_period(){
@@ -242,7 +242,7 @@ Template.company_profile.helpers({
 
     costs_in_period(){
         var game = Template.instance().getGame();
-        return game.companies[Meteor.user().username].getCosts(game);
+        return parseFloat(game.companies[Meteor.user().username].getCosts(game).toFixed(2));
     },
 
     users_in_period_ratio(){

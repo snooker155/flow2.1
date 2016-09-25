@@ -150,7 +150,7 @@
 
 <template name="news_flow">
     {{#each news}}
-        <div class="timeline-item" style="margin-top:5px;">
+        <div class="timeline-item" style="margin-top:5px; border-bottom: 1px solid #eee;">
             <div class="row">
                 <div class="col-md-3">
                     <i class="fa fa-{{type}} pull-right"></i>
@@ -159,8 +159,28 @@
                     <small class="text-navy">time period</small>
                 </div>
                 <div class="col-md-7 no-top-border">
-                    <p class="m-b-xs"><strong>{{header}}</strong></p>
-                    <p>{{text}}</p>
+                    <p class="m-b-xs" style="margin-bottom: 10px;"><strong>{{header}}</strong></p>
+                    {{#if text}}
+                        <p>{{text}}</p>
+                    {{/if}}
+                    {{#if params}}
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                <div class="stat-percent font-bold text-{{conserv_color}}">{{params.conserv}}% <i class="fa fa-level-{{conserv_arrow}}"></i></div><strong>Conservatism: </strong>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <div class="stat-percent font-bold text-{{pref_color}}">{{params.pref}}% <i class="fa fa-level-{{pref_arrow}}"></i></div><strong>Preferences: </strong>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-6 text-center">
+                                <div class="stat-percent font-bold text-{{income_color}}">{{params.income}}% <i class="fa fa-level-{{income_arrow}}"></i></div><strong>Income: </strong>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <div class="stat-percent font-bold text-{{prices_color}}">{{params.prices}}% <i class="fa fa-level-{{prices_arrow}}"></i></div><strong>Prices: </strong>
+                            </div>
+                        </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

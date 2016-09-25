@@ -228,8 +228,8 @@ Meteor.startup(() => {
 		product_quantity: 100,
 		product_creator: "Bot",
         product_status: "Completed",
-        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_regions: ["RU"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["RU"],
         product_util: 0,
 	});
 
@@ -246,8 +246,8 @@ Meteor.startup(() => {
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_regions: ["RU"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["RU"],
         product_util: 0,
 	});
 
@@ -265,96 +265,96 @@ Meteor.startup(() => {
 		product_quantity: 75,
 		product_creator: "Bot",
         product_status: "Completed",
-        //product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
-        product_regions: ["RU"],
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        //product_regions: ["RU"],
         product_util: 0,
 	});
 
-	// Products.insert({
-	// 	product_id: 3,
-	// 	product_name: "Prod " + 3,
-	// 	product_price: 12,
-	// 	product_color: "magenta",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_2", prop_level: 1},
-	// 		{prop_name: "prop_3", prop_level: 2},
-	// 	],
-	// 	product_quantity: 50,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
- //        product_util: 0,
-	// });
+	Products.insert({
+		product_id: 3,
+		product_name: "Prod " + 3,
+		product_price: 12,
+		product_color: "magenta",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+		],
+		product_quantity: 50,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
 
-	// Products.insert({
-	// 	product_id: 4,
-	// 	product_name: "Prod " + 4,
-	// 	product_price: 20,
-	// 	product_color: "pink",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_1", prop_level: 2},
-	// 		{prop_name: "prop_2", prop_level: 1},
-	// 		{prop_name: "prop_3", prop_level: 2},
-	// 	],
-	// 	product_quantity: 25,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
- //        product_util: 0,
-	// });
+	Products.insert({
+		product_id: 4,
+		product_name: "Prod " + 4,
+		product_price: 20,
+		product_color: "pink",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+		],
+		product_quantity: 25,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
-	// Products.insert({
-	// 	product_id: 5,
-	// 	product_name: "Prod " + 5,
-	// 	product_price: 25,
-	// 	product_color: "#90ceff",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_1", prop_level: 2},
-	// 		{prop_name: "prop_2", prop_level: 1},
-	// 		{prop_name: "prop_3", prop_level: 2},
-	// 		{prop_name: "prop_4", prop_level: 1},
-	// 		{prop_name: "prop_6", prop_level: 1},
-	// 	],
-	// 	product_quantity: 15,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
- //        product_util: 0,
-	// });
+	Products.insert({
+		product_id: 5,
+		product_name: "Prod " + 5,
+		product_price: 25,
+		product_color: "#90ceff",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+			{prop_name: "prop_4", prop_level: 1},
+			{prop_name: "prop_6", prop_level: 1},
+		],
+		product_quantity: 15,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
-	// Products.insert({
-	// 	product_id: 6,
-	// 	product_name: "Prod " + 6,
-	// 	product_price: 30,
-	// 	product_color: "#f6f930",
-	// 	//product_quality: 1 + Math.floor(Math.random() * 10),
-	// 	prop: [
-	// 		{prop_name: "prop_1", prop_level: 2},
-	// 		{prop_name: "prop_2", prop_level: 1},
-	// 		{prop_name: "prop_3", prop_level: 2},
-	// 		{prop_name: "prop_4", prop_level: 1},
-	// 		{prop_name: "prop_5", prop_level: 3},
-	// 		{prop_name: "prop_6", prop_level: 1},
-	// 		{prop_name: "prop_7", prop_level: 1},
-	// 		{prop_name: "prop_8", prop_level: 1},
-	// 	],
-	// 	product_quantity: 10,
-	// 	product_creator: "Bot",
- //        product_status: "Completed",
- //        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
- //        product_util: 0,
-	// });
+	Products.insert({
+		product_id: 6,
+		product_name: "Prod " + 6,
+		product_price: 30,
+		product_color: "#f6f930",
+		//product_quality: 1 + Math.floor(Math.random() * 10),
+		prop: [
+			{prop_name: "prop_1", prop_level: 2},
+			{prop_name: "prop_2", prop_level: 1},
+			{prop_name: "prop_3", prop_level: 2},
+			{prop_name: "prop_4", prop_level: 1},
+			{prop_name: "prop_5", prop_level: 3},
+			{prop_name: "prop_6", prop_level: 1},
+			{prop_name: "prop_7", prop_level: 1},
+			{prop_name: "prop_8", prop_level: 1},
+		],
+		product_quantity: 10,
+		product_creator: "Bot",
+        product_status: "Completed",
+        product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
+        product_util: 0,
+	});
 
 
 	//////////////////////////////////////////////////////////////////////
 	//////////////////  REGIONS  /////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
-	var PEOPLE_MULTI = 3;
+	var PEOPLE_MULTI = 5;
 
   	Regions.insert({
 		region_id: "CE",
@@ -507,7 +507,7 @@ Meteor.startup(() => {
 		base_income_rate: 20,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.05,
 	});
 
 
@@ -560,7 +560,7 @@ Meteor.startup(() => {
 				customer_pref: region.region_pref,
 				//customer_money: 2000 + Math.floor((Math.random() * 500) + 100),
 				base_customer_conservatism: region.base_level_of_conservatism,
-				customer_conservatism: null,
+				customer_conservatism: region.base_level_of_conservatism,
 				customer_product_conservatism: {},
 				customer_income: new_customer_income,
 				customer_activity: 1,
@@ -642,18 +642,22 @@ Meteor.startup(() => {
     });
 
 	var features = [];
+	var departments = [];
 
 	Features.find({}).fetch().forEach(function (feature) {
 		features.push(feature);
 	});
 
-
+	Departments.find({}).fetch().forEach(function (department) {
+		departments.push(department);
+	});
 
 	var game_id = Games.insert({
     	game_name: "test",
     	players: [],
      	regions: regions,
      	customers: customers,
+     	departments: departments,
      	features: features,
      	companies: {},
      	news: [],
@@ -858,61 +862,214 @@ Meteor.startup(() => {
 	   	///////      WORLD CHANGES   /////////////////////////////
 	   	//////////////////////////////////////////////////////////
 
+	   	var price_changed = 0;
 
-	   	if(game.getRegionConserv("RU") >= 0.08 
-	   		&& (game.getRegionConserv("RU") < 0.12
-	   		|| game.getRegionPref("RU") < 4)
-	   		&& game.getAvgPrice("RU") < 20
-	   		&& game.getAverageIncome("RU") >= 25){  //// set crisis in Russia  /// 0.08 = base_level_of_conservatism for "RU" region * 2
+	   	for (var region in game.regions){
 
-	   		console.log("----------------------   Recession in Russia   --------------------------");
+		   	var changed = 0;
+		   	var employee_price_change = 0;
 
-		   	game.changeRegionPref(0.025, "RU");
+		   	if((game.getRegionConserv(region) >= 0.08 && game.getRegionConserv(region) < 0.16)
+		   	&& (game.getRegionPref(region) >= 2)){
+		   	// && game.getAvgPrice("RU") < 20
+		   	// && game.getAverageIncome("RU") >= 25
 
-	   	}
+				//console.log("---------------------- Recovery in Russia --------------------------");
 
-	   	if((game.getRegionConserv("RU") >= 0.12 
-	   		|| game.getRegionPref("RU") >= 4)
-	   		&& (game.getAvgPrice("RU") < 20
-	   		&& game.getAverageIncome("RU") >= 25)){
+				// game.changeRegionConservLevel(0.01, "RU");
+				// game.changeRegionPref(0.015, "RU");
 
-	   		console.log("----------------------   Crisis in Russia   --------------------------");
+				// game.changeIncome(0.01, "RU");
+				// game.changeProductPrice(0.015);
 
-		   	game.changeProductPrice(0.3);
+				game.changeRegionConservLevel(0.01);
+				game.changeRegionPref(0.015);
 
-		   	if(game.getAvgPrice("RU") >= 10){
-				game.changeIncome(-0.02, "RU");
+				game.changeIncome(0.01);
+				if(price_changed == 0){
+					game.changeProductPrice(0.015);
+					price_changed = 1;
+				}
+
+				changed = 1;
+				employee_price_change = 0.015;
+
+				game.news.push({
+					time_period: game.time_period,
+					type: "line-chart", /////Types: usd, newspaper-o, user, warning, line-chart
+					//header: "Recovery in Russia",
+					header: "Recovery in "+game.regions[region].region_name,
+					//text: "All customers' activities in region \"RU\" have been set to.",
+					params: {
+						conserv: 1,
+						pref: 1.5,
+						income: 1,
+						prices: 1.5,
+					},
+				});
+
+		   	}
+
+		   	if((game.getRegionConserv(region) >= 0.16)
+		   	&& (game.getRegionPref(region) >= 2)){
+
+			   	//console.log("---------------------- Extremum in Russia --------------------------");
+
+				// game.changeRegionConservLevel(0.01, "RU");
+			 //   	game.changeRegionPref(-0.015, "RU");
+
+			 //   	game.changeIncome(-0.01, "RU");
+				// game.changeProductPrice(-0.015);
+
+				game.changeRegionConservLevel(0.01);
+			   	game.changeRegionPref(-0.015);
+
+			   	game.changeIncome(-0.01);
+				if(price_changed == 0){
+					game.changeProductPrice(-0.015);
+					price_changed = 1;
+				}
+
+				changed = 1;
+				employee_price_change = -0.015;
+
+				game.news.push({
+					time_period: game.time_period,
+					type: "line-chart", /////Types: usd, newspaper-o, user, warning, line-chart
+					//header: "Extremum in Russia",
+					header: "Extremum in "+game.regions[region].region_name,
+					//text: "All customers' activities in region \""+region+"\" have been set to "+status+".",
+					params: {
+						conserv: 1,
+						pref: -1.5,
+						income: -1,
+						prices: -1.5,
+					},
+				});
 			}
 
-	   	}
+			if((game.getRegionConserv(region) >= 0.16)
+		   	&& (game.getRegionPref(region) < 2)){
 
-	   	if((game.getRegionConserv("RU") >= 0.05 
-	   		|| game.getRegionPref("RU") >= 0.5)
-	   		&& game.getAvgPrice("RU") >= 20
-	   		&& game.getAverageIncome("RU") < 25){
+			   	//console.log("---------------------- Recession in Russia  --------------------------");
 
-	   		console.log("----------------------   Recovery in Russia   --------------------------");
+				// game.changeRegionConservLevel(-0.015, "RU");
+			 //   	game.changeRegionPref(-0.015, "RU");
 
-		   	game.changeRegionPref(-0.025, "RU");
+			 //   	game.changeIncome(-0.01, "RU");
+				// game.changeProductPrice(0.015);
 
-		   	if(game.getRegionPref("RU") >= 0.5){
-		   		game.changeRegionConservLevel(-0.002, "RU");
+				game.changeRegionConservLevel(-0.015);
+			   	game.changeRegionPref(-0.015);
+
+			   	game.changeIncome(-0.01);
+				if(price_changed == 0){
+					game.changeProductPrice(0.015);
+					price_changed = 1;
+				}
+
+				changed = 1;
+				employee_price_change = 0.015;
+
+				game.news.push({
+					time_period: game.time_period,
+					type: "line-chart", /////Types: usd, newspaper-o, user, warning, line-chart
+					//header: "Recession in Russia",
+					header: "Recession in "+game.regions[region].region_name,
+					//text: "All customers' activities in region \""+region+"\" have been set to "+status+".",
+					params: {
+						conserv: -1,
+						pref: -1.5,
+						income: -1,
+						prices: 1.5,
+					},
+				});
+			}
+
+			if((game.getRegionConserv(region) >= 0.08 && game.getRegionConserv(region) < 0.16)
+		   	&& (game.getRegionPref(region) < 2)){
+
+				//console.log("---------------------- Crisis in Russia --------------------------");
+
+				// game.changeRegionConservLevel(-0.015, "RU");
+			 //   	game.changeRegionPref(0.015, "RU");
+
+			 //   	game.changeIncome(0.01, "RU");
+				// game.changeProductPrice(-0.015);
+
+				game.changeRegionConservLevel(-0.015);
+			   	game.changeRegionPref(0.015);
+
+			   	game.changeIncome(0.01);
+				if(price_changed == 0){
+					game.changeProductPrice(-0.015);
+					price_changed = 1;
+				}
+
+				changed = 1;
+				employee_price_change = -0.015;
+
+				game.news.push({
+					time_period: game.time_period,
+					type: "line-chart", /////Types: usd, newspaper-o, user, warning, line-chart
+					//header: "Crisis in Russia",
+					header: "Crisis in "+game.regions[region].region_name,
+					//text: "All customers' activities in region \""+region+"\" have been set to "+status+".",
+					params: {
+						conserv: -1,
+						pref: 1.5,
+						income: 1,
+						prices: -1.5,
+					},
+				});
 		   	}
 
-	   	}
+		}
 
-	   	if(game.getRegionConserv("RU") < 0.05
-	   		|| game.getRegionPref("RU") < 1.5){
 
-	   		console.log("----------------------   Extremum in Russia   --------------------------");
+	  //  	if((game.getRegionConserv("RU") >= 0.12
+	  //  		|| game.getRegionPref("RU") >= 4)
+	  //  		// && (game.getAvgPrice("RU") < 20
+	  //  		// && game.getAverageIncome("RU") >= 25)
+	  //  		){
 
-		   	game.changeIncome(0.03, "RU");
+	  //  		console.log("----------------------   Crisis in Russia   --------------------------");
 
-		   	if(game.getAverageIncome("RU") >= 25){
-		   		game.changeProductPrice(-0.7);
-		   	}
+		 //   	game.changeProductPrice(0.3);
 
-	   	}
+		 //   	if(game.getAvgPrice("RU") >= 10){
+			// 	game.changeIncome(-0.02, "RU");
+			// }
+	  //  	}
+
+	   	// if((game.getRegionConserv("RU") >= 0.05 
+	   	// 	|| game.getRegionPref("RU") >= 0.5)
+	   	// 	// && game.getAvgPrice("RU") >= 20
+	   	// 	// && game.getAverageIncome("RU") < 25
+	   	// 	){
+
+	   	// 	console.log("----------------------   Recovery in Russia   --------------------------");
+
+		   // 	game.changeRegionPref(-0.025, "RU");
+
+		   // 	if(game.getRegionPref("RU") >= 0.5){
+		   // 		game.changeRegionConservLevel(-0.002, "RU");
+		   // 	}
+
+	   	// }
+
+	   	// if(game.getRegionConserv("RU") < 0.05
+	   	// 	|| game.getRegionPref("RU") < 1.5){
+
+	   	// 	console.log("----------------------   Extremum in Russia   --------------------------");
+
+		   // 	game.changeIncome(0.03, "RU");
+
+		   // 	if(game.getAverageIncome("RU") >= 25){
+		   // 		game.changeProductPrice(-0.7);
+		   // 	}
+
+	   	// }
 
 
 
@@ -1024,6 +1181,14 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
+	   	for (var company in game_new.companies){
+	   		game_new.companies[company].company_team.forEach(function (dep) {
+	   			if(changed == 1){
+	   				dep.price_for_employee += dep.price_for_employee * employee_price_change;
+	   			}
+	   		});
+	   	}
+
 
 	    game.products.forEach(function (product) {
 	   		var prop_finished = 0;
@@ -1082,7 +1247,7 @@ Meteor.startup(() => {
 	   	//var target_util = 0;
 		//while(target_util != 162){
 
-		   	console.log("------------------------  START GENERATIONS ---------------------------");
+		   	//console.log("------------------------  START GENERATIONS ---------------------------");
 
 		   	//time_count++;
 
@@ -1114,7 +1279,7 @@ Meteor.startup(() => {
 
 
 
-		   	console.log("------------------------   END GENERATIONS  ---------------------------");
+		   	//console.log("------------------------   END GENERATIONS  ---------------------------");
 		//};
 
 

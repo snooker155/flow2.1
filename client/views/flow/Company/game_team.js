@@ -89,8 +89,14 @@ Template.game_team.helpers({
         return employees_array;
     },
 
+    price_for_employee(){
+        var self = this;
+        return parseFloat(self.price_for_employee.toFixed(2));
+    },
+
     sum_of_department(){
-        return this.employee_number * this.price_for_employee;
+        var self = this;
+        return parseFloat((self.employee_number * self.price_for_employee).toFixed(2));
     },
 
 
@@ -105,7 +111,7 @@ Template.game_team.helpers({
             sum += employee.employee_number * employee.price_for_employee;
         });
         employees_arrayDep.depend();
-        return sum;
+        return parseFloat(sum.toFixed(2));
     },
 
 

@@ -357,7 +357,9 @@ Template.world_map.helpers({
 			game.customers.forEach(function (customer) {
 				if(customer.customer_region == selected_region.get()){
 					customer_count++;
-					region_conservatism += customer.customer_conservatism;
+					for (var conserv in customer.customer_product_conservatism){
+						region_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
+					}
 				}
 			});
 			region_conservatism = region_conservatism / customer_count;
@@ -384,7 +386,9 @@ Template.world_map.helpers({
 
 			var total_conservatism = 0;
 	        game.customers.forEach(function (customer) {
-	            total_conservatism += customer.customer_conservatism;
+	            for (var conserv in customer.customer_product_conservatism){
+					total_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
+				}
 	        });
 	        total_conservatism = total_conservatism / game.customers.length;
 

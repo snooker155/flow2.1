@@ -534,10 +534,18 @@ Template.customer.helpers({
         return self.getIncomeGroup(game);
     },
 
+    base_customer_conservatism(){
+        return parseFloat(this.base_customer_conservatism.toFixed(4));
+    },
+
     customer_conservatism(){
         return this.customer_conservatism ? 
-            parseFloat(this.customer_conservatism).toFixed(3) : 
-            parseFloat(this.base_customer_conservatism).toFixed(3);
+            parseFloat(this.customer_conservatism).toFixed(4) : 
+            parseFloat(this.base_customer_conservatism).toFixed(4);
+    },
+
+    customer_pref(){
+        return parseFloat(this.customer_pref.toFixed(3));
     },
 
     products(){
@@ -549,24 +557,24 @@ Template.customer.helpers({
                 product_selection.push({
                     product_name: product.product_name,
                     chosen_product: "font-weight: bold",
-                    product_price: product.product_price,
+                    product_price: parseFloat(product.product_price.toFixed(2)),
                     customer_product_conservatism: parseFloat(self.customer_product_conservatism[product.product_id].toFixed(3)),
                     product_utility: self.getSubjectiveUtility(product),
                     product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
-                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
-                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])) / product.product_price).toFixed(3)),
+                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - (self.customer_conservatism * self.customer_product_conservatism[product.product_id]))).toFixed(3)),
+                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - (self.customer_conservatism * self.customer_product_conservatism[product.product_id]))) / product.product_price).toFixed(3)),
                     product_needed: self.updateNeeded(product),
                 });
             }else{
                 product_selection.push({
                     product_name: product.product_name,
                     chosen_product: "",
-                    product_price: product.product_price,
+                    product_price: parseFloat(product.product_price.toFixed(2)),
                     customer_product_conservatism: parseFloat(self.customer_product_conservatism[product.product_id].toFixed(3)),
                     product_utility: self.getSubjectiveUtility(product),
                     product_graph_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product)).toFixed(2)),
-                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])).toFixed(3)),
-                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - self.customer_product_conservatism[product.product_id])) / product.product_price).toFixed(3)),
+                    product_conserv_utility: parseFloat((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - (self.customer_conservatism * self.customer_product_conservatism[product.product_id]))).toFixed(3)),
+                    product_value: parseFloat(((self.getNeighborsOpinion(game, self.getSubjectiveUtility(product), product) * (1 - (self.customer_conservatism * self.customer_product_conservatism[product.product_id]))) / product.product_price).toFixed(3)),
                     product_needed: self.updateNeeded(product),
                 });
             }

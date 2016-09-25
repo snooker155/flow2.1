@@ -217,6 +217,11 @@ Template.game_product.helpers({
     //     return this.feature_level !== 1? true: false;
     // },
 
+    product_price(){
+        var self = this;
+        return parseFloat(self.product_price.toFixed(2));
+    },
+
 
 });
 

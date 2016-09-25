@@ -6,7 +6,7 @@
 
 
                         {{#each news}}
-                            <div class="timeline-item">
+                            <div class="timeline-item" style="border-bottom: 1px solid #eee;">
                                 <div class="row">
                                     <div class="col-md-3 date">
                                         <i class="fa fa-{{type}}"></i>
@@ -17,8 +17,26 @@
                                     <div class="col-md-9 no-top-border content" style="width:80%">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <p class="m-b-xs"><strong>{{header}}</strong></p>
-                                                <p>{{text}}</p>
+                                                <h3 class="m-b-xs text-center" style="margin-bottom: 10px;"><strong>{{header}}</strong></h3>
+                                                {{#if text}}
+                                                    <p>{{text}}</p>
+                                                {{/if}}
+                                                {{#if params}}
+                                                    <div class="row" style="margin-bottom: 20px;">
+                                                        <div class="col-md-3 text-center">
+                                                            <div class="stat-percent font-bold text-{{conserv_color}}">{{params.conserv}}% <i class="fa fa-level-{{conserv_arrow}}"></i></div><strong>Conservatism: </strong>
+                                                        </div>
+                                                        <div class="col-md-3 text-center">
+                                                            <div class="stat-percent font-bold text-{{pref_color}}">{{params.pref}}% <i class="fa fa-level-{{pref_arrow}}"></i></div><strong>Preferences: </strong>
+                                                        </div>
+                                                        <div class="col-md-3 text-center">
+                                                            <div class="stat-percent font-bold text-{{income_color}}">{{params.income}}% <i class="fa fa-level-{{income_arrow}}"></i></div><strong>Income: </strong>
+                                                        </div>
+                                                        <div class="col-md-3 text-center">
+                                                            <div class="stat-percent font-bold text-{{prices_color}}">{{params.prices}}% <i class="fa fa-level-{{prices_arrow}}"></i></div><strong>Prices: </strong>
+                                                        </div>
+                                                    </div>
+                                                {{/if}}
                                             </div>
                                             <!-- <div class="col-md-4">
                                                 <div class="stat-percent font-bold text-navy">{{news_demand}}% <i class="fa fa-level-up"></i></div><strong>Demand: </strong><br>

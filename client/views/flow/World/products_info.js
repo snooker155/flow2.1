@@ -47,3 +47,11 @@ Template.customers_stat.helpers({
 });
 
 
+Template.products.helpers({
+  product_price() {
+    var self = this;
+    return parseFloat(self.product_price.toFixed(2));
+  },
+});
+
+

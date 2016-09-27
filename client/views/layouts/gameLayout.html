@@ -5,7 +5,15 @@
     {{> topGameNavbar }}
 
     <!-- Main view  -->
-    {{> yield}}
+    {{#if game_is_finished}}
+      {{> game_finished}}
+    {{else}}
+      {{#if company_is_finished}}
+        {{> game_finished}}
+      {{else}}
+        {{> yield}}
+      {{/if}}
+    {{/if}}
 
     <!-- Statistic row -->
         {{> stat_row}}

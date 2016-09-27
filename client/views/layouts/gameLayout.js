@@ -17,3 +17,15 @@ Template.gameLayout.onCreated(function(){
   // documents down to the client
   this.subscribe("games");
 });
+
+Template.gameLayout.helpers({
+	game_is_finished: function () {
+		var game = Games.findOne({});
+		return game.status == 'finished' ? true : false;
+	},
+
+  company_is_finished(){
+    var game = Games.findOne({});
+    return game.companies[Meteor.user().username].status == 'bankrupt' ? true : false;
+  },
+});

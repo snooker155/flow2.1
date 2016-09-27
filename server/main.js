@@ -310,7 +310,7 @@ Meteor.startup(() => {
 		product_id: 5,
 		product_name: "Prod " + 5,
 		product_price: 25,
-		product_color: "#90ceff",
+		product_color: "#3196e5",
 		//product_quality: 1 + Math.floor(Math.random() * 10),
 		prop: [
 			{prop_name: "prop_1", prop_level: 2},
@@ -367,7 +367,7 @@ Meteor.startup(() => {
 		base_income_rate: 21,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.07,
+		base_level_of_conservatism: 0.05,
 	});
 
 	Regions.insert({
@@ -381,7 +381,7 @@ Meteor.startup(() => {
 		base_income_rate: 23,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.08,
+		base_level_of_conservatism: 0.07,
 	});
 
 	Regions.insert({
@@ -395,7 +395,7 @@ Meteor.startup(() => {
 		base_income_rate: 9,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.03,
+		base_level_of_conservatism: 0.01,
 	});
 
 	Regions.insert({
@@ -409,7 +409,7 @@ Meteor.startup(() => {
 		base_income_rate: 18,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.02,
 	});
 
 	Regions.insert({
@@ -423,7 +423,7 @@ Meteor.startup(() => {
 		base_income_rate: 25,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.02,
+		base_level_of_conservatism: 0.01,
 	});
 
 	Regions.insert({
@@ -437,7 +437,7 @@ Meteor.startup(() => {
 		base_income_rate: 16,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.05,
+		base_level_of_conservatism: 0.03,
 	});
 
 	Regions.insert({
@@ -451,7 +451,7 @@ Meteor.startup(() => {
 		base_income_rate: 14,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.04,
+		base_level_of_conservatism: 0.02,
 	});
 
 	Regions.insert({
@@ -465,7 +465,7 @@ Meteor.startup(() => {
 		base_income_rate: 15,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.06,
+		base_level_of_conservatism: 0.05,
 	});
 
 	Regions.insert({
@@ -493,7 +493,7 @@ Meteor.startup(() => {
 		base_income_rate: 13,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.07,
+		base_level_of_conservatism: 0.08,
 	});
 
 	Regions.insert({
@@ -507,7 +507,7 @@ Meteor.startup(() => {
 		base_income_rate: 20,
 		//base_price_rate: parseFloat((Math.random() + 1).toFixed(2)),
 		//region_price: 10000 + Math.floor((Math.random() * 5000) + 1000),
-		base_level_of_conservatism: 0.05,
+		base_level_of_conservatism: 0.04,
 	});
 
 
@@ -837,6 +837,11 @@ Meteor.startup(() => {
 	   	console.log("-----------------------------  START  --------------------------------");
 
 	   	var game = Games.findOne({});
+
+	   	if(game.status == 'finished'){
+	   		Meteor.clearInterval(interval);
+	   		console.log("------------------------  GAME ENDED  --------------------------");
+	   	}
 
 
 	 	// game.crossover();
@@ -1238,6 +1243,10 @@ Meteor.startup(() => {
 
 		for(var company in game_new.companies){
 			game_new.companies[company].changeCompanyBalance(game);
+
+			if(game_new.companies[company].company_balance <= 0){
+				game_new.companies[company].status = 'bankrupt';
+			}
 		}
 
 
@@ -1281,6 +1290,14 @@ Meteor.startup(() => {
 
 		   	//console.log("------------------------   END GENERATIONS  ---------------------------");
 		//};
+
+
+
+		game.products.forEach(function (product) {
+			if(product.getShare(game) > 50){
+				game.status = 'finished';
+			}
+		});
 
 
 

@@ -78,21 +78,26 @@ Template.game_product.helpers({
         var self = this;
         var total_time_to_achieve = 0;
         var total_start_period = 0;
+        var target_property = null;
         self.prop.forEach(function (property) {
-            if(total_time_to_achieve < property.time_to_achieve){
-                total_time_to_achieve = property.time_to_achieve;
-            }
-            if(total_start_period < property.start_period){
-                total_start_period = property.start_period;
+            if(property.status == 'active'){
+                if(total_time_to_achieve < property.start_period + property.time_to_achieve * property.prop_level){
+                    total_time_to_achieve = property.start_period + property.time_to_achieve * property.prop_level;
+                    target_property = property;
+                }
             }
         });
         // console.log(total_time_to_achieve);
         // console.log(total_start_period);
         // console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
-        if(Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100) >= 100){
-            return 100;
+        if(target_property){
+            if(Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100) >= 100){
+                return 100;
+            }else{
+                return Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100); 
+            }
         }else{
-            return Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100); 
+            return 100;
         }
     },
 
@@ -222,6 +227,11 @@ Template.game_product.helpers({
         return parseFloat(self.product_price.toFixed(2));
     },
 
+    time_to_achieve(){
+        var self = this;
+        return self.time_to_achieve * self.prop_level;
+    },
+
 
 });
 
@@ -332,8 +342,9 @@ Template.game_product.events({
                 if(property.id == self.id){
                     property.prop_level += 1;
                     property.progress = 0;
+                    property.status = 'active';
                     property.start_period = game.time_period;
-                    selected_product.product_status = "In production";
+                    selected_product.product_status = "Updated";
                 }
             });
 
@@ -372,8 +383,9 @@ Template.game_product.events({
             if(company.has_department(self.neccessary_department)){
                 if(company.has_employees_number(self.neccessary_department, self.neccessary_employees_number)){
                     self.start_period = game.time_period;
+                    self.status = 'active';
                     selected_product.prop.push(self);
-                    selected_product.product_status = "In production";
+                    selected_product.product_status = "Updated";
                     features_objDep.changed();
 
                     //console.log(selected_product.prop);

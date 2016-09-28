@@ -891,13 +891,6 @@ Meteor.startup(() => {
 				game.changeRegionPref(0.015);
 
 				game.changeIncome(0.01);
-				if(price_changed == 0){
-					game.changeProductPrice(0.015);
-					price_changed = 1;
-				}
-
-				changed = 1;
-				employee_price_change = 0.015;
 
 				game.news.push({
 					time_period: game.time_period,
@@ -909,7 +902,6 @@ Meteor.startup(() => {
 						conserv: 1,
 						pref: 1.5,
 						income: 1,
-						prices: 1.5,
 					},
 				});
 
@@ -930,13 +922,6 @@ Meteor.startup(() => {
 			   	game.changeRegionPref(-0.015);
 
 			   	game.changeIncome(-0.01);
-				if(price_changed == 0){
-					game.changeProductPrice(-0.015);
-					price_changed = 1;
-				}
-
-				changed = 1;
-				employee_price_change = -0.015;
 
 				game.news.push({
 					time_period: game.time_period,
@@ -948,7 +933,6 @@ Meteor.startup(() => {
 						conserv: 1,
 						pref: -1.5,
 						income: -1,
-						prices: -1.5,
 					},
 				});
 			}
@@ -968,13 +952,6 @@ Meteor.startup(() => {
 			   	game.changeRegionPref(-0.015);
 
 			   	game.changeIncome(-0.01);
-				if(price_changed == 0){
-					game.changeProductPrice(0.015);
-					price_changed = 1;
-				}
-
-				changed = 1;
-				employee_price_change = 0.015;
 
 				game.news.push({
 					time_period: game.time_period,
@@ -986,7 +963,6 @@ Meteor.startup(() => {
 						conserv: -1,
 						pref: -1.5,
 						income: -1,
-						prices: 1.5,
 					},
 				});
 			}
@@ -1006,13 +982,6 @@ Meteor.startup(() => {
 			   	game.changeRegionPref(0.015);
 
 			   	game.changeIncome(0.01);
-				if(price_changed == 0){
-					game.changeProductPrice(-0.015);
-					price_changed = 1;
-				}
-
-				changed = 1;
-				employee_price_change = -0.015;
 
 				game.news.push({
 					time_period: game.time_period,
@@ -1024,7 +993,6 @@ Meteor.startup(() => {
 						conserv: -1,
 						pref: 1.5,
 						income: 1,
-						prices: -1.5,
 					},
 				});
 		   	}
@@ -1186,15 +1154,6 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
-	   	for (var company in game_new.companies){
-	   		game_new.companies[company].company_team.forEach(function (dep) {
-	   			if(changed == 1){
-	   				dep.price_for_employee += dep.price_for_employee * employee_price_change;
-	   			}
-	   		});
-	   	}
-
-
 	    game.products.forEach(function (product) {
 	   		var prop_finished = 0;
 	   		var target_company = null;
@@ -1205,6 +1164,17 @@ Meteor.startup(() => {
 			            prop_finished++;
 			        }else{ 
 			            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
+			        }
+	   			});
+	   		}
+
+	   		if(product.product_status == "Updated"){
+	   			product.prop.forEach(function (property) {
+	   				if((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) > 1){
+			            property.progress = 100;
+			            prop_finished++;
+			        }else{ 
+			            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
 			        }
 	   			});
 	   		}
@@ -1294,7 +1264,7 @@ Meteor.startup(() => {
 
 
 		game.products.forEach(function (product) {
-			if(product.getShare(game) > 50){
+			if(product.getShare(game) > 90){
 				game.status = 'finished';
 			}
 		});

@@ -124,8 +124,8 @@ Template.company_profile.onCreated(function() {
 
 
                 drawPlotGraph(data1, data2);
-                console.log(data1);
-                console.log(data2);
+                //console.log(data1);
+                //console.log(data2);
             }
         }
     });

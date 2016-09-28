@@ -433,7 +433,7 @@ Template.world_map.helpers({
 		var game = Games.findOne({});
 		var products = [];
 		game.products.forEach(function (product) {
-			if(product.product_status == "Completed"){
+			if(product.product_status != "In production"){
 				products.push(product);
 			}
 		});

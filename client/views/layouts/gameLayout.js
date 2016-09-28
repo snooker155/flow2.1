@@ -26,6 +26,6 @@ Template.gameLayout.helpers({
 
   company_is_finished(){
     var game = Games.findOne({});
-    return game.companies[Meteor.user().username].status == 'bankrupt' ? true : false;
+    return game.companies[Meteor.user().username] && game.companies[Meteor.user().username].status == 'bankrupt' ? true : false;
   },
 });

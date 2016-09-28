@@ -35,9 +35,9 @@ Template.company_stat.helpers({
 		var production = [];
 		game.products.forEach(function (product) {
 			if(product.product_creator == company.company_name){
-				if(product.product_status == "In production"){
+				//if(product.product_status != "Completed"){
 					production.push(product);
-				}
+				//}
 			}
 		});
 
@@ -50,21 +50,25 @@ Template.company_stat.helpers({
 		var total_time_to_achieve = 0;
 		var total_start_period = 0;
 		self.prop.forEach(function (property) {
-			if(total_time_to_achieve < property.time_to_achieve){
-                total_time_to_achieve = property.time_to_achieve;
+            if(property.status == 'active'){
+                if(total_time_to_achieve < property.start_period + property.time_to_achieve * property.prop_level){
+                    total_time_to_achieve = property.start_period + property.time_to_achieve * property.prop_level;
+                    target_property = property;
+                }
             }
-			if(total_start_period < property.start_period){
-				total_start_period = property.start_period;
-			}
-		});
-		// console.log(total_time_to_achieve);
-		// console.log(total_start_period);
-		// console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
-		if(Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100) >= 100){
-			return 100;
-		}else{
-			return Math.round((game.time_period - total_start_period) / total_time_to_achieve * 100);	
-		}
+        });
+        // console.log(total_time_to_achieve);
+        // console.log(total_start_period);
+        // console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
+        if(target_property){
+            if(Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100) >= 100){
+                return 100;
+            }else{
+                return Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100); 
+            }
+        }else{
+            return 100;
+        }
 	},
 
 	company_customers: function(){

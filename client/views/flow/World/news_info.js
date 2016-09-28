@@ -40,15 +40,6 @@ Template.news_flow.helpers({
 		}
 	},
 
-	prices_color(){
-		var self = this;
-		if(self.params.prices > 0){
-			return "navy";
-		}else{
-			return "danger";
-		}
-	},
-
 	conserv_arrow(){
 		var self = this;
 		if(self.params.conserv > 0){
@@ -76,13 +67,5 @@ Template.news_flow.helpers({
 		}
 	},
 
-	prices_arrow(){
-		var self = this;
-		if(self.params.prices > 0){
-			return "up";
-		}else{
-			return "down";
-		}
-	},
 });
 

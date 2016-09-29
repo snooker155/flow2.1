@@ -12,6 +12,13 @@ Meteor.startup(() => {
 		Regions.remove(region._id);
 	});
 
+	Customers.find().fetch().forEach(function (customer) {
+		Customers.remove(customer._id);
+	});
+
+	Companies.find().fetch().forEach(function (company) {
+		Companies.remove(company._id);
+	});
 
 	Products.find().fetch().forEach(function (product) {
 		Products.remove(product._id);
@@ -354,7 +361,7 @@ Meteor.startup(() => {
 	//////////////////  REGIONS  /////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
-	var PEOPLE_MULTI = 5;
+	var PEOPLE_MULTI = 2;
 
   	Regions.insert({
 		region_id: "CE",
@@ -514,6 +521,8 @@ Meteor.startup(() => {
     var regions = {};
     var products = [];
     var customers = [];
+    var features = [];
+	var departments = [];
     var j = 0;
 
     var market = 0;
@@ -554,7 +563,7 @@ Meteor.startup(() => {
 	    	//new_customer_income = region.base_income_rate;
 	    	customer_income += new_customer_income;
 
-	     	customers.push({
+	     	Customers.insert({
 				customer_id: j,
 				customer_region: region.region_id,
 				customer_pref: region.region_pref,
@@ -641,8 +650,11 @@ Meteor.startup(() => {
     	}
     });
 
-	var features = [];
-	var departments = [];
+
+	Customers.find({}).fetch().forEach(function (customer) {
+		customers.push(customer);
+	});
+
 
 	Features.find({}).fetch().forEach(function (feature) {
 		features.push(feature);

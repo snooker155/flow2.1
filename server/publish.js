@@ -25,7 +25,7 @@
   Meteor.publish("generations", function() {
     return Generations.find();
   });
-  // Meteor.publish("customers", function() {
-  //   return Customers.find();
-  // });
+  Meteor.publish("customers", function() {
+    return Customers.find();
+  });
 

@@ -22,7 +22,7 @@
                       <tr>
                         <td style="color: {{product_color}}">{{product_name}}</td>
                         <td>{{product_price}}</td>
-                        <td>{{product_customers}}</td>
+                        <td>{{product_customers_number}}</td>
                         <td>{{product_income}}</td>
                       </tr>
                     {{/each}}
@@ -124,7 +124,7 @@
                  </tr>
                 <tr>
                     <td style="width:50%">
-                        Conserv: <strong id="shareHolderValue">{{region.base_level_of_conservatism}}</strong>
+                        Conserv: <strong id="shareHolderValue">{{region.region_conserv}}</strong>
                     </td>
                     <td style="width:50%">
                         Base Income: <strong id="shareHolderValue">{{region.base_income_rate}}</strong>

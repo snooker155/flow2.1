@@ -3,57 +3,57 @@ var selected_region = new ReactiveVar(null);
 
 
 function getGradientData(game, region_id){
-	var products = [];
-	var inactive_count = 0;
-	var notselected_count = 0;
-	var region_customer_number = game.getRegionCustomerNumber(region_id);
-	var increment = 0;
-	game.products.forEach(function (product) {
-	  	var count = 0;
-		game.customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
-				if(customer.customer_region == region_id){
-					count++;
-				}
-			}
-		});
+	// var products = [];
+	// var inactive_count = 0;
+	// var notselected_count = 0;
+	// var region_customer_number = game.getRegionCustomerNumber(region_id);
+	// var increment = 0;
+	// game.products.forEach(function (product) {
+	//   	var count = 0;
+	// 	game.customers.forEach(function (customer) {
+	// 		if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
+	// 			if(customer.customer_region == region_id){
+	// 				count++;
+	// 			}
+	// 		}
+	// 	});
 		
-		if(count > 0){
-			increment += parseFloat((count / region_customer_number * 100).toFixed(2));
-			products.push({
-				color: product.product_color,
-				offset: increment + "%",
-			});
-		}
-	});
+	// 	if(count > 0){
+	// 		increment += parseFloat((count / region_customer_number * 100).toFixed(2));
+	// 		products.push({
+	// 			color: product.product_color,
+	// 			offset: increment + "%",
+	// 		});
+	// 	}
+	// });
 
-	game.customers.forEach(function (customer) {
-		if(customer.customer_activity == 0){
-			if(customer.customer_region == region_id){
-				inactive_count++;
-			}
-		}else if(customer.customer_activity == 1 && !customer.customer_product){
-			if(customer.customer_region == region_id){
-				notselected_count++;
-			}
-		}
-	});
+	// game.customers.forEach(function (customer) {
+	// 	if(customer.customer_activity == 0){
+	// 		if(customer.customer_region == region_id){
+	// 			inactive_count++;
+	// 		}
+	// 	}else if(customer.customer_activity == 1 && !customer.customer_product){
+	// 		if(customer.customer_region == region_id){
+	// 			notselected_count++;
+	// 		}
+	// 	}
+	// });
 
-	if(inactive_count > 0){
-		increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
-		products.push({
-			color: "red",
-			offset: increment + "%",
-		});
-	}
+	// if(inactive_count > 0){
+	// 	increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
+	// 	products.push({
+	// 		color: "red",
+	// 		offset: increment + "%",
+	// 	});
+	// }
 
-	if(notselected_count > 0){
-		increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
-		products.push({
-			color: "#fff",
-			offset: increment + "%",
-		});
-	}
+	// if(notselected_count > 0){
+	// 	increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
+	// 	products.push({
+	// 		color: "#fff",
+	// 		offset: increment + "%",
+	// 	});
+	// }
 
 
 
@@ -71,7 +71,9 @@ function getGradientData(game, region_id){
 	//console.log(products);
 	
 
-	return products;
+	// return products;
+
+	return game.regions[region_id].map_data;
 };
 
 
@@ -352,323 +354,361 @@ Template.world_map.helpers({
 	selected_region(){
 		var game = Games.findOne({});
 		if(selected_region.get()){
-			var region_conservatism = 0;
-			var customer_count = 0;
-			game.customers.forEach(function (customer) {
-				if(customer.customer_region == selected_region.get()){
-					customer_count++;
-					for (var conserv in customer.customer_product_conservatism){
-						region_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
-					}
-				}
-			});
-			region_conservatism = region_conservatism / customer_count;
-			var region = {
-				base_income_rate: parseFloat(game.regions[selected_region.get()].base_income_rate.toFixed(2)),
-				base_level_of_conservatism: parseFloat(region_conservatism.toFixed(4)),
-				region_id: game.regions[selected_region.get()].region_id,
-				region_name: game.regions[selected_region.get()].region_name,
-				region_people_number: game.regions[selected_region.get()].region_people_number,
-				region_pref: parseFloat(game.regions[selected_region.get()].region_pref.toFixed(3)),
-			};
-			return region;
+			// var region_conservatism = 0;
+			// var customer_count = 0;
+			// game.customers.forEach(function (customer) {
+			// 	if(customer.customer_region == selected_region.get()){
+			// 		customer_count++;
+			// 		for (var conserv in customer.customer_product_conservatism){
+			// 			region_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
+			// 		}
+			// 	}
+			// });
+			// region_conservatism = region_conservatism / customer_count;
+			// var region = {
+			// 	base_income_rate: parseFloat(game.regions[selected_region.get()].base_income_rate.toFixed(2)),
+			// 	base_level_of_conservatism: parseFloat(region_conservatism.toFixed(4)),
+			// 	region_id: game.regions[selected_region.get()].region_id,
+			// 	region_name: game.regions[selected_region.get()].region_name,
+			// 	region_people_number: game.regions[selected_region.get()].region_people_number,
+			// 	region_pref: parseFloat(game.regions[selected_region.get()].region_pref.toFixed(3)),
+			// };
+			// return region;
+			return game.regions[selected_region.get()];
 		}else{
-			var world_people_number = 0,
-				world_pref = 0,
-				world_region_market = 0,
-				world_region_demand = 0,
-				world_base_income_rate = 0,
-				//world_base_price_rate = 0,
-				world_level_of_conservatism = 0,
-				world_region_trend;
+			// var world_people_number = 0,
+			// 	world_pref = 0,
+			// 	world_region_market = 0,
+			// 	world_region_demand = 0,
+			// 	world_base_income_rate = 0,
+			// 	//world_base_price_rate = 0,
+			// 	world_level_of_conservatism = 0,
+			// 	world_region_trend;
 
-			var number_of_regions = Regions.find({}).count();
+			// var number_of_regions = Regions.find({}).count();
 
-			var total_conservatism = 0;
-	        game.customers.forEach(function (customer) {
-	            for (var conserv in customer.customer_product_conservatism){
-					total_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
-				}
-	        });
-	        total_conservatism = total_conservatism / game.customers.length;
+			// var total_conservatism = 0;
+	  //       game.customers.forEach(function (customer) {
+	  //           for (var conserv in customer.customer_product_conservatism){
+			// 		total_conservatism += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
+			// 	}
+	  //       });
+	  //       total_conservatism = total_conservatism / game.customers.length;
 
-			for (var region in game.regions){
+			// for (var region in game.regions){
 
-				world_people_number += game.regions[region].region_people_number;
-				world_pref += game.regions[region].region_pref;
-				world_region_market += game.regions[region].region_market;
-				world_region_demand += game.regions[region].region_demand;
-				world_base_income_rate += game.regions[region].base_income_rate;
-				//world_base_price_rate += game.regions[region].base_price_rate;
-				//world_level_of_conservatism += total_conservatism;
-			};
+			// 	world_people_number += game.regions[region].region_people_number;
+			// 	world_pref += game.regions[region].region_pref;
+			// 	world_region_market += game.regions[region].region_market;
+			// 	world_region_demand += game.regions[region].region_demand;
+			// 	world_base_income_rate += game.regions[region].base_income_rate;
+			// 	//world_base_price_rate += game.regions[region].base_price_rate;
+			// 	//world_level_of_conservatism += total_conservatism;
+			// };
 
-			if(world_region_demand - world_region_market < 0){
-				world_region_trend = "Negative";
-			}else if(world_region_demand - world_region_market < 0.5){
-				world_region_trend = "Low";
-			}else if(world_region_demand - world_region_market < 1){
-				world_region_trend = "Medium";
-			}else if (world_region_demand - world_region_market > 1) {
-				world_region_trend = "High";
-			}
+			// if(world_region_demand - world_region_market < 0){
+			// 	world_region_trend = "Negative";
+			// }else if(world_region_demand - world_region_market < 0.5){
+			// 	world_region_trend = "Low";
+			// }else if(world_region_demand - world_region_market < 1){
+			// 	world_region_trend = "Medium";
+			// }else if (world_region_demand - world_region_market > 1) {
+			// 	world_region_trend = "High";
+			// }
 
 			
-			return world = {
-				region_name: "World",
-				region_pref: parseFloat((world_pref / number_of_regions).toFixed(3)),
-				region_trend: world_region_trend,
-				region_people_number: world_people_number,
-				region_market: world_region_market,
-				region_demand: world_region_demand,
-				base_income_rate: parseFloat((world_base_income_rate / number_of_regions).toFixed(2)),
-				//base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
-				base_level_of_conservatism: parseFloat((total_conservatism).toFixed(4)),
-			};
+			// return world = {
+			// 	region_name: "World",
+			// 	region_pref: parseFloat((world_pref / number_of_regions).toFixed(3)),
+			// 	region_trend: world_region_trend,
+			// 	region_people_number: world_people_number,
+			// 	region_market: world_region_market,
+			// 	region_demand: world_region_demand,
+			// 	base_income_rate: parseFloat((world_base_income_rate / number_of_regions).toFixed(2)),
+			// 	//base_price_rate: parseFloat((world_base_price_rate / number_of_regions).toFixed(2)),
+			// 	base_level_of_conservatism: parseFloat((total_conservatism).toFixed(4)),
+			// };
+			return game.getWorldState();
 		}
 	},
 
 
 	products(){
 		var game = Games.findOne({});
-		var products = [];
-		game.products.forEach(function (product) {
-			if(product.product_status != "In production"){
-				products.push(product);
-			}
-		});
-		return products;
+		// var products = [];
+		// game.products.forEach(function (product) {
+		// 	if(product.product_status != "In production"){
+		// 		products.push(product);
+		// 	}
+		// });
+		// return products;
+
+		if(selected_region.get()){
+			return game.regions[selected_region.get()].region_products;
+		}else{
+			return game.getWorldState().region_products;
+		}
 	},
 
-	product_price(){
-		var self = this;
-		return parseFloat(this.product_price.toFixed(2));
-	},
+	// product_price(){
+	// 	var self = this;
+	// 	return parseFloat(this.product_price.toFixed(2));
+	// },
 
-	product_customers(){
-		var self = this;
-		var customers = Games.findOne({}).customers;
-		var count = 0;
-		customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
-				if(selected_region.get()){
-					if(customer.customer_region == selected_region.get()){
-						count++;
-					}
-				}else{
-					count++
-				}
-			}
-		});
-		return count;
-	},
+	// product_customers(){
+	// 	var self = this;
+	// 	var customers = Games.findOne({}).customers;
+	// 	var count = 0;
+	// 	customers.forEach(function (customer) {
+	// 		if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
+	// 			if(selected_region.get()){
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					count++;
+	// 				}
+	// 			}else{
+	// 				count++
+	// 			}
+	// 		}
+	// 	});
+	// 	return count;
+	// },
 
-	product_income(){
-		var self = this;
-		var customers = Games.findOne({}).customers;
-		var count = 0;
-		customers.forEach(function (customer) {
-			if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
-				if(selected_region.get()){
-					if(customer.customer_region == selected_region.get()){
-						count++;	
-					}
-				}else{
-					count++;
-				}
-			}
-		});
-		return Math.floor(count * self.product_price);
-	},
+	// product_income(){
+	// 	var self = this;
+	// 	var customers = Games.findOne({}).customers;
+	// 	var count = 0;
+	// 	customers.forEach(function (customer) {
+	// 		if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == self.product_id){
+	// 			if(selected_region.get()){
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					count++;	
+	// 				}
+	// 			}else{
+	// 				count++;
+	// 			}
+	// 		}
+	// 	});
+	// 	return Math.floor(count * self.product_price);
+	// },
 
 	avg_income(){
-		var total_income = 0;
-		var total_customers = 0;
-		var customers = Games.findOne({}).customers;
-		customers.forEach(function (customer) {
-			if(selected_region.get()){
-				if(customer.customer_region == selected_region.get()){
-					total_income += customer.customer_income;
-					total_customers++;
-				}
-			}else{
-				total_income += customer.customer_income;
-				total_customers++;
-			}
-		});
-		return parseFloat((total_income / total_customers).toFixed(2));
+		var game = Games.findOne({})
+	// 	var total_income = 0;
+	// 	var total_customers = 0;
+	// 	var customers = Games.findOne({}).customers;
+	// 	customers.forEach(function (customer) {
+	// 		if(selected_region.get()){
+	// 			if(customer.customer_region == selected_region.get()){
+	// 				total_income += customer.customer_income;
+	// 				total_customers++;
+	// 			}
+	// 		}else{
+	// 			total_income += customer.customer_income;
+	// 			total_customers++;
+	// 		}
+	// 	});
+	// 	return parseFloat((total_income / total_customers).toFixed(2));
+		if(selected_region.get()){
+			return game.regions[selected_region.get()].region_avg_income;
+		}else{
+			return game.getWorldState().region_avg_income;
+		}
 	},
 
 	active_people_number(){
-		var total_active = 0;
-		var customers = Games.findOne({}).customers;
-		customers.forEach(function (customer) {
-			if(selected_region.get()){
-				if(customer.customer_region == selected_region.get()){
-					if(customer.customer_activity == 1){
-						total_active++;
-					}
-				}
-			}else{
-				if(customer.customer_activity == 1){
-					total_active++;
-				}
-			}
-		});
-		return total_active;
+		var game = Games.findOne({})
+	// 	var total_active = 0;
+	// 	var customers = Games.findOne({}).customers;
+	// 	customers.forEach(function (customer) {
+	// 		if(selected_region.get()){
+	// 			if(customer.customer_region == selected_region.get()){
+	// 				if(customer.customer_activity == 1){
+	// 					total_active++;
+	// 				}
+	// 			}
+	// 		}else{
+	// 			if(customer.customer_activity == 1){
+	// 				total_active++;
+	// 			}
+	// 		}
+	// 	});
+	// 	return total_active;
+		if(selected_region.get()){
+			return game.regions[selected_region.get()].region_active_people_number;
+		}else{
+			return game.getWorldState().region_active_people_number;
+		}
 	},
 
 	total_people_number(){
+		var game = Games.findOne({})
+	// 	if(selected_region.get()){
+	// 		var count = 0;
+	// 		Games.findOne({}).customers.forEach(function (customer) {
+	// 			if(customer.customer_region == selected_region.get()){
+	// 				count++;
+	// 			}
+	// 		});
+	// 		return count;
+	// 	}else{
+	// 		return Games.findOne({}).customers.length;
+	// 	}
 		if(selected_region.get()){
-			var count = 0;
-			Games.findOne({}).customers.forEach(function (customer) {
-				if(customer.customer_region == selected_region.get()){
-					count++;
-				}
-			});
-			return count;
+			return game.regions[selected_region.get()].region_people_number;
 		}else{
-			return Games.findOne({}).customers.length;
+			return game.getWorldState().region_people_number;
 		}
 	},
 
 	people(){
-		var count_rich = 0, count_middle = 0, count_poor = 0;
-		var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
-		var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
-		var game = Games.findOne({});
-		game.customers.forEach(function (customer) {
-			if(customer.getIncomeGroup(game) == "rich"){
-				if(selected_region.get()){
-					if(customer.customer_region == selected_region.get()){
-						count_rich++;
-						avg_income_rich += customer.customer_income;
-						if(customer.customer_activity == 1){
-							count_active_rich++;
-						}
-					}
-				}else{
-					count_rich++;
-					avg_income_rich += customer.customer_income;
-					if(customer.customer_activity == 1){
-						count_active_rich++;
-					}
-				}
-			}else if(customer.getIncomeGroup(game) == "middle"){
-				if(selected_region.get()){
-					if(customer.customer_region == selected_region.get()){
-						count_middle++;
-						avg_income_middle += customer.customer_income;
-						if(customer.customer_activity == 1){
-							count_active_middle++;
-						}
-					}
-				}else{
-					count_middle++;
-					avg_income_middle += customer.customer_income;
-					if(customer.customer_activity == 1){
-						count_active_middle++;
-					}
-				}
-			}else if(customer.getIncomeGroup(game) == "poor"){
-				if(selected_region.get()){
-					if(customer.customer_region == selected_region.get()){
-						count_poor++;
-						avg_income_poor += customer.customer_income;
-						if(customer.customer_activity == 1){
-							count_active_poor++;
-						}
-					}
-				}else{
-					count_poor++;
-					avg_income_poor += customer.customer_income;
-					if(customer.customer_activity == 1){
-						count_active_poor++;
-					}
-				}
-			}
-		});
+	// 	var count_rich = 0, count_middle = 0, count_poor = 0;
+	// 	var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
+	// 	var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
+	var game = Games.findOne({});
+	// 	game.customers.forEach(function (customer) {
+	// 		if(customer.getIncomeGroup(game) == "rich"){
+	// 			if(selected_region.get()){
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					count_rich++;
+	// 					avg_income_rich += customer.customer_income;
+	// 					if(customer.customer_activity == 1){
+	// 						count_active_rich++;
+	// 					}
+	// 				}
+	// 			}else{
+	// 				count_rich++;
+	// 				avg_income_rich += customer.customer_income;
+	// 				if(customer.customer_activity == 1){
+	// 					count_active_rich++;
+	// 				}
+	// 			}
+	// 		}else if(customer.getIncomeGroup(game) == "middle"){
+	// 			if(selected_region.get()){
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					count_middle++;
+	// 					avg_income_middle += customer.customer_income;
+	// 					if(customer.customer_activity == 1){
+	// 						count_active_middle++;
+	// 					}
+	// 				}
+	// 			}else{
+	// 				count_middle++;
+	// 				avg_income_middle += customer.customer_income;
+	// 				if(customer.customer_activity == 1){
+	// 					count_active_middle++;
+	// 				}
+	// 			}
+	// 		}else if(customer.getIncomeGroup(game) == "poor"){
+	// 			if(selected_region.get()){
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					count_poor++;
+	// 					avg_income_poor += customer.customer_income;
+	// 					if(customer.customer_activity == 1){
+	// 						count_active_poor++;
+	// 					}
+	// 				}
+	// 			}else{
+	// 				count_poor++;
+	// 				avg_income_poor += customer.customer_income;
+	// 				if(customer.customer_activity == 1){
+	// 					count_active_poor++;
+	// 				}
+	// 			}
+	// 		}
+	// 	});
 
 
-		var people = [{
-			people_group: "rich",
-			people_count: count_rich,
-			people_average_income:  parseFloat((avg_income_rich / count_rich).toFixed(2)) >= 0 ? parseFloat((avg_income_rich / count_rich).toFixed(2)) : 0,
-			people_active_number: count_active_rich,
-		},{
-			people_group: "middle",
-			people_count: count_middle,
-			people_average_income:  parseFloat((avg_income_middle / count_middle).toFixed(2)) >= 0 ? parseFloat((avg_income_middle / count_middle).toFixed(2)) : 0,
-			people_active_number: count_active_middle,
-		},{
-			people_group: "poor",
-			people_count: count_poor,
-			people_average_income:  parseFloat((avg_income_poor / count_poor).toFixed(2)) >= 0 ? parseFloat((avg_income_poor / count_poor).toFixed(2)) : 0,
-			people_active_number: count_active_poor,
-		}]
-		return people;
+	// 	var people = [{
+	// 		people_group: "rich",
+	// 		people_count: count_rich,
+	// 		people_average_income:  parseFloat((avg_income_rich / count_rich).toFixed(2)) >= 0 ? parseFloat((avg_income_rich / count_rich).toFixed(2)) : 0,
+	// 		people_active_number: count_active_rich,
+	// 	},{
+	// 		people_group: "middle",
+	// 		people_count: count_middle,
+	// 		people_average_income:  parseFloat((avg_income_middle / count_middle).toFixed(2)) >= 0 ? parseFloat((avg_income_middle / count_middle).toFixed(2)) : 0,
+	// 		people_active_number: count_active_middle,
+	// 	},{
+	// 		people_group: "poor",
+	// 		people_count: count_poor,
+	// 		people_average_income:  parseFloat((avg_income_poor / count_poor).toFixed(2)) >= 0 ? parseFloat((avg_income_poor / count_poor).toFixed(2)) : 0,
+	// 		people_active_number: count_active_poor,
+	// 	}]
+	// 	return people;
+
+		if(selected_region.get()){
+			return game.regions[selected_region.get()].region_income_groups;
+		}else{
+			return game.getWorldState().region_income_groups;
+		}
 	},
 
 	prop_pop(){
-		var game = Games.findOne({});
-		var count_prop_needed = 0;
-		var j = 0;
-		var prop_arr = [];
+	 	var game = Games.findOne({});
+	// 	var count_prop_needed = 0;
+	// 	var j = 0;
+	// 	var prop_arr = [];
+
+	// 	if(selected_region.get()){
+	// 		game.features.forEach(function (feature) {
+	// 			var prop_needed_arr = [];
+	// 			for(var x = 0; x < game.customers[0].needed.length; x++){
+	// 				prop_needed_arr[x] = 0;
+	// 			}
+	// 			var count_prop = 0;
+	// 			var customer_number_in_region = 0;
+	// 			game.customers.forEach(function (customer) {
+	// 				if(customer.customer_region == selected_region.get()){
+	// 					j = 0;
+	// 					customer.needed.forEach(function (need) {
+	// 						count_prop += need.prop[feature.feature_name];
+	// 						prop_needed_arr[j] += need.prop[feature.feature_name];
+	// 						j++;
+	// 					});
+	// 					customer_number_in_region++;
+	// 				}
+	// 			});
+	// 			for(var y = 0; y < prop_needed_arr.length; y++){
+	// 				prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / customer_number_in_region).toFixed(2));
+	// 			}
+	// 			prop_arr.push({
+	// 				prop_name: feature.feature_name,
+	// 				prop_count: parseFloat((count_prop / customer_number_in_region).toFixed(2)),
+	// 				prop_needed_arr: prop_needed_arr,
+	// 			});
+	// 		});
+	// 	}else{
+	// 		game.features.forEach(function (feature) {
+	// 			var prop_needed_arr = [];
+	// 			for(var x = 0; x < game.customers[0].needed.length; x++){
+	// 				prop_needed_arr[x] = 0;
+	// 			}
+	// 			var count_prop = 0;
+	// 			game.customers.forEach(function (customer) {
+	// 				j = 0;
+	// 				customer.needed.forEach(function (need) {
+	// 					count_prop += need.prop[feature.feature_name];
+	// 					prop_needed_arr[j] += need.prop[feature.feature_name];
+	// 					j++;
+	// 				});
+	// 			});
+	// 			for(var y = 0; y < prop_needed_arr.length; y++){
+	// 				prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / game.customers.length).toFixed(2));
+	// 			}
+	// 			prop_arr.push({
+	// 				prop_name: feature.feature_name,
+	// 				prop_count: parseFloat((count_prop / game.customers.length).toFixed(2)),
+	// 				prop_needed_arr: prop_needed_arr,
+	// 			});
+	// 		});
+	// 	}
+	// 	return prop_arr;
 
 		if(selected_region.get()){
-			game.features.forEach(function (feature) {
-				var prop_needed_arr = [];
-				for(var x = 0; x < game.customers[0].needed.length; x++){
-					prop_needed_arr[x] = 0;
-				}
-				var count_prop = 0;
-				var customer_number_in_region = 0;
-				game.customers.forEach(function (customer) {
-					if(customer.customer_region == selected_region.get()){
-						j = 0;
-						customer.needed.forEach(function (need) {
-							count_prop += need.prop[feature.feature_name];
-							prop_needed_arr[j] += need.prop[feature.feature_name];
-							j++;
-						});
-						customer_number_in_region++;
-					}
-				});
-				for(var y = 0; y < prop_needed_arr.length; y++){
-					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / customer_number_in_region).toFixed(2));
-				}
-				prop_arr.push({
-					prop_name: feature.feature_name,
-					prop_count: parseFloat((count_prop / customer_number_in_region).toFixed(2)),
-					prop_needed_arr: prop_needed_arr,
-				});
-			});
+			return game.regions[selected_region.get()].region_prop_pop;
 		}else{
-			game.features.forEach(function (feature) {
-				var prop_needed_arr = [];
-				for(var x = 0; x < game.customers[0].needed.length; x++){
-					prop_needed_arr[x] = 0;
-				}
-				var count_prop = 0;
-				game.customers.forEach(function (customer) {
-					j = 0;
-					customer.needed.forEach(function (need) {
-						count_prop += need.prop[feature.feature_name];
-						prop_needed_arr[j] += need.prop[feature.feature_name];
-						j++;
-					});
-				});
-				for(var y = 0; y < prop_needed_arr.length; y++){
-					prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / game.customers.length).toFixed(2));
-				}
-				prop_arr.push({
-					prop_name: feature.feature_name,
-					prop_count: parseFloat((count_prop / game.customers.length).toFixed(2)),
-					prop_needed_arr: prop_needed_arr,
-				});
-			});
+			return game.getWorldState().region_prop_pop;
 		}
-		return prop_arr;
 	},
 
 

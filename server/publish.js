@@ -2,7 +2,7 @@
     return Meteor.users.find();
   });
   Meteor.publish("games", function() {
-    return Games.find();
+    return Games.find({}, {fields: {'customers': 0, 'customers_history': 0, 'avg_price_history': 0}});
   });
   Meteor.publish("regions", function() {
     return Regions.find();

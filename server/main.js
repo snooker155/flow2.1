@@ -629,16 +629,6 @@ Meteor.startup(() => {
 			console.log('Initializing: Customer ---- №' + j);
 	    }
 
-	    regions[region.region_id] = {
-     		region_id: region.region_id,
-     		region_name: region.region_name,
-     		region_pref: region.region_pref,
-     		//region_trend: region.region_trend,
-			region_people_number: region.region_people_number,
-			base_income_rate: region.base_income_rate,
-			//base_price_rate: region.base_price_rate,
-			base_level_of_conservatism: region.base_level_of_conservatism,
-    	}
     });
 
 	var features = [];
@@ -652,11 +642,159 @@ Meteor.startup(() => {
 		departments.push(department);
 	});
 
+
+
+	Regions.find().forEach(function (region) {
+
+		var region_active_people_number = 0;
+		var region_avg_income = 0;
+		var region_income_groups = [];
+		var region_products = [];
+		var region_prop_pop = [];
+
+		var total_income = 0;
+		var region_conservatism = 0;
+		var count_rich = 0, count_middle = 0, count_poor = 0;
+		var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
+		var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
+
+		customers.forEach(function (customer) {
+			if(customer.customer_region == region.region_id){
+				if(customer.customer_activity == 1){
+					region_active_people_number++;
+				}
+
+				total_income += customer.customer_income;
+			}
+
+		});
+
+		region_avg_income = parseFloat((total_income / region.region_people_number).toFixed(2));
+		region_conservatism = parseFloat((region_conservatism / region.region_people_number).toFixed(2));
+
+		region_income_groups = [];
+
+
+		var map_data = [];
+		var inactive_count = 0;
+		var notselected_count = 0;
+		var increment = 0;
+		products.forEach(function (product) {
+		  	var count = 0;
+			customers.forEach(function (customer) {
+				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
+					if(customer.customer_region == region.region_id){
+						count++;
+					}
+				}
+			});
+			
+			if(count > 0){
+				increment += parseFloat((count / region.region_people_number * 100).toFixed(2));
+				map_data.push({
+					color: product.product_color,
+					offset: increment + "%",
+				});
+			}
+
+
+			region_products.push({
+				product_name: product.product_name,
+				product_color: product.product_color,
+				product_price: product.product_price,
+				product_customers_number: count,
+				product_income: product.product_price * count,
+			});
+		});
+
+		customers.forEach(function (customer) {
+			if(customer.customer_activity == 0){
+				if(customer.customer_region == region.region_id){
+					inactive_count++;
+				}
+			}else if(customer.customer_activity == 1 && !customer.customer_product){
+				if(customer.customer_region == region.region_id){
+					notselected_count++;
+				}
+			}
+		});
+
+		if(inactive_count > 0){
+			increment += parseFloat((inactive_count / region.region_people_number * 100).toFixed(2));
+			map_data.push({
+				color: "red",
+				offset: increment + "%",
+			});
+		}
+
+		if(notselected_count > 0){
+			increment += parseFloat((notselected_count / region.region_people_number * 100).toFixed(2));
+			map_data.push({
+				color: "lightblue",
+				offset: increment + "%",
+			});
+		}
+
+
+		var count_prop_needed = 0;
+		var j = 0;
+		var prop_arr = [];
+
+		features.forEach(function (feature) {
+			var prop_needed_arr = [];
+			for(var x = 0; x < customers[0].needed.length; x++){
+				prop_needed_arr[x] = 0;
+			}
+			var count_prop = 0;
+			var customer_number_in_region = 0;
+			customers.forEach(function (customer) {
+				if(customer.customer_region == region.region_id){
+					j = 0;
+					customer.needed.forEach(function (need) {
+						count_prop += need.prop[feature.feature_name];
+						prop_needed_arr[j] += need.prop[feature.feature_name];
+						j++;
+					});
+					customer_number_in_region++;
+				}
+			});
+			for(var y = 0; y < prop_needed_arr.length; y++){
+				prop_needed_arr[y] = parseFloat((prop_needed_arr[y] / customer_number_in_region).toFixed(2));
+			}
+			region_prop_pop.push({
+				prop_name: feature.feature_name,
+				prop_count: parseFloat((count_prop / customer_number_in_region).toFixed(2)),
+				prop_needed_arr: prop_needed_arr,
+			});
+		});
+
+
+		regions[region.region_id] = {
+     		region_id: region.region_id,
+     		region_name: region.region_name,
+     		region_pref: region.region_pref,
+			region_people_number: region.region_people_number,
+			base_income_rate: region.base_income_rate,
+			base_level_of_conservatism: region.base_level_of_conservatism,
+			region_conserv: region_conservatism,
+			region_active_people_number: region_active_people_number,
+			region_avg_income: region_avg_income,
+			region_income_groups: region_income_groups,
+			region_products: region_products,
+			map_data: map_data,
+			region_prop_pop: region_prop_pop,
+    	}
+    });
+
+
+
+
 	var game_id = Games.insert({
     	game_name: "test",
     	players: [],
      	regions: regions,
      	customers: customers,
+     	//customers_data: customers_data,
      	departments: departments,
      	features: features,
      	companies: {},
@@ -688,6 +826,70 @@ Meteor.startup(() => {
 	console.log('Initializing: Conservatism --- End');
 
 
+	for (var region in game.regions){
+		var count_rich = 0, count_middle = 0, count_poor = 0;
+		var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
+		var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
+		var region_conserv = 0;
+		game.customers.forEach(function (customer) {
+			if(customer.customer_region == game.regions[region].region_id){
+				for (var conserv in customer.customer_product_conservatism){
+					region_conserv += customer.customer_conservatism * customer.customer_product_conservatism[conserv];		
+				}
+			}
+
+			if(customer.getIncomeGroup(game) == "rich"){
+				if(customer.customer_region == game.regions[region].region_id){
+					count_rich++;
+					avg_income_rich += customer.customer_income;
+					if(customer.customer_activity == 1){
+						count_active_rich++;
+					}
+				}
+			}else if(customer.getIncomeGroup(game) == "middle"){
+				if(customer.customer_region == game.regions[region].region_id){
+					count_middle++;
+					avg_income_middle += customer.customer_income;
+					if(customer.customer_activity == 1){
+						count_active_middle++;
+					}
+				}
+			}else if(customer.getIncomeGroup(game) == "poor"){
+				if(customer.customer_region == game.regions[region].region_id){
+					count_poor++;
+					avg_income_poor += customer.customer_income;
+					if(customer.customer_activity == 1){
+						count_active_poor++;
+					}
+				}
+			}
+		});
+		region_conserv = parseFloat((region_conserv / game.regions[region].region_people_number).toFixed(4));
+		game.regions[region].region_conserv = region_conserv;
+
+		var region_income_groups = [{
+			people_group: "rich",
+			people_count: count_rich,
+			people_average_income:  parseFloat((avg_income_rich / count_rich).toFixed(2)) >= 0 ? parseFloat((avg_income_rich / count_rich).toFixed(2)) : 0,
+			people_active_number: count_active_rich,
+		},{
+			people_group: "middle",
+			people_count: count_middle,
+			people_average_income:  parseFloat((avg_income_middle / count_middle).toFixed(2)) >= 0 ? parseFloat((avg_income_middle / count_middle).toFixed(2)) : 0,
+			people_active_number: count_active_middle,
+		},{
+			people_group: "poor",
+			people_count: count_poor,
+			people_average_income:  parseFloat((avg_income_poor / count_poor).toFixed(2)) >= 0 ? parseFloat((avg_income_poor / count_poor).toFixed(2)) : 0,
+			people_active_number: count_active_poor,
+		}];
+
+		game.regions[region].region_income_groups = region_income_groups;
+	}
+
+
+
+
 
 	console.log('Initializing: History --- Start');
 
@@ -700,6 +902,7 @@ Meteor.startup(() => {
 	Games.update(game_id,{
 		players: game.players,
 		customers: game.customers,
+		//customers_data: game.customers_data,
 		customers_history: game.customers_history,
 		avg_price_history: game.avg_price_history,
 		news: game.news,
@@ -712,120 +915,6 @@ Meteor.startup(() => {
 		time_period: game.time_period,
 	});
 
-
-
-////////////////////////////////////////////////////////////////////////
-////////////////////////                       /////////////////////////
-////////////////////////      GENERATIONS      /////////////////////////
-////////////////////////                       /////////////////////////
-////////////////////////////////////////////////////////////////////////
-
-
-	// var CUSTOMERS_NUMBER = 1000;
-	// var FEATRUES_NUMBER = 20;
-	// var PRODUCTS_NUMBER = 6;
-
-	// var products = [];
-	// var customers = [];
-	// var features = [];
-
-
-
-	// for (var i = 0; i < FEATRUES_NUMBER; i++){
-
-	// 	features.push({
-	// 		feature_id: i,
-	// 		feature_name: "prop_"+i,
-	// 	});
-
-	// }
-
-
-
-	// for (var i = 0; i < PRODUCTS_NUMBER; i++){
-
-	// 	var prop = [];
-
-	// 	for(var j = 0; j < Math.floor(Math.random() * (features.length - 10.1) + 1); j++){
-	// 		prop.push({
-	// 			prop_name: "prop_"+Math.floor(Math.random() * (features.length - 0.001)),
-	// 		})
-	// 	}
-
-	// 	//var product_price = Math.pow(5, prop.length);
-	// 	var product_price = 3
-	// 	if(prop.length > 0){
-	// 		product_price = 5 * prop.length;
-	// 	}
-
-
-	// 	products.push({
-	// 		product_id: i,
-	// 		product_name: "Prod " + i,
-	// 		//product_price: 10 + Math.floor(Math.random() * 20),
-	// 		product_price: product_price,
-	// 		//product_color: "lightblue",
-	// 		prop: prop,
-	// 		product_creator: "Bot",
-	//         product_status: "Completed",
-	//         //product_share: 0,
-	//         product_util: 0,
-	// 	});
-
-
-	// }
-
-
-
-	// for(var i = 0; i < CUSTOMERS_NUMBER; i++){
-
-	// 	var needed = [];
-
-	// 	for(var j = 0; j < 10; j++){
-	// 		needed.push({
-	// 			value: 0,
-	// 			weight: Math.floor(Math.random() * 10),  
-	// 			prop: {
-	// 				prop_0: 0,
-	// 				prop_1: 1,
-	// 				prop_2: 2,
-	// 				prop_3: 3,
-	// 				prop_4: 4,
-	// 				prop_5: 5,
-	// 				prop_6: 6,
-	// 				prop_7: 7,
-	// 				prop_8: 8,
-	// 				prop_9: 9,
-	// 				prop_10: 10,
-	// 				prop_11: 11,
-	// 				prop_12: 12,
-	// 				prop_13: 13,
-	// 				prop_14: 14,
-	// 				prop_15: 15,
-	// 				prop_16: 16,
-	// 				prop_17: 17,
-	// 				prop_18: 18,
-	// 				prop_19: 19,
-	// 			}
-	// 		})
-	// 	}
-
-
-	// 	customers.push({
-	// 		customer_id: i,
-	// 		customer_income: 20 + Math.floor(Math.random() * 3),
-	// 		customer_product: "",
-	// 		needed: needed,
-	// 	});
-	// }
-
-
-	// Generations.insert({
-	// 	customers_arr: customers,
-	// 	products_arr: products,
-	// 	features_arr: features,
-	// 	generation_n: 1,
-	// });
 
 
 	var time_count = 1;
@@ -843,20 +932,10 @@ Meteor.startup(() => {
 	   		console.log("------------------------  GAME ENDED  --------------------------");
 	   	}
 
-
-	 	// game.crossover();
-		// game.mutation();
-		// game.estimation();
-		// game.selection();
-
-
 	   	game.customers.forEach(function (customer) {
-
-	   		//customer.makeRelations();
 	  		
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
-
 
 	   	});
 
@@ -867,30 +946,19 @@ Meteor.startup(() => {
 	   	///////      WORLD CHANGES   /////////////////////////////
 	   	//////////////////////////////////////////////////////////
 
-	   	var price_changed = 0;
 
 	   	for (var region in game.regions){
 
-		   	var changed = 0;
-		   	var employee_price_change = 0;
-
 		   	if((game.getRegionConserv(region) >= 0.08 && game.getRegionConserv(region) < 0.16)
 		   	&& (game.getRegionPref(region) >= 2)){
-		   	// && game.getAvgPrice("RU") < 20
-		   	// && game.getAverageIncome("RU") >= 25
 
-				//console.log("---------------------- Recovery in Russia --------------------------");
+				game.changeRegionConservLevel(0.01, region);
+				game.changeRegionPref(0.015, region);
+				game.changeIncome(0.01, region);
 
-				// game.changeRegionConservLevel(0.01, "RU");
-				// game.changeRegionPref(0.015, "RU");
-
-				// game.changeIncome(0.01, "RU");
-				// game.changeProductPrice(0.015);
-
-				game.changeRegionConservLevel(0.01);
-				game.changeRegionPref(0.015);
-
-				game.changeIncome(0.01);
+				if(game.news.length > 40){
+			   		game.news.splice(0, 1);
+			   	}
 
 				game.news.push({
 					time_period: game.time_period,
@@ -910,18 +978,13 @@ Meteor.startup(() => {
 		   	if((game.getRegionConserv(region) >= 0.16)
 		   	&& (game.getRegionPref(region) >= 2)){
 
-			   	//console.log("---------------------- Extremum in Russia --------------------------");
+				game.changeRegionConservLevel(0.01, region);
+			   	game.changeRegionPref(-0.015, region);
+			   	game.changeIncome(-0.01, region);
 
-				// game.changeRegionConservLevel(0.01, "RU");
-			 //   	game.changeRegionPref(-0.015, "RU");
-
-			 //   	game.changeIncome(-0.01, "RU");
-				// game.changeProductPrice(-0.015);
-
-				game.changeRegionConservLevel(0.01);
-			   	game.changeRegionPref(-0.015);
-
-			   	game.changeIncome(-0.01);
+			   	if(game.news.length > 40){
+			   		game.news.splice(0, 1);
+			   	}
 
 				game.news.push({
 					time_period: game.time_period,
@@ -940,18 +1003,13 @@ Meteor.startup(() => {
 			if((game.getRegionConserv(region) >= 0.16)
 		   	&& (game.getRegionPref(region) < 2)){
 
-			   	//console.log("---------------------- Recession in Russia  --------------------------");
+				game.changeRegionConservLevel(-0.015, region);
+			   	game.changeRegionPref(-0.015, region);
+			   	game.changeIncome(-0.01, region);
 
-				// game.changeRegionConservLevel(-0.015, "RU");
-			 //   	game.changeRegionPref(-0.015, "RU");
-
-			 //   	game.changeIncome(-0.01, "RU");
-				// game.changeProductPrice(0.015);
-
-				game.changeRegionConservLevel(-0.015);
-			   	game.changeRegionPref(-0.015);
-
-			   	game.changeIncome(-0.01);
+			   	if(game.news.length > 40){
+			   		game.news.splice(0, 1);
+			   	}
 
 				game.news.push({
 					time_period: game.time_period,
@@ -970,18 +1028,13 @@ Meteor.startup(() => {
 			if((game.getRegionConserv(region) >= 0.08 && game.getRegionConserv(region) < 0.16)
 		   	&& (game.getRegionPref(region) < 2)){
 
-				//console.log("---------------------- Crisis in Russia --------------------------");
+				game.changeRegionConservLevel(-0.015, region);
+			   	game.changeRegionPref(0.015, region);
+			   	game.changeIncome(0.01, region);
 
-				// game.changeRegionConservLevel(-0.015, "RU");
-			 //   	game.changeRegionPref(0.015, "RU");
-
-			 //   	game.changeIncome(0.01, "RU");
-				// game.changeProductPrice(-0.015);
-
-				game.changeRegionConservLevel(-0.015);
-			   	game.changeRegionPref(0.015);
-
-			   	game.changeIncome(0.01);
+			   	if(game.news.length > 40){
+			   		game.news.splice(0, 1);
+			   	}
 
 				game.news.push({
 					time_period: game.time_period,
@@ -999,149 +1052,33 @@ Meteor.startup(() => {
 
 		}
 
-
-	  //  	if((game.getRegionConserv("RU") >= 0.12
-	  //  		|| game.getRegionPref("RU") >= 4)
-	  //  		// && (game.getAvgPrice("RU") < 20
-	  //  		// && game.getAverageIncome("RU") >= 25)
-	  //  		){
-
-	  //  		console.log("----------------------   Crisis in Russia   --------------------------");
-
-		 //   	game.changeProductPrice(0.3);
-
-		 //   	if(game.getAvgPrice("RU") >= 10){
-			// 	game.changeIncome(-0.02, "RU");
-			// }
-	  //  	}
-
-	   	// if((game.getRegionConserv("RU") >= 0.05 
-	   	// 	|| game.getRegionPref("RU") >= 0.5)
-	   	// 	// && game.getAvgPrice("RU") >= 20
-	   	// 	// && game.getAverageIncome("RU") < 25
-	   	// 	){
-
-	   	// 	console.log("----------------------   Recovery in Russia   --------------------------");
-
-		   // 	game.changeRegionPref(-0.025, "RU");
-
-		   // 	if(game.getRegionPref("RU") >= 0.5){
-		   // 		game.changeRegionConservLevel(-0.002, "RU");
-		   // 	}
-
-	   	// }
-
-	   	// if(game.getRegionConserv("RU") < 0.05
-	   	// 	|| game.getRegionPref("RU") < 1.5){
-
-	   	// 	console.log("----------------------   Extremum in Russia   --------------------------");
-
-		   // 	game.changeIncome(0.03, "RU");
-
-		   // 	if(game.getAverageIncome("RU") >= 25){
-		   // 		game.changeProductPrice(-0.7);
-		   // 	}
-
-	   	// }
-
-
-
-
-
-
-
-	   	// if(game.getAvgPrice("RU") >= 16){  //// set inflation in Russia
-
-	   	// 	console.log("----------------------   Inflation in Russia   --------------------------");
-
-	   	// 	//game.changeIncome(-0.02, "RU");
-
-	   	// 	if(game.getRegionPref("RU") > 1){
-	   	// 		if(game.getRegionPref("RU") > 3){    /// 3 = region_pref for "RU" region
-	   	// 			game.changeRegionPref(-0.05, "RU");
-	   	// 			game.changeIncome(-0.02, "RU");
-	   	// 		}else if(game.getRegionPref("RU") > 3 * 0.5){    /// 3 = region_pref for "RU" region
-	   	// 			game.changeRegionPref(-0.05, "RU");
-	   	// 			game.changeIncome(-0.01, "RU");
-	   	// 		}else if(game.getRegionPref("RU") > 3 * 0.25){   /// 3 = region_pref for "RU" region
-	   	// 			game.changeRegionPref(-0.05, "RU");
-	   	// 			game.changeIncome(-0.005, "RU");
-	   	// 		}
-	   	// 	}
-
-		   // 	// if(game.getRegionConserv("RU") > 0.01 ){
-		   // 	// 	game.changeRegionConservLevel(-0.005, "RU");
-		   // 	// 	game.changeRegionPref(0.3, "RU");
-		   // 	// 	game.changeIncome(-0.02, "RU");
-		   // 	// }
-		   	
-	   	// }
-
-
-
-	   	// if(game.getAverageIncome("RU") <= 10){  //// set Customers' ability in Russia
-
-	   	// 	console.log("------------   Customers' ability reducing in Russia   ----------------");
-
-	   	// 	//game.changeRegionConservLevel(0.05, "RU");
-
-	   	// 	if(game.getRegionConserv("RU") < 0.6){
-		   // 		//game.changeCustomersNumber(1, "RU");
-		   // 		game.changeRegionPref(-0.05, "RU");
-		   // 		//game.changeRegionConservLevel(-0.005, "RU");
-		   // 		//game.changeIncome(0.2, "RU");
-		   // 	}else{
-		   // 		game.changeRegionActivity(0, "RU");
-		   // 	}
-		   	
-	   	// }
-
-
-
-
-	   	// if(game.getRegionPref("RU") > 3.5){  //// set Overexpectations reducing in Russia
-
-	   	// 	console.log("------------   Overexpectations reducing in Russia   ----------------");
-
-	   	// 	//game.changeRegionConservLevel(0.1, "RU");
-
-	   	// 	if(game.getAvgPrice("RU") >= 20){
-		   // 		//game.changeCustomersNumber(1, "RU");
-		   // 		//game.changeRegionPref(-0.1, "RU");
-		   // 		game.changeRegionConservLevel(0.02, "RU");
-		   // 		//game.changeProductPrice(-2, "Prod 2");
-		   // 	}else{
-		   // 		game.changeIncome(-0.015, "RU");
-		   // 	}
-		   	
-	   	// }
-
-
-
-	   	// if(game.getRegionConserv("RU") > 0.04){  /// 0.07 = base_level_of_conservatism for "RU" region
-		   // 	if(game.getRegionPref("RU") <= 1){      /////// set Economic growth in Russia
-		   // 		console.log("------------  Economic growth in Russia   ----------------");
-
-		   // 		game.changeRegionConservLevel(-0.005, "RU");
-
-		   // 		game.changeIncome(0.02, "RU");
-
-		   // 		if(game.getAverageIncome("RU") <= 17 && game.getAvgPrice("RU") >= 8){
-			  //  		game.changeProductPrice(-1, "Prod 2");
-			  //  		//game.changeIncome(0.05, "RU");
-			  //  	}
-		   // 	}
-	   	// }
-
-
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
 
 
+	   	for (var region in game.regions){
+	   		game.regions[region] = {
+				region_id: game.regions[region].region_id,
+	     		region_name: game.regions[region].region_name,
+	     		region_pref: game.regions[region].region_pref,
+				region_people_number: game.regions[region].region_people_number,
+				base_income_rate: game.regions[region].base_income_rate,
+				base_level_of_conservatism: game.regions[region].base_level_of_conservatism,
+				region_conserv: game.getRegionConserv(region),
+				region_active_people_number: game.regions[region].region_active_people_number,
+				region_avg_income: game.regions[region].region_avg_income,
+				region_income_groups: game.regions[region].region_income_groups,
+				region_products: game.getRegionProducts(region),
+				map_data: game.getMapData(region),
+				region_prop_pop: game.regions[region].region_prop_pop,
+	    	}
+	   	}
 
-		game.setPriceHistory();	   		
-	   	game.setCustomersHistory(game.time_period);
+
+
+		// game.setPriceHistory();	   		
+	 	// game.setCustomersHistory(game.time_period);
 
 
 
@@ -1154,73 +1091,76 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
-	    game.products.forEach(function (product) {
-	   		var prop_finished = 0;
-	   		var target_company = null;
-	   		if(product.product_status == "In production"){
-	   			product.prop.forEach(function (property) {
-	   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
-			            property.progress = 100;
-			            prop_finished++;
-			        }else{ 
-			            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
-			        }
-	   			});
-	   		}
+	 //    game.products.forEach(function (product) {
+	 //   		var prop_finished = 0;
+	 //   		var target_company = null;
+	 //   		if(product.product_status == "In production"){
+	 //   			product.prop.forEach(function (property) {
+	 //   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
+		// 	            property.progress = 100;
+		// 	            prop_finished++;
+		// 	        }else{ 
+		// 	            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
+		// 	        }
+	 //   			});
+	 //   		}
 
-	   		if(product.product_status == "Updated"){
-	   			product.prop.forEach(function (property) {
-	   				if((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) > 1){
-			            property.progress = 100;
-			            prop_finished++;
-			        }else{ 
-			            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
-			        }
-	   			});
-	   		}
+	 //   		if(product.product_status == "Updated"){
+	 //   			product.prop.forEach(function (property) {
+	 //   				if((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) > 1){
+		// 	            property.progress = 100;
+		// 	            prop_finished++;
+		// 	        }else{ 
+		// 	            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
+		// 	        }
+	 //   			});
+	 //   		}
 
-	   		if(prop_finished == product.prop.length){
-	   			product.product_status = "Completed";
+	 //   		if(prop_finished == product.prop.length){
+	 //   			product.product_status = "Completed";
 
-	   			for(var company in game_new.companies){
-	   				if(game_new.companies[company].company_name == product.product_creator){
-	   					target_company = game_new.companies[company]
-	   				}
-	   			}
+	 //   			for(var company in game_new.companies){
+	 //   				if(game_new.companies[company].company_name == product.product_creator){
+	 //   					target_company = game_new.companies[company]
+	 //   				}
+	 //   			}
 
-	   			target_company.company_team.forEach(function (dep) {
-	   				dep.employee_number_at_work = 0;
-	   			});
+	 //   			target_company.company_team.forEach(function (dep) {
+	 //   				dep.employee_number_at_work = 0;
+	 //   			});
 
-	   			target_company.company_level += 1;
+	 //   			target_company.company_level += 1;
 
-	   			target_company.company_activities.push({
-		           status: "Complete",
-		           title: "Product development has been finished",
-		           start_time: game.time_period,
-		           comments: "Product "+product.product_name+" has been developed.",
-		        });
+	 //   			target_company.company_activities.push({
+		//            status: "Complete",
+		//            title: "Product development has been finished",
+		//            start_time: game.time_period,
+		//            comments: "Product "+product.product_name+" has been developed.",
+		//         });
 
-		        game.news.push({
-                    time_period: game.time_period,
-                    type: "user", /////Types: usd, newspaper-o, user, warning
-                    header: "New product has been released",
-                    text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
-                });
-	   		}
-	   	});
-
-
-		for(var company in game_new.companies){
-			game_new.companies[company].changeCompanyBalance(game);
-
-			if(game_new.companies[company].company_balance <= 0){
-				game_new.companies[company].status = 'bankrupt';
-			}
-		}
+		//         game.news.push({
+  //                   time_period: game.time_period,
+  //                   type: "user", /////Types: usd, newspaper-o, user, warning
+  //                   header: "New product has been released",
+  //                   text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
+  //               });
+	 //   		}
+	 //   	});
 
 
-		game_new.setCompaniesHistory();
+		// for(var company in game_new.companies){
+		// 	game_new.companies[company].changeCompanyBalance(game);
+
+		// 	if(game_new.companies[company].company_balance <= 0){
+		// 		game_new.companies[company].status = 'bankrupt';
+		// 	}
+		// }
+
+
+		// game_new.setCompaniesHistory();
+
+
+		////////////////////////////////////////////////////
 
 
 	   	//var target_util = 0;
@@ -1274,6 +1214,7 @@ Meteor.startup(() => {
 		Games.update(game._id,{
 	   		players: game.players,
 	   		customers: game.customers,
+	   		//customers_data: game.customers_data,
 	   		customers_history: game.customers_history,
 	   		avg_price_history: game.avg_price_history,
 	   		news: game.news,

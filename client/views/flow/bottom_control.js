@@ -3,49 +3,37 @@ Template.bottom_control.helpers({
     products:function(){
     	var game = Games.findOne({});
     	var products = [];
-        var free_share = 0;
-        var inactive_share = 0;
-        game.products.forEach(function (product) {
+        var world_state = game.getWorldState();
+        var total_share = 0;
+        var total_customer_number = 0;
+        world_state.region_products.forEach(function (product) {
             var product_share = 0;
-            var total_product_customers = 0;
-            game.customers.forEach(function (customer) {
-                if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
-                    total_product_customers++;
-                }
-            });
-            product_share = Math.floor(total_product_customers / game.customers.length * 100);
+            product_share = Math.floor(product.product_customers_number / world_state.region_people_number * 100);
             products.push({
                 product_name: product.product_name,
                 product_color: product.product_color,
                 product_share: product_share,
             });
+            total_share += product_share;
+            total_customer_number += product.product_customers_number;
         });
 
-        game.customers.forEach(function (customer) {
-            if(customer.customer_activity != 1){
-                inactive_share++;
-            }
 
-            if(customer.customer_activity == 1 && !customer.customer_product){
-                free_share++;
-            }
-        });
-
-        if(free_share > 0 && Math.floor(free_share / game.customers.length * 100) > 0){
+        if(total_share < 100 && Math.floor(world_state.region_people_number - total_customer_number / world_state.region_people_number * 100) > 0){
             products.push({
                 product_name: "Free",
                 product_color: "lightblue",
-                product_share: Math.floor(free_share / game.customers.length * 100),
+                product_share: (100 - total_share),
             });
         }
 
-        if(inactive_share > 0 && Math.floor(inactive_share / game.customers.length * 100) > 0){
-            products.push({
-                product_name: "Inactive",
-                product_color: "red",
-                product_share: Math.floor(inactive_share / game.customers.length * 100),
-            });
-        }
+        // if(inactive_share > 0 && Math.floor(inactive_share / game.customers.length * 100) > 0){
+        //     products.push({
+        //         product_name: "Inactive",
+        //         product_color: "red",
+        //         product_share: Math.floor(inactive_share / game.customers.length * 100),
+        //     });
+        // }
 
         return products;
     },

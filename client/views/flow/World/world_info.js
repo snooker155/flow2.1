@@ -11,7 +11,7 @@ var getSunburstData = function(game){
 
 	for(var region in game.regions){
 		var region_state = [];
-		var free_people = 0;
+		//var free_people = 0;
 
 
 	////////////////////////////////////////////////////
@@ -19,63 +19,79 @@ var getSunburstData = function(game){
 	////////////////////////////////////////////////////
 
 
-		var inactive_count = 0;
-		var notselected_count = 0;
-		var region_customer_number = game.getRegionCustomerNumber(region);
-		var increment = 0;
-		game.products.forEach(function (product) {
-		  	var count = 0;
-			game.customers.forEach(function (customer) {
-				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
-					if(customer.customer_region == region){
-						count++;
-					}
-				}
-			});
+		//var inactive_count = 0;
+		//var notselected_count = 0;
+		// var region_customer_number = game.getRegionCustomerNumber(region);
+		// var increment = 0;
+		// game.products.forEach(function (product) {
+		//   	var count = 0;
+		// 	game.customers.forEach(function (customer) {
+		// 		if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
+		// 			if(customer.customer_region == region){
+		// 				count++;
+		// 			}
+		// 		}
+		// 	});
 			
-			if(count > 0){
-				//increment += parseFloat((count / region_customer_number * 100).toFixed(2));
-				//increment += Math.floor(count / region_customer_number * 100);
-				region_state.push({
-					name: product.product_name,
-					color: product.product_color,
-					size: count,
-				});
-			}
-		});
+		// 	if(count > 0){
+		// 		//increment += parseFloat((count / region_customer_number * 100).toFixed(2));
+		// 		//increment += Math.floor(count / region_customer_number * 100);
+		// 		region_state.push({
+		// 			name: product.product_name,
+		// 			color: product.product_color,
+		// 			size: count,
+		// 		});
+		// 	}
+		// });
 
-		game.customers.forEach(function (customer) {
-			if(customer.customer_activity == 0){
-				if(customer.customer_region == region){
-					inactive_count++;
-				}
-			}else if(customer.customer_activity == 1 && !customer.customer_product){
-				if(customer.customer_region == region){
-					notselected_count++;
-				}
-			}
-		});
 
-		if(inactive_count > 0){
-			//increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
-			//increment += Math.floor(inactive_count / region_customer_number * 100);
-			region_state.push({
-				name: "Inactive",
-				color: "red",
-				size: inactive_count,
-			});
-		}
+		// if(inactive_count > 0){
+		// 	//increment += parseFloat((inactive_count / region_customer_number * 100).toFixed(2));
+		// 	//increment += Math.floor(inactive_count / region_customer_number * 100);
+		// 	region_state.push({
+		// 		name: "Inactive",
+		// 		color: "red",
+		// 		size: inactive_count,
+		// 	});
+		// }
 
-		if(notselected_count > 0){
-			//increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
-			//increment += Math.floor(notselected_count / region_customer_number * 100);
-			region_state.push({
-				name: "Free",
-				color: "lightblue",
-				size: notselected_count,
-			});
-		}
+		// if(notselected_count > 0){
+		// 	//increment += parseFloat((notselected_count / region_customer_number * 100).toFixed(2));
+		// 	//increment += Math.floor(notselected_count / region_customer_number * 100);
+		// 	region_state.push({
+		// 		name: "Free",
+		// 		color: "lightblue",
+		// 		size: notselected_count,
+		// 	});
+		// }
 
+
+        var total_customer_number = 0;
+        game.regions[region].region_products.forEach(function (product) {
+            region_state.push({
+                name: product.product_name,
+                color: product.product_color,
+                size: product.product_customers_number,
+            });
+            total_customer_number += product.product_customers_number;
+        });
+
+
+        if(total_customer_number < game.regions[region].region_customer_number){
+            region_state.push({
+                name: "Free",
+                color: "lightblue",
+                size: (game.regions[region].region_customer_number - total_customer_number),
+            });
+        }
+
+        // if(inactive_share > 0 && Math.floor(inactive_share / game.customers.length * 100) > 0){
+        //     products.push({
+        //         product_name: "Inactive",
+        //         product_color: "red",
+        //         product_share: Math.floor(inactive_share / game.customers.length * 100),
+        //     });
+        // }
 
 
 	////////////////////////////////////////////////////
@@ -485,40 +501,42 @@ Template.world_info.helpers({
  //        return shares_arr;
 	// },
 
-	regions: function () {
-		var game = Games.findOne({});
-		var regions_arr = [];
-        for(var region in game.regions){
-        	if(100-game.getRegionFullness(region) > 0.009){
-				regions_arr.push({
-					region: game.regions[region],
-					region_fullness_array: [parseFloat(game.getRegionFullness(region).toFixed(2)), parseFloat((100 - game.getRegionFullness(region)).toFixed(2))],
-					region_fullness: parseFloat((100 - game.getRegionFullness(region)).toFixed(2)),
-				});
-			}else{
-				regions_arr.push({
-					region: game.regions[region],
-					region_fullness_array: [100, 0],
-					region_fullness: 0,
-				});
-			}
-     	}
-        return regions_arr;
-	},
+	// regions: function () {
+	// 	var game = Games.findOne({});
+	// 	var regions_arr = [];
+ //        for(var region in game.regions){
+ //        	if(100-game.getRegionFullness(region) > 0.009){
+	// 			regions_arr.push({
+	// 				region: game.regions[region],
+	// 				region_fullness_array: [parseFloat(game.getRegionFullness(region).toFixed(2)), parseFloat((100 - game.getRegionFullness(region)).toFixed(2))],
+	// 				region_fullness: parseFloat((100 - game.getRegionFullness(region)).toFixed(2)),
+	// 			});
+	// 		}else{
+	// 			regions_arr.push({
+	// 				region: game.regions[region],
+	// 				region_fullness_array: [100, 0],
+	// 				region_fullness: 0,
+	// 			});
+	// 		}
+ //     	}
+ //        return regions_arr;
+	// },
 
-	selected_region: function(){
-		var game = Games.findOne({});
-		if(selected_region.get() == "World"){
-			return game.getWorldState();
-		}else{
-			return game.regions[selected_region.get()];
-		}		
-	},
+	// selected_region: function(){
+	// 	var game = Games.findOne({});
+	// 	if(selected_region.get() == "World"){
+	// 		return game.getWorldState();
+	// 	}else{
+	// 		return game.regions[selected_region.get()];
+	// 	}		
+	// },
 
-	colors: function(){
-		return ["#ccc", "#1ab394"];
-	},
+	// colors: function(){
+	// 	return ["#ccc", "#1ab394"];
+	// },
 
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	// products:function(){
  //    	var game = Games.findOne({});
@@ -605,81 +623,81 @@ Template.world_info.helpers({
 
 
 Template.region_info.helpers({
-	products:function(){
-    	var game = Games.findOne({});
-    	var products = [];
-        var free_share = 0;
-        var inactive_share = 0;
-        var total_customer = 0;
-    	game.products.forEach(function (product) {
-            if(product.product_status != "In production"){
-                var product_share = 0;
-                var total_product_customers = 0;
-                total_customer = 0;
-                game.customers.forEach(function (customer) {
-                	if(selected_region.get() == "World"){
-                		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
-                    	    total_product_customers++;
-                    	}
-                    	total_customer++;
+	// products:function(){
+ //    	var game = Games.findOne({});
+ //    	var products = [];
+ //        var free_share = 0;
+ //        var inactive_share = 0;
+ //        var total_customer = 0;
+ //    	game.products.forEach(function (product) {
+ //            if(product.product_status != "In production"){
+ //                var product_share = 0;
+ //                var total_product_customers = 0;
+ //                total_customer = 0;
+ //                game.customers.forEach(function (customer) {
+ //                	if(selected_region.get() == "World"){
+ //                		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
+ //                    	    total_product_customers++;
+ //                    	}
+ //                    	total_customer++;
                 		
-                	}else{
-                		if(customer.customer_region == selected_region.get()){
-                    		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
-                    		    total_product_customers++;
-                    		}
-                    		total_customer++;
-                    	}
-                	}
-                });
-                total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
-                product_share = Math.floor(total_product_customers / total_customer * 100);
-                products.push({
-                    product_name: product.product_name,
-                    product_color: product.product_color,
-                    product_share: product_share,
-                });
-            }
-        });
+ //                	}else{
+ //                		if(customer.customer_region == selected_region.get()){
+ //                    		if(customer.customer_product && customer.customer_product.product_id == product.product_id && customer.customer_activity == 1){
+ //                    		    total_product_customers++;
+ //                    		}
+ //                    		total_customer++;
+ //                    	}
+ //                	}
+ //                });
+ //                total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
+ //                product_share = Math.floor(total_product_customers / total_customer * 100);
+ //                products.push({
+ //                    product_name: product.product_name,
+ //                    product_color: product.product_color,
+ //                    product_share: product_share,
+ //                });
+ //            }
+ //        });
 	
-		total_customer = 0;
-        game.customers.forEach(function (customer) {
-        	if(selected_region.get() == "World"){
-        		if(customer.customer_activity != 1){
-            	    inactive_share++;
-            	}
+	// 	total_customer = 0;
+ //        game.customers.forEach(function (customer) {
+ //        	if(selected_region.get() == "World"){
+ //        		if(customer.customer_activity != 1){
+ //            	    inactive_share++;
+ //            	}
 
-            	if(customer.customer_activity == 1 && !customer.customer_product){
-            	    free_share++;
-            	}
+ //            	if(customer.customer_activity == 1 && !customer.customer_product){
+ //            	    free_share++;
+ //            	}
 
-            	total_customer++;
+ //            	total_customer++;
        
-        	}else{
-            	if(customer.customer_region == selected_region.get()){
-        			if(customer.customer_activity != 1){
-            		    inactive_share++;
-            		}
+ //        	}else{
+ //            	if(customer.customer_region == selected_region.get()){
+ //        			if(customer.customer_activity != 1){
+ //            		    inactive_share++;
+ //            		}
 
-            		if(customer.customer_activity == 1 && !customer.customer_product){
-            		    free_share++;
-            		}
-        			total_customer++;
-        		}
-        	}
-        });
-		total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
-        products.push({
-            product_name: "Free",
-            product_color: "lightblue",
-            product_share: Math.floor(free_share / total_customer * 100),
-        });
+ //            		if(customer.customer_activity == 1 && !customer.customer_product){
+ //            		    free_share++;
+ //            		}
+ //        			total_customer++;
+ //        		}
+ //        	}
+ //        });
+	// 	total_customer == 0 ? total_customer = 1 : total_customer = total_customer;
+ //        products.push({
+ //            product_name: "Free",
+ //            product_color: "lightblue",
+ //            product_share: Math.floor(free_share / total_customer * 100),
+ //        });
 
-        products.push({
-            product_name: "Inactive",
-            product_color: "red",
-            product_share: Math.floor(inactive_share / total_customer * 100),
-        });
-    	return products;
-    },
+ //        products.push({
+ //            product_name: "Inactive",
+ //            product_color: "red",
+ //            product_share: Math.floor(inactive_share / total_customer * 100),
+ //        });
+ //    	return products;
+ //    },
 });

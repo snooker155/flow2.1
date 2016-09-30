@@ -14,6 +14,7 @@
       Games.update(game._id, {
         players: game.players,
         customers: game.customers,
+        //customers_data: game.customers_data,
         customers_history: game.customers_history,
         avg_price_history: game.avg_price_history,
         news: game.news,

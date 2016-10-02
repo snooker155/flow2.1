@@ -1077,8 +1077,8 @@ Meteor.startup(() => {
 
 
 
-		// game.setPriceHistory();	   		
-	 	// game.setCustomersHistory(game.time_period);
+		game.setPriceHistory();	   		
+	 	game.setCustomersHistory();
 
 
 

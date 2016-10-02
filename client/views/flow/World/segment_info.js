@@ -291,27 +291,22 @@ Template.segment_info.helpers({
 
     current_world_users(){
         var game = Games.findOne({});
-        var current_world_users = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                current_world_users++;
-            }
+        var world_state = game.getWorldState();
+        var total_customers = 0;
+        world_state.region_products.forEach(function (product) {
+            total_customers += product.product_customers_number;
         });
-
-        return current_world_users;
+        return total_customers;
     },
 
     ratio_potential_current_users(){
         var game = Games.findOne({});
-        var current_world_users = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                current_world_users++;
-            }
+        var world_state = game.getWorldState();
+        var total_customers = 0;
+        world_state.region_products.forEach(function (product) {
+            total_customers += product.product_customers_number;
         });
-
-
-        return (current_world_users / game.customers.length * 100).toFixed(2);
+        return (total_customers / world_state.region_people_number * 100).toFixed(2);
     },
     
     new_users(){
@@ -337,20 +332,22 @@ Template.segment_info.helpers({
 
     world_demand(){
         var game = Games.findOne({});
-        return parseFloat(game.getDemand().toFixed(2));
+        var demand = 0;
+        for (var region in game.regions){
+            demand += game.regions[region].region_people_number * game.regions[region].base_income_rate;
+        }
+        return parseFloat(demand.toFixed(0));
     },
     
     world_market(){
         var game = Games.findOne({});
-        return parseFloat(game.getMarket().toFixed(2));
+        return parseFloat(game.getMarket().toFixed(0));
     },
     
     people_number(){
         var game = Games.findOne({});
-        var people_number = 0;
-        game.customers ? people_number = game.customers.length : 0;
-
-        return people_number;
+        var world_state = game.getWorldState();
+        return world_state.region_people_number;
     },
     
     companies_number(){
@@ -366,14 +363,8 @@ Template.segment_info.helpers({
 
     active_customers_number(){
         var game = Games.findOne({});
-        var active_customers_number = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_activity == 1){
-                active_customers_number++;
-            }
-        });
-
-        return active_customers_number;
+        var world_state = game.getWorldState();
+        return world_state.region_people_number;
     },
 
     products_number(){
@@ -384,112 +375,110 @@ Template.segment_info.helpers({
         return products_number;
     },
 
-    avg_income(){
-        var game = Games.findOne({});
-        var total_customers = 0;
-        var total_income = 0;
-        game.customers.forEach(function (customer) {
-            total_customers++;
-            total_income += customer.customer_income;
-        });
+    // avg_income(){
+    //     var game = Games.findOne({});
+    //     var total_customers = 0;
+    //     var total_income = 0;
+    //     game.customers.forEach(function (customer) {
+    //         total_customers++;
+    //         total_income += customer.customer_income;
+    //     });
 
-        return parseFloat((total_income / total_customers).toFixed(2));
-    },
+    //     return parseFloat((total_income / total_customers).toFixed(2));
+    // },
 
     clients_number(){
         var game = Games.findOne({});
-        var clients_number = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                clients_number++;
-            }
-        });
-
-        return clients_number;
-    },
-
-    users_in_period(){
-        var game = Games.findOne({});
-        var users_in_period = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                users_in_period++;
-            }
-        });
-
-        return users_in_period;
-    },
-
-    income_in_period(){
-        var game = Games.findOne({});
+        var world_state = game.getWorldState();
         var total_customers = 0;
-        var total_income = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_activity == 1){
-                total_customers++;
-                total_income += customer.customer_income;
-            }
+        world_state.region_products.forEach(function (product) {
+            total_customers += product.product_customers_number;
         });
-        if(total_customers == 0){
-            return 0;
-        }else{
-            return parseFloat((total_income / total_customers).toFixed(2));
-        }
+        return total_customers;
     },
 
-    revenue_in_period(){
-        var game = Games.findOne({});
-        var total_revenue = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                total_revenue += customer.customer_income;
-            }
-        });
+    // users_in_period(){
+    //     var game = Games.findOne({});
+    //     var users_in_period = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_product != "" && customer.customer_activity == 1){
+    //             users_in_period++;
+    //         }
+    //     });
 
-        return parseFloat(total_revenue.toFixed(2));
-    },
+    //     return users_in_period;
+    // },
 
-    users_in_period_ratio(){
-        var game = Games.findOne({});
-        var users_in_period = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                users_in_period++;
-            }
-        });
+    // income_in_period(){
+    //     var game = Games.findOne({});
+    //     var total_customers = 0;
+    //     var total_income = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_activity == 1){
+    //             total_customers++;
+    //             total_income += customer.customer_income;
+    //         }
+    //     });
+    //     if(total_customers == 0){
+    //         return 0;
+    //     }else{
+    //         return parseFloat((total_income / total_customers).toFixed(2));
+    //     }
+    // },
 
-        return Math.floor(users_in_period / game.customers.length * 100);
-    },
+    // revenue_in_period(){
+    //     var game = Games.findOne({});
+    //     var total_revenue = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_product != "" && customer.customer_activity == 1){
+    //             total_revenue += customer.customer_income;
+    //         }
+    //     });
 
-    income_in_period_ratio(){
-        var game = Games.findOne({});
-        var total_active_customers = 0;
-        var total_active_income = 0;
-        var total_income = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_activity == 1){
-                total_active_customers++;
-                total_active_income += customer.customer_income;
-            }
-            total_income += customer.customer_income;
-        });
+    //     return parseFloat(total_revenue.toFixed(2));
+    // },
 
-        return Math.floor((total_active_income / total_income) * 100);
-    },
+    // users_in_period_ratio(){
+    //     var game = Games.findOne({});
+    //     var users_in_period = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_product != "" && customer.customer_activity == 1){
+    //             users_in_period++;
+    //         }
+    //     });
 
-    revenue_in_period_ratio(){
-        var game = Games.findOne({});
-        var total_active_revenue = 0;
-        var total_revenue = 0;
-        game.customers.forEach(function (customer) {
-            if(customer.customer_product != "" && customer.customer_activity == 1){
-                total_active_revenue += customer.customer_income;
-            }
-            total_revenue += customer.customer_income;
-        });
+    //     return Math.floor(users_in_period / game.customers.length * 100);
+    // },
 
-        return Math.floor(total_active_revenue / total_revenue * 100);
-    },
+    // income_in_period_ratio(){
+    //     var game = Games.findOne({});
+    //     var total_active_customers = 0;
+    //     var total_active_income = 0;
+    //     var total_income = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_activity == 1){
+    //             total_active_customers++;
+    //             total_active_income += customer.customer_income;
+    //         }
+    //         total_income += customer.customer_income;
+    //     });
+
+    //     return Math.floor((total_active_income / total_income) * 100);
+    // },
+
+    // revenue_in_period_ratio(){
+    //     var game = Games.findOne({});
+    //     var total_active_revenue = 0;
+    //     var total_revenue = 0;
+    //     game.customers.forEach(function (customer) {
+    //         if(customer.customer_product != "" && customer.customer_activity == 1){
+    //             total_active_revenue += customer.customer_income;
+    //         }
+    //         total_revenue += customer.customer_income;
+    //     });
+
+    //     return Math.floor(total_active_revenue / total_revenue * 100);
+    // },
 
 });
 

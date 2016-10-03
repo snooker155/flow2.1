@@ -1067,7 +1067,7 @@ Meteor.startup(() => {
 				base_level_of_conservatism: game.regions[region].base_level_of_conservatism,
 				region_conserv: game.getRegionConserv(region),
 				region_active_people_number: game.regions[region].region_active_people_number,
-				region_avg_income: game.regions[region].region_avg_income,
+				region_avg_income: game.getAverageIncome(region),
 				region_income_groups: game.regions[region].region_income_groups,
 				region_products: game.getRegionProducts(region),
 				map_data: game.getMapData(region),

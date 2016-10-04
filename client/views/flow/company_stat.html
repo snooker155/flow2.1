@@ -1,5 +1,6 @@
 <template name="company_stat">
-	<div class="ibox">
+	{{#if Template.subscriptionsReady}}
+			<div class="ibox">
 				<div class="ibox-content">
 				{{#if has_company}}
 					<div class="profile-info"  style="margin-bottom:10px;">
@@ -94,4 +95,7 @@
                 {{/if}}
                 </div>
             </div>
+    {{else}}
+    	Loading ...
+    {{/if}}
 </template>

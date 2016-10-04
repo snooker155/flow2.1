@@ -1,10 +1,14 @@
 <template name="game_company">
   <div class="wrapper wrapper-content">
     {{>company_menu}}
-    {{#if has_company}}
-        {{>company_profile}}
+    {{#if Template.subscriptionsReady}}
+        {{#if company}}
+            {{>company_profile company = company}}
+        {{else}}
+            {{>company_registration}}
+        {{/if}}
     {{else}}
-        {{>company_registration}}
+        Loading...
     {{/if}}
 
     </div>

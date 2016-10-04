@@ -21,8 +21,7 @@ Template.company_stat.onCreated(function() {
 
 Template.company_stat.helpers({
 	has_company(){
-		var company = Companies.findOne({owner: Meteor.user().username});
-        return company;
+        return self.company;
 	},
 
 	company_name: function () {

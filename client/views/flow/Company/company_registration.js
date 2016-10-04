@@ -132,15 +132,42 @@ Template.company_registration.events({
 
         if (form.valid()){
 
-            company_activities.push({
-                status: "Complete",
-                title: "Company created",
-                start_time: game.time_period,
-                comments: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
-            });
+            // company_activities.push({
+            //     status: "Complete",
+            //     title: "Company created",
+            //     start_time: game.time_period,
+            //     comments: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
+            // });
 
 
-            game.companies[Meteor.user().username] = {
+            // game.companies[Meteor.user().username] = {
+            //     company_name: template.$("#company_name").val(),
+            //     company_region: [template.$("#region").val()],
+            //     company_level: 0,
+            //     company_exp: 0,
+            //     company_balance: 100000,
+            //     owner: Meteor.user().username,
+            //     company_activities: company_activities,
+            //     company_history: [{
+            //         company_balance: 100000,
+            //         company_users: 0,
+            //         company_revenue: 0,
+            //         company_costs: 0,
+            //         time_period: game.time_period,
+            //     }],
+            // };
+
+            // game.news.push({
+            //     time_period: game.time_period,
+            //     type: "user", /////Types: usd, newspaper-o, user, warning
+            //     header: "New company created",
+            //     text: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
+            // });
+
+            // Meteor.call('updateGame', game);
+
+
+            var company = {
                 company_name: template.$("#company_name").val(),
                 company_region: [template.$("#region").val()],
                 company_level: 0,
@@ -157,14 +184,9 @@ Template.company_registration.events({
                 }],
             };
 
-            game.news.push({
-                time_period: game.time_period,
-                type: "user", /////Types: usd, newspaper-o, user, warning
-                header: "New company created",
-                text: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
-            });
 
-            Meteor.call('updateGame', game);
+
+            Meteor.call('createCompany', company);
 
         }
 

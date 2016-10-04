@@ -29,6 +29,10 @@ Meteor.startup(() => {
 		Generations.remove(generation._id);
 	});
 
+	Companies.find().fetch().forEach(function (company) {
+		Companies.remove(company._id);
+	});
+
 
 
 

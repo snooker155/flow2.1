@@ -519,7 +519,6 @@ Template.world_info.helpers({
 				});
 			}
      	}
-     	console.log(regions_arr);
         return regions_arr;
 	},
 

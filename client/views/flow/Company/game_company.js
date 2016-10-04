@@ -1,7 +1,30 @@
+Template.game_company.onCreated(function() {
+    var self = this;
+    Tracker.autorun(function (c) {
+        self.company = Companies.findOne({owner: Meteor.user().username});
+        //console.log("Now i am here");
+        self.c = c;
+        var company_subscription = self.subscribe("companies");
+        if(company_subscription.ready()){
+            console.log('Loaded');
+            console.log(self.company);
+        }else{
+            console.log('Loading...');
+        }
+    });
+
+    self.getCompany = function(){
+        return self.company;
+    }
+});
+
+
+
 Template.game_company.helpers({
     has_company(){
-        var game = Games.findOne({});
-        return game.companies[Meteor.user().username];
+        //var company = Companies.findOne({owner: Meteor.user().username});
+        return self.company;
+        //return false;
     },
 });
 

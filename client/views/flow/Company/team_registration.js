@@ -15,7 +15,7 @@ Template.team_registration.onCreated(function(){
     var price_for_employee = 0;
     var employee_number = 0;
     var max_employee_number = 10;
-    var company = game.companies[Meteor.user().username];
+    var company = Companies.findOne({owner: Meteor.user().username});
     for (i=0; i<company.company_level+2; i++){
         employees_array.push({
             id: i,

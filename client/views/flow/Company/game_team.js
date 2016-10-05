@@ -22,8 +22,7 @@ Template.game_team.onRendered(function(){
 Template.game_team.helpers({
 
     has_team(){
-        var game = Games.findOne({});
-        return game.companies[Meteor.user().username].company_team;
+        return Companies.findOne({owner: Meteor.user().username}).company_team;
     },
 
     employees: function(){

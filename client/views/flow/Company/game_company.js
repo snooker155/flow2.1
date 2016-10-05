@@ -99,13 +99,23 @@ function drawPlotGraph(data1, data2){
 Template.company_profile.onCreated(function() {
     var self = this;
     Tracker.autorun(function (c) {
-        //console.log("Now i am here");
         self.c = c;
         var company_subscription = self.subscribe("companies");
         if(company_subscription.ready()){
             console.log('Loaded');
             self.company = Companies.findOne({owner: Meteor.user().username});
-            //console.log(self.company);
+            var data1 = [];
+            var data2 = [];
+            if(self.company){
+                self.company.company_history.forEach(function (company_history) {
+                    data1.push([Math.floor(company_history.time_period), company_history.company_balance]);
+                    data2.push([Math.floor(company_history.time_period), company_history.company_revenue]);
+                });
+                for(var i = data1.length; i < 20; i++){
+                    data1.push([i, 0]);
+                }
+                drawPlotGraph(data1, data2);
+            }
         }else{
             console.log('Loading...');
         }
@@ -119,21 +129,7 @@ Template.company_profile.onCreated(function() {
 
 
 Template.company_profile.onRendered(function() {
-    var self = this;
-    var company = Template.instance().company;
-    console.log(company);
-    var data1 = [];
-    var data2 = [];
-    if(company){
-        company.company_history.forEach(function (company_history) {
-            data1.push([Math.floor(company_history.time_period), company_history.company_balance]);
-            data2.push([Math.floor(company_history.time_period), company_history.company_revenue]);
-        });
-        for(var i = data1.length; i < 20; i++){
-            data1.push([i, 0]);
-        }
-        drawPlotGraph(data1, data2);
-    }
+
 });
 
 
@@ -276,7 +272,7 @@ Template.company_profile.events({
 });
 
 
-Template.game_company.onDestroyed(function(){
+Template.company_profile.onDestroyed(function(){
     var self = this;
     self.c.stop();
 });

@@ -1,14 +1,10 @@
 <template name="game_company">
   <div class="wrapper wrapper-content">
     {{>company_menu}}
-    {{#if Template.subscriptionsReady}}
-        {{#if company}}
-            {{>company_profile company = company}}
-        {{else}}
-            {{>company_registration}}
-        {{/if}}
+    {{#if company}}
+        {{>company_profile}}
     {{else}}
-        Loading...
+        {{>company_registration}}
     {{/if}}
 
     </div>
@@ -19,6 +15,7 @@
 
 
 <template name="company_profile">
+{{#if Template.subscriptionsReady}}
     <div class="row">
             <div class="col-lg-9">
                     <div class="ibox">
@@ -221,4 +218,7 @@
                     </div>
             </div>
         </div>
+{{else}}
+    Loading...
+{{/if}}
 </template>

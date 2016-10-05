@@ -49,4 +49,23 @@
 
 
 
+    deleteCompany: function(company){
+      Companies.remove(company._id);
+    },
+
+    updateCompany: function(company){
+        Companies.update(company._id, {
+        company_name: company.company_name,
+        company_region: company.company_region,
+        company_level: company.company_level,
+        company_exp: company.company_exp,
+        company_balance: company.company_balance,
+        owner: company.owner,
+        company_activities: company.company_activities,
+        company_history: company.company_history,
+      });
+    },
+
+
+
 });

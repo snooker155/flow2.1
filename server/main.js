@@ -38,6 +38,8 @@ Meteor.startup(() => {
 
 
 
+
+
 	///////////////////////////////////////////////////////////////////////
 	///////////////    DEPARTMENTS   //////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////
@@ -1088,10 +1090,6 @@ Meteor.startup(() => {
 
 	   	console.log("---------------------------   UPDATE   -------------------------------");
 
-	   	console.log("---------------------------   "+ game.time_period +"   -------------------------------");
-
-	   	game.time_period += 1;
-
 
 	   	var game_new = Games.findOne({});
 
@@ -1161,7 +1159,10 @@ Meteor.startup(() => {
 		// }
 
 
-		// game_new.setCompaniesHistory();
+		Companies.find({}).fetch().forEach(function (company) {
+			company.setCompaniesHistory(game);
+			Meteor.call('updateCompany', company);
+		});
 
 
 		////////////////////////////////////////////////////
@@ -1213,6 +1214,10 @@ Meteor.startup(() => {
 			}
 		});
 
+
+		console.log("---------------------------   "+ game.time_period +"   -------------------------------");
+
+	   	game.time_period += 1;
 
 
 		Games.update(game._id,{

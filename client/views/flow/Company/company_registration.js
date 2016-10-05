@@ -132,12 +132,12 @@ Template.company_registration.events({
 
         if (form.valid()){
 
-            // company_activities.push({
-            //     status: "Complete",
-            //     title: "Company created",
-            //     start_time: game.time_period,
-            //     comments: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
-            // });
+            company_activities.push({
+                status: "Complete",
+                title: "Company created",
+                start_time: game.time_period,
+                comments: "Company "+template.$("#company_name").val()+" in region "+template.$("#region").val()+" by "+Meteor.user().username+" successfully created.",
+            });
 
 
             // game.companies[Meteor.user().username] = {

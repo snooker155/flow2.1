@@ -1,12 +1,11 @@
 Template.company_stat.onCreated(function() {
     var self = this;
     Tracker.autorun(function (c) {
-        self.company = Companies.findOne({owner: Meteor.user().username});
-        //console.log("Now i am here");
         self.c = c;
         var company_subscription = self.subscribe("companies");
         if(company_subscription.ready()){
            	console.log('Loaded');
+           	self.company = Companies.findOne({owner: Meteor.user().username});
         }else{
             console.log('Loading...');
         }
@@ -21,25 +20,20 @@ Template.company_stat.onCreated(function() {
 
 Template.company_stat.helpers({
 	has_company(){
-        return self.company;
+        return Template.instance().company;
 	},
 
 	company_name: function () {
-		return self.company.company_name;
+		return Template.instance().company.company_name;
 	},
 
 	company_level: function () {
-		return self.company.company_level;
+		return Template.instance().company.company_level;
 	},
 
 	company_balance: function () {
-		return parseFloat(self.company.company_balance.toFixed(2));
+		return parseFloat(Template.instance().company.company_balance.toFixed(2));
 	},
-
-	// company_level: function () {
-	// 	var game = Games.findOne({});
-	// 	return game.companies[Meteor.user().username].company_level;
-	// },
 
 	// company_exp: function(){
 	// 	var game = Games.findOne({});

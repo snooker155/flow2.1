@@ -26,10 +26,10 @@ Template.game_product.onRendered(function(){
 Template.game_product.helpers({
 
     has_products(){
-        var game = Games.findOne({});
+        var company = Companies.findOne({owner: Meteor.user().username});
         var has_product = false;
-        game.products.forEach(function(product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+        Products.find().fetch().forEach(function(product) {
+            if(product.product_creator == company.company_name){
                 has_product = true;
             }
         });
@@ -37,10 +37,10 @@ Template.game_product.helpers({
     },
 
     products(){
-        var game = Games.findOne({});
+        var company = Companies.findOne({owner: Meteor.user().username});
         var company_products = [];
-        game.products.forEach(function(product) {
-            if(product.product_creator == game.companies[Meteor.user().username].company_name){
+        Products.find().fetch().forEach(function(product) {
+            if(product.product_creator == company.company_name){
                 company_products.push(product);
             }
         });
@@ -49,12 +49,11 @@ Template.game_product.helpers({
 
     features: function(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var properties = [];
         var bad_properties = [];
         var selected_product = null;
-        game.products.forEach(function(product) {
+        Products.find().fetch().forEach(function(product) {
             if(product.product_id == self.product_id){
                 selected_product = product;
             }
@@ -116,8 +115,7 @@ Template.game_product.helpers({
 
     available_employees_number(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var current_employees_number = null;
         company.company_team.forEach(function (dep) {
             if(self.neccessary_department == dep.department_name){
@@ -140,8 +138,7 @@ Template.game_product.helpers({
 
     new_features_lists: function(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         if (Features.find({neccessary_level: { $lte: company.company_level }}).count() - self.prop.length > 0 ){
             var n = company.company_level + 2 - self.prop.length;
         }else{
@@ -244,33 +241,19 @@ Template.game_product.events({
 
         var self = this;
 
-        var game = Games.findOne({});
-
         var count = 0;
 
-        game.products.forEach(function (product) {
-            if(product.product_id == self.product_id){
-                game.products.splice(count, 1);
-            }
-            count++;
-        });
-
-        Meteor.call('updateGame', game);
+        Meteor.call('deleteProduct', self);
     },
 
     "click #edit_product": function(){
         event.preventDefault();
 
         var self = this;
-        var game = Games.findOne({});
+        
+        self.product_editable = true;
 
-        game.products.forEach(function (product) {
-            if(product.product_id == self.product_id){
-                product.product_editable = true;
-            }
-        });
-
-        Meteor.call('updateGame', game);
+        Meteor.call('updateProduct', self);
     },
 
 
@@ -278,20 +261,17 @@ Template.game_product.events({
         event.preventDefault();
 
         var self = this;
-        var game = Games.findOne({});
 
         var product_name = $("#product_name"+self.product_id).val();
         var product_price = $("#product_price"+self.product_id).val() * 1;
 
-        game.products.forEach(function (product) {
-            if(product.product_id == self.product_id){
-                product.product_name = product_name;
-                product.product_price = product_price;
-                product.product_editable = false;
-            }
-        });
 
-        Meteor.call('updateGame', game);
+        self.product_name = product_name;
+        self.product_price = product_price;
+        self.product_editable = false;
+
+
+        Meteor.call('updateProduct', self);
     },
 
 
@@ -328,10 +308,10 @@ Template.game_product.events({
     "click #feature_level_plus": function(event){
         var self =  this;
         var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var selected_product = null;
 
-        game.products.forEach(function (product) {
+        Products.find().fetch().forEach(function (product) {
             if(product.product_id == self.product_id){
                 selected_product = product;
             }
@@ -350,7 +330,9 @@ Template.game_product.events({
 
             company.setToWork(self.neccessary_department, self.neccessary_employees_number);
 
-            Meteor.call('updateGame', game);
+            Meteor.call('updateProduct', selected_product);
+
+            Meteor.call('updateCompany', company);
         }else{
             can_create = false;
             alert("Not enough employees in department \""+self.neccessary_department+"\".\n\nRequire "+self.neccessary_employees_number+", has "+company.getDepEmployeeNumber(self.neccessary_department)+".");
@@ -370,10 +352,9 @@ Template.game_product.events({
     "click #create_new_feature": function(event, template){
         event.preventDefault();
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var selected_product = null;
-        game.products.forEach(function (product) {
+        Products.find().fetch().forEach(function (product) {
             if(product.product_id == self.product_id){
                 selected_product = product;
             }
@@ -392,7 +373,9 @@ Template.game_product.events({
 
                     company.setToWork(self.neccessary_department, self.neccessary_employees_number);
 
-                    Meteor.call('updateGame', game);
+                    Meteor.call('updateProduct', selected_product);
+
+                    Meteor.call('updateCompany', company);
                 }else{
                     can_create = false;
                     alert("Not enough employees in department \""+self.neccessary_department+"\".\n\nRequire "+self.neccessary_employees_number+", has "+company.getDepEmployeeNumber(self.neccessary_department)+".");
@@ -420,12 +403,11 @@ Template.game_product.events({
     'click #delete_prop': function(){
         event.preventDefault();
         var self = this;
-        var game = Games.findOne({});
 
         var count = 0;
         var selected_product = null;
 
-        game.products.forEach(function (product) {
+        Products.find().fetch().forEach(function (product) {
             if(product.product_id == self.product_id){
                 selected_product = product;
             }
@@ -439,7 +421,7 @@ Template.game_product.events({
         });
 
 
-        Meteor.call('updateGame', game);
+        Meteor.call('updateProduct', selected_product);
     },
 
 });

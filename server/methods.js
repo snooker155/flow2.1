@@ -44,14 +44,15 @@
         owner: company.owner,
         company_activities: company.company_activities,
         company_history: company.company_history,
+        company_team: company.company_team,
       });
     },
-
 
 
     deleteCompany: function(company){
       Companies.remove(company._id);
     },
+
 
     updateCompany: function(company){
         Companies.update(company._id, {
@@ -63,9 +64,53 @@
         owner: company.owner,
         company_activities: company.company_activities,
         company_history: company.company_history,
+        company_team: company.company_team,
       });
     },
 
+
+
+
+
+////////// Product methods ///////////////
+
+    
+
+    createProduct: function(product){
+      Products.insert({
+        product_id: product.product_id,
+        product_name: product.product_name,
+        product_price: product.product_price,
+        product_color: product.product_color,
+        prop: product.prop,
+        product_quantity: product.product_quantity,
+        product_creator: product.product_creator,
+        product_status: product.product_status,
+        product_regions: product.product_regions,
+        product_editable: product.product_editable,
+      });
+    },
+
+
+    deleteProduct: function(product){
+      Products.remove(product._id);
+    },
+
+
+    updateProduct: function(product){
+        Products.update(product._id, {
+            product_id: product.product_id,
+            product_name: product.product_name,
+            product_price: product.product_price,
+            product_color: product.product_color,
+            prop: product.prop,
+            product_quantity: product.product_quantity,
+            product_creator: product.product_creator,
+            product_status: product.product_status,
+            product_regions: product.product_regions,
+            product_editable: product.product_editable,
+        });
+    },
 
 
 });

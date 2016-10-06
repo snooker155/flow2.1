@@ -182,6 +182,7 @@ Template.company_registration.events({
                     company_costs: 0,
                     time_period: game.time_period,
                 }],
+                company_team: [],
             };
 
 

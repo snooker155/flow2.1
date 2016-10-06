@@ -8,8 +8,7 @@ var features_arrayDep = new Tracker.Dependency();
 Template.product_registration.onCreated(function(){
 
     features_array = [];
-    var game = Games.findOne({});
-    var company = game.companies[Meteor.user().username];
+    var company = Companies.findOne({owner: Meteor.user().username});
     var features = Features.find({neccessary_level: { $lte: company.company_level } });
     //var features = Features.find({});
     //console.log(features.fetch());
@@ -64,8 +63,7 @@ Template.product_registration.helpers({
     },
 
     features: function(){
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var all_features = Features.find().fetch();
         var features = [];
         all_features.forEach(function (feat) {
@@ -102,8 +100,7 @@ Template.product_registration.helpers({
 
     current_employees_number(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var current_employees_number = null;
         var target_dep = null;
         company.company_team.forEach(function (dep) {
@@ -125,8 +122,7 @@ Template.product_registration.helpers({
 
     has_department(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(self.neccessary_department){
             if(company.has_department(self.neccessary_department)){
                 return "green";
@@ -138,8 +134,7 @@ Template.product_registration.helpers({
 
     has_employees_number(){
         var self = this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(self.neccessary_department && self.neccessary_employees_number){
             if(company.has_employees_number(self.neccessary_department, self.neccessary_employees_number)){
                 return "green";
@@ -155,9 +150,9 @@ Template.product_registration.helpers({
     },
 
     can_add(){
-        var game = Games.findOne({});
+        var company = Companies.findOne({owner: Meteor.user().username});
         features_arrayDep.depend();
-        return features_array.length < game.companies[Meteor.user().username].company_level + 2;
+        return features_array.length < company.company_level + 2;
     },
 
     can_remove(){
@@ -209,7 +204,6 @@ Template.product_registration.events({
 
     "click #add_feature": function(event, template){
         event.preventDefault();
-        var game = Games.findOne({});
         var self = this;
 
         features_array.push({
@@ -231,7 +225,6 @@ Template.product_registration.events({
 
     "click #remove_feature": function(event, template){
         event.preventDefault();
-        var game = Games.findOne({});
         var self = this;
 
 
@@ -261,7 +254,7 @@ Template.product_registration.events({
     "click #create": function(event, template){
         event.preventDefault();
         var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var product = {};
         var prop = [];
         var can_create = true;
@@ -293,7 +286,8 @@ Template.product_registration.events({
                             neccessary_department: feature.neccessary_department,
                             progress: feature.progress,
                             start_period: game.time_period,
-                            product_id: game.products[game.products.length - 1].product_id + 1,
+                            product_id: Products.find({}, {sort: {product_id: -1}, limit: 1}).fetch()[0].product_id + 1,
+                            status: "active",
                         })
 
                         product_costs += feature.feature_price;
@@ -319,7 +313,7 @@ Template.product_registration.events({
                 //var regions = ["RU"];
 
                 product = {
-                    product_id: game.products[game.products.length - 1].product_id + 1,
+                    product_id: Products.find({}, {sort: {product_id: -1}, limit: 1}).fetch()[0].product_id + 1,
                     product_name: product_name,
                     product_price: parseInt(product_price),
                     product_color: product_color,
@@ -332,11 +326,10 @@ Template.product_registration.events({
                     product_editable: false,
                 }
 
-                game.products.push(product);
 
-                game.customers.forEach(function (customer) {
-                    customer.makeProductConservatism(product)
-                });
+                // game.customers.forEach(function (customer) {
+                //     customer.makeProductConservatism(product)
+                // });
 
                 features_array.forEach(function (feature) {
                     company.setToWork(feature.neccessary_department, feature.neccessary_employees_number);
@@ -351,8 +344,9 @@ Template.product_registration.events({
                     comments: "Product "+product_name+" has gone in production.",
                 });
 
+                Meteor.call('createProduct', product);
 
-                Meteor.call('updateGame', game);
+                Meteor.call('updateCompany', company);
 
                 $("#collapse").attr("class", "collapse");
 

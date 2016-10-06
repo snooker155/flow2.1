@@ -237,6 +237,8 @@ Meteor.startup(() => {
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         //product_regions: ["RU"],
         product_util: 0,
+		product_region: "",
+		product_price_history: [],
 	});
 
 	Products.insert({
@@ -255,6 +257,8 @@ Meteor.startup(() => {
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         //product_regions: ["RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 	Products.insert({
@@ -274,6 +278,8 @@ Meteor.startup(() => {
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         //product_regions: ["RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 	Products.insert({
@@ -291,6 +297,8 @@ Meteor.startup(() => {
         product_status: "Completed",
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 
@@ -310,6 +318,8 @@ Meteor.startup(() => {
         product_status: "Completed",
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 	Products.insert({
@@ -330,6 +340,8 @@ Meteor.startup(() => {
         product_status: "Completed",
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 	Products.insert({
@@ -353,6 +365,8 @@ Meteor.startup(() => {
         product_status: "Completed",
         product_regions: ["AF", "OR", "IN", "AS", "SP", "IN", "NA", "SA", "CA", "CE", "NE", "RU"],
         product_util: 0,
+        product_region: "",
+		product_price_history: [],
 	});
 
 
@@ -524,25 +538,25 @@ Meteor.startup(() => {
 
     var market = 0;
 
-    Products.find().fetch().forEach(function (product) {
-		products.push({
-			_id: product._id,
-			product_id: product.product_id,
-			product_name: product.product_name,
-			product_price: product.product_price,
-			product_region: "",
-			product_price_history: [],
-			product_color: product.product_color,
-			//product_quality: product.product_quality,
-			prop: product.prop,
-			product_quantity: product.product_quantity,
-			product_creator: product.product_creator,
-        	product_status: product.product_status,
-        	product_regions: product.product_regions,
-        	product_util: product.product_util,
-		});
+ //    Products.find().fetch().forEach(function (product) {
+	// 	products.push({
+	// 		_id: product._id,
+	// 		product_id: product.product_id,
+	// 		product_name: product.product_name,
+	// 		product_price: product.product_price,
+	// 		product_region: "",
+	// 		product_price_history: [],
+	// 		product_color: product.product_color,
+	// 		//product_quality: product.product_quality,
+	// 		prop: product.prop,
+	// 		product_quantity: product.product_quantity,
+	// 		product_creator: product.product_creator,
+ //        	product_status: product.product_status,
+ //        	product_regions: product.product_regions,
+ //        	product_util: product.product_util,
+	// 	});
 
-	});
+	// });
 
 
     Regions.find().forEach(function (region) {
@@ -685,7 +699,7 @@ Meteor.startup(() => {
 		var inactive_count = 0;
 		var notselected_count = 0;
 		var increment = 0;
-		products.forEach(function (product) {
+		Products.find({}).fetch().forEach(function (product) {
 		  	var count = 0;
 			customers.forEach(function (customer) {
 				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
@@ -1058,6 +1072,11 @@ Meteor.startup(() => {
 
 		}
 
+
+
+
+
+
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
@@ -1093,61 +1112,63 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
-	 //    game.products.forEach(function (product) {
-	 //   		var prop_finished = 0;
-	 //   		var target_company = null;
-	 //   		if(product.product_status == "In production"){
-	 //   			product.prop.forEach(function (property) {
-	 //   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
-		// 	            property.progress = 100;
-		// 	            prop_finished++;
-		// 	        }else{ 
-		// 	            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
-		// 	        }
-	 //   			});
-	 //   		}
+	    Products.find({}).fetch().forEach(function (product) {
+	   		var prop_finished = 0;
+	   		//var target_company = null;
+	   		if(product.product_status == "In production"){
+	   			product.prop.forEach(function (property) {
+	   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
+			            property.progress = 100;
+			            prop_finished++;
+			        }else{ 
+			            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
+			        }
+	   			});
+	   		}
 
-	 //   		if(product.product_status == "Updated"){
-	 //   			product.prop.forEach(function (property) {
-	 //   				if((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) > 1){
-		// 	            property.progress = 100;
-		// 	            prop_finished++;
-		// 	        }else{ 
-		// 	            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
-		// 	        }
-	 //   			});
-	 //   		}
+	   		if(product.product_status == "Updated"){
+	   			product.prop.forEach(function (property) {
+	   				if((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) > 1){
+			            property.progress = 100;
+			            prop_finished++;
+			        }else{ 
+			            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
+			        }
+	   			});
+	   		}
 
-	 //   		if(prop_finished == product.prop.length){
-	 //   			product.product_status = "Completed";
+	   		if(prop_finished == product.prop.length){
+	   			product.product_status = "Completed";
 
-	 //   			for(var company in game_new.companies){
-	 //   				if(game_new.companies[company].company_name == product.product_creator){
-	 //   					target_company = game_new.companies[company]
-	 //   				}
-	 //   			}
+	   			// for(var company in game_new.companies){
+	   			// 	if(game_new.companies[company].company_name == product.product_creator){
+	   			// 		target_company = game_new.companies[company]
+	   			// 	}
+	   			// }
 
-	 //   			target_company.company_team.forEach(function (dep) {
-	 //   				dep.employee_number_at_work = 0;
-	 //   			});
+	   			// target_company.company_team.forEach(function (dep) {
+	   			// 	dep.employee_number_at_work = 0;
+	   			// });
 
-	 //   			target_company.company_level += 1;
+	   			// target_company.company_level += 1;
 
-	 //   			target_company.company_activities.push({
-		//            status: "Complete",
-		//            title: "Product development has been finished",
-		//            start_time: game.time_period,
-		//            comments: "Product "+product.product_name+" has been developed.",
-		//         });
+	   			// target_company.company_activities.push({
+		     //       status: "Complete",
+		     //       title: "Product development has been finished",
+		     //       start_time: game.time_period,
+		     //       comments: "Product "+product.product_name+" has been developed.",
+		     //    });
 
-		//         game.news.push({
-  //                   time_period: game.time_period,
-  //                   type: "user", /////Types: usd, newspaper-o, user, warning
-  //                   header: "New product has been released",
-  //                   text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
-  //               });
-	 //   		}
-	 //   	});
+		     //    game.news.push({
+       //              time_period: game.time_period,
+       //              type: "user", /////Types: usd, newspaper-o, user, warning
+       //              header: "New product has been released",
+       //              text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
+       //          });
+	   		}
+
+	   		Meteor.call("updateProduct", product);
+	   	});
 
 
 		// for(var company in game_new.companies){

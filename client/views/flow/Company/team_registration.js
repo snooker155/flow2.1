@@ -7,9 +7,6 @@ var employees_arrayDep = new Tracker.Dependency();
 
 Template.team_registration.onCreated(function(){
 
-    var game = Games.findOne({});
-    // var company = game.companies[Meteor.user().username];
-    // var n = company.company_level + 1;
     employees_array = [];
     var departments = Departments.find().fetch();
     var price_for_employee = 0;
@@ -152,11 +149,9 @@ Template.team_registration.events({
         var form = template.$("#team_form");
 
         var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});;
 
         if (form.valid()){
-
-            //console.log(employees_array);
 
             company.company_activities.push({
                 status: "Complete",
@@ -169,11 +164,9 @@ Template.team_registration.events({
             company.company_team = employees_array;
 
 
-            Meteor.call('updateGame', game);
+            Meteor.call('updateCompany', company);
 
         }
-
-        //console.log(game.companies);
 
     },
 

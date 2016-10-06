@@ -26,8 +26,7 @@ Template.game_team.helpers({
     },
 
     employees: function(){
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         return company.company_team; 
     },
 
@@ -40,7 +39,7 @@ Template.game_team.helpers({
     // },
 
     departments: function(){
-        var company = Games.findOne({}).companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var departments = [];
         var bad_departments = [];
         company.company_team.forEach(function (employee) {
@@ -58,7 +57,7 @@ Template.game_team.helpers({
 
     new_employees: function(){
 
-        var company = Games.findOne({}).companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         if (Departments.find().count() - company.company_team.length > 0 ){
             var n = company.company_level + 2 - company.company_team.length;
         }else{
@@ -100,7 +99,7 @@ Template.game_team.helpers({
 
 
     sum_of_month: function(){
-        var company = Games.findOne({}).companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var employees = company.company_team;
         var sum = 0;
         employees.forEach(function (employee) {
@@ -157,7 +156,7 @@ Template.game_team.helpers({
     },
 
     sum_of_at_work: function(){
-        var company = Games.findOne({}).companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var employees = company.company_team;
         var sum = 0;
         employees.forEach(function (employee) {
@@ -168,7 +167,7 @@ Template.game_team.helpers({
     },
 
     sum_of_free: function(){
-        var company = Games.findOne({}).companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var employees = company.company_team;
         var sum = 0;
         employees.forEach(function (employee) {
@@ -237,8 +236,7 @@ Template.game_team.events({
 
     "click #level_plus": function(event){
         var self =  this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
 
         company.company_team.forEach(function (dep) {
             if(dep.id == self.id){
@@ -246,17 +244,14 @@ Template.game_team.events({
             }
         });
 
-        //console.log(company);
-
-        Meteor.call('updateGame', game);
+        Meteor.call('updateCompany', company);
 
     },
 
 
     "click .employee_number_minus": function(){
         var self =  this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
 
         company.company_team.forEach(function (dep) {
             if(dep.id == self.id){
@@ -264,17 +259,13 @@ Template.game_team.events({
             }
         });
 
-        //console.log(company);
-
-        Meteor.call('updateGame', game);
+        Meteor.call('updateCompany', company);
     },
 
 
     "click .employee_number_plus": function(){
         var self =  this;
-        //console.log(self);
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
 
         company.company_team.forEach(function (dep) {
             if(dep.id == self.id){
@@ -282,9 +273,7 @@ Template.game_team.events({
             }
         });
 
-        //console.log(company);
-
-        Meteor.call('updateGame', game);
+        Meteor.call('updateCompany', company);
     },
 
 
@@ -305,27 +294,21 @@ Template.game_team.events({
     'click #create_new_department': function(event, template){
         event.preventDefault();
         var self =  this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
-
-        //console.log(self);
+        var company = Companies.findOne({owner: Meteor.user().username});
 
         if(template.$("#new_department"+self.id).valid()){
 
             company.company_team.push(self);
             employees_arrayDep.changed();
 
-            //console.log(company.company_team);
-
-            Meteor.call('updateGame', game);
+            Meteor.call('updateCompany', company);
         }
     },
 
 
     'click #disband': function(){
         var self =  this;
-        var game = Games.findOne({});
-        var company = game.companies[Meteor.user().username];
+        var company = Companies.findOne({owner: Meteor.user().username});
         var count = 0;
 
         company.company_team.forEach(function (dep) {
@@ -339,9 +322,7 @@ Template.game_team.events({
             delete company.company_team;
         }
 
-        //console.log(company.company_team);
-
-        Meteor.call('updateGame', game);
+        Meteor.call('updateCompany', company);
     },
 
 });

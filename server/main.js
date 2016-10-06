@@ -699,7 +699,7 @@ Meteor.startup(() => {
 		var inactive_count = 0;
 		var notselected_count = 0;
 		var increment = 0;
-		Products.find({}).fetch().forEach(function (product) {
+		Products.find({}, {sort: {product_id: 1}}).fetch().forEach(function (product) {
 		  	var count = 0;
 			customers.forEach(function (customer) {
 				if(customer.customer_product && customer.customer_activity == 1 && customer.customer_product.product_id == product.product_id){
@@ -1112,16 +1112,23 @@ Meteor.startup(() => {
 
 	   	var game_new = Games.findOne({});
 
+
+	   	game.time_period += 1;
+
+
+
 	    Products.find({}).fetch().forEach(function (product) {
 	   		var prop_finished = 0;
-	   		//var target_company = null;
+	   		var target_company = null;
 	   		if(product.product_status == "In production"){
 	   			product.prop.forEach(function (property) {
 	   				if((game.time_period - property.start_period) / property.time_to_achieve > 1){
 			            property.progress = 100;
-			            prop_finished++;
 			        }else{ 
 			            property.progress = Math.round((game.time_period - property.start_period) / property.time_to_achieve * 100);
+			        }
+			        if(property.progress == 100){
+			        	prop_finished++;
 			        }
 	   			});
 	   		}
@@ -1134,50 +1141,56 @@ Meteor.startup(() => {
 			        }else{ 
 			            property.progress = Math.round((game.time_period - property.start_period) / (property.time_to_achieve * property.prop_level) * 100);
 			        }
+			        if(property.progress == 100){
+			        	prop_finished++;
+			        }
 	   			});
 	   		}
 
 	   		if(prop_finished == product.prop.length){
 	   			product.product_status = "Completed";
 
-	   			// for(var company in game_new.companies){
-	   			// 	if(game_new.companies[company].company_name == product.product_creator){
-	   			// 		target_company = game_new.companies[company]
-	   			// 	}
-	   			// }
+	   			Companies.find().fetch().forEach(function (company) {
+	   				if(company.company_name == product.product_creator){
+	   					target_company = company
+	   				}
+	   			});
 
-	   			// target_company.company_team.forEach(function (dep) {
-	   			// 	dep.employee_number_at_work = 0;
-	   			// });
+	   			target_company.company_team.forEach(function (dep) {
+	   				dep.employee_number_at_work = 0;
+	   			});
 
-	   			// target_company.company_level += 1;
+	   			target_company.company_level += 1;
 
-	   			// target_company.company_activities.push({
-		     //       status: "Complete",
-		     //       title: "Product development has been finished",
-		     //       start_time: game.time_period,
-		     //       comments: "Product "+product.product_name+" has been developed.",
-		     //    });
+	   			target_company.company_activities.push({
+		           status: "Complete",
+		           title: "Product development has been finished",
+		           start_time: game.time_period,
+		           comments: "Product "+product.product_name+" has been developed.",
+		        });
 
-		     //    game.news.push({
-       //              time_period: game.time_period,
-       //              type: "user", /////Types: usd, newspaper-o, user, warning
-       //              header: "New product has been released",
-       //              text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
-       //          });
+		        // game.news.push({
+          //           time_period: game.time_period,
+          //           type: "user", /////Types: usd, newspaper-o, user, warning
+          //           header: "New product has been released",
+          //           text: "Company "+target_company.company_name+" has released product \""+product.product_name+"\".",
+          //       });
 	   		}
 
 	   		Meteor.call("updateProduct", product);
+	   		if(target_company != null){
+	   			Meteor.call("updateCompany", target_company);
+	   		}
 	   	});
 
 
-		// for(var company in game_new.companies){
-		// 	game_new.companies[company].changeCompanyBalance(game);
+		Companies.find().fetch().forEach(function (company) {
+			company.changeCompanyBalance();
 
-		// 	if(game_new.companies[company].company_balance <= 0){
-		// 		game_new.companies[company].status = 'bankrupt';
-		// 	}
-		// }
+			if(company.company_balance <= 0){
+				company.status = 'bankrupt';
+			}
+		});
 
 
 		Companies.find({}).fetch().forEach(function (company) {
@@ -1238,7 +1251,7 @@ Meteor.startup(() => {
 
 		console.log("---------------------------   "+ game.time_period +"   -------------------------------");
 
-	   	game.time_period += 1;
+	   	//game.time_period += 1;
 
 
 		Games.update(game._id,{

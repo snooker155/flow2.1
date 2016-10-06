@@ -90,10 +90,12 @@ Template.game_product.helpers({
         // console.log(total_start_period);
         // console.log(Math.round((game.time_period - total_start_period) / (total_time_to_achieve / 3) * 100));
         if(target_property){
-            if(Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100) >= 100){
+            if(Math.round(((game.time_period) - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100) >= 100){
                 return 100;
+            }else if(Math.round(((game.time_period) - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100) < 0){
+                return 0;
             }else{
-                return Math.round((game.time_period - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100); 
+                return Math.round(((game.time_period) - target_property.start_period) / (target_property.time_to_achieve * target_property.prop_level) * 100); 
             }
         }else{
             return 100;
@@ -352,6 +354,7 @@ Template.game_product.events({
     "click #create_new_feature": function(event, template){
         event.preventDefault();
         var self = this;
+        var game = Games.findOne({});
         var company = Companies.findOne({owner: Meteor.user().username});
         var selected_product = null;
         Products.find().fetch().forEach(function (product) {

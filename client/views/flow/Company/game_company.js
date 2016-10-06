@@ -97,39 +97,39 @@ function drawPlotGraph(data1, data2){
 
 
 Template.company_profile.onCreated(function() {
+    // var self = this;
+    // var company_subscription = self.subscribe("companies");
+    // if(company_subscription.ready()){
+    //     console.log('Loaded');
+    // }else{
+    //     console.log('Loading...');
+    // }
+});
+
+
+
+Template.company_profile.onRendered(function() {
     var self = this;
     Tracker.autorun(function (c) {
         self.c = c;
-        var company_subscription = self.subscribe("companies");
-        if(company_subscription.ready()){
-            console.log('Loaded');
-            self.company = Companies.findOne({owner: Meteor.user().username});
-            var data1 = [];
-            var data2 = [];
-            if(self.company){
-                self.company.company_history.forEach(function (company_history) {
-                    data1.push([Math.floor(company_history.time_period), company_history.company_balance]);
-                    data2.push([Math.floor(company_history.time_period), company_history.company_revenue]);
-                });
-                for(var i = data1.length; i < 20; i++){
-                    data1.push([i, 0]);
-                }
-                drawPlotGraph(data1, data2);
+        self.company = Companies.findOne({owner: Meteor.user().username});
+        var data1 = [];
+        var data2 = [];
+        if(self.company){
+            self.company.company_history.forEach(function (company_history) {
+                data1.push([Math.floor(company_history.time_period), company_history.company_balance]);
+                data2.push([Math.floor(company_history.time_period), company_history.company_revenue]);
+            });
+            for(var i = data1.length; i < 20; i++){
+                data1.push([i, 0]);
             }
-        }else{
-            console.log('Loading...');
+            drawPlotGraph(data1, data2);
         }
     });
 
     self.getCompany = function(){
         return self.company;
     }
-});
-
-
-
-Template.company_profile.onRendered(function() {
-
 });
 
 
@@ -142,28 +142,28 @@ Template.company_profile.onRendered(function() {
 Template.company_profile.helpers({
 
     activities_list: function(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(company.company_activities){
             return company.company_activities.slice(company.company_activities.length-10).sort(function(a, b){return b.start_time - a.start_time});
         }
     },
 
     company_name: function(){
-        return Template.instance().company.company_name;
+        return Companies.findOne({owner: Meteor.user().username}).company_name;
     },
 
 
     company_level: function(){
-         return Template.instance().company.company_level;
+         return Companies.findOne({owner: Meteor.user().username}).company_level;
     },
 
 
     company_region: function(){
-        return Template.instance().company.company_region;
+        return Companies.findOne({owner: Meteor.user().username}).company_region;
     },
 
     number_of_departments: function(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(company.company_team){
             return company.company_team.length;
         }else{
@@ -172,7 +172,7 @@ Template.company_profile.helpers({
     },
 
     number_of_employees: function(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         var count = 0;
         if(company.company_team){
             company.company_team.forEach(function (employee) {
@@ -183,7 +183,7 @@ Template.company_profile.helpers({
     },
 
     company_product: function(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         if (company.company_product){
             return company_product.product_name;
         }else{
@@ -193,29 +193,29 @@ Template.company_profile.helpers({
     },
 
     username: function(){
-        return Template.instance().company.owner;
+        return Companies.findOne({owner: Meteor.user().username}).owner;
     },
 
 
     users_in_period(){
-        return Template.instance().company.getUsers();
+        return Companies.findOne({owner: Meteor.user().username}).getUsers();
     },
 
 
     revenue_in_period(){
-        return parseFloat(Template.instance().company.getRevenue().toFixed(2));
+        return parseFloat(Companies.findOne({owner: Meteor.user().username}).getRevenue().toFixed(2));
     },
 
     balance_in_period(){
-        return parseFloat(Template.instance().company.company_balance.toFixed(2));
+        return parseFloat(Companies.findOne({owner: Meteor.user().username}).company_balance.toFixed(2));
     },
 
     costs_in_period(){
-        return parseFloat(Template.instance().company.getCosts().toFixed(2));
+        return parseFloat(Companies.findOne({owner: Meteor.user().username}).getCosts().toFixed(2));
     },
 
     users_in_period_ratio(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         var users_in_period = 0;
         if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_users != 0){
             return Math.floor(company.getUsers() / company.company_history[company.company_history.length - 2].company_users * 100);
@@ -225,7 +225,7 @@ Template.company_profile.helpers({
     },
 
     revenue_in_period_ratio(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_revenue != 0){
             return Math.floor(company.getRevenue() / company.company_history[company.company_history.length - 2].company_revenue * 100);
         }else{
@@ -234,7 +234,7 @@ Template.company_profile.helpers({
     },
 
     balance_in_period_ratio(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_balance != 0){
             return Math.floor(company.company_balance / company.company_history[company.company_history.length - 2].company_balance * 100);
         }else{
@@ -243,7 +243,7 @@ Template.company_profile.helpers({
     },
 
     costs_in_period_ratio(){
-        var company = Template.instance().company;
+        var company = Companies.findOne({owner: Meteor.user().username});
         var costs = company.getCosts();
         if(company.company_history[company.company_history.length - 2] && company.company_history[company.company_history.length - 2].company_costs != 0){
             return Math.floor(costs / company.company_history[company.company_history.length - 2].company_costs * 100);

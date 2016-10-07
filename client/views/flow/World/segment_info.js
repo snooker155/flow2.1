@@ -247,14 +247,13 @@ Template.segment_info.helpers({
     },
 
     current_world_avg_price(){
-        var game = Games.findOne({});
         var current_world_avg_price = 0;
 
-        game.products.forEach(function (product) {
+        Products.find().fetch().forEach(function (product) {
             current_world_avg_price += product.product_price;
         });
 
-        return parseFloat((current_world_avg_price / game.products.length).toFixed(2));
+        return parseFloat((current_world_avg_price / Products.find().fetch().length).toFixed(2));
     },
 
     avg_price_10(){

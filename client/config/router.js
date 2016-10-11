@@ -16,15 +16,30 @@ Router.route('/', {
   action: function () {
     //this.render('gameScreen');
     if(Meteor.userId()){
-      //this.render('outer');
-      this.render('gameScreen');
-      this.layout('gameLayout');
+      if(Session.get("game")){
+        //this.render('outer');
+        this.render('gameScreen');
+        this.layout('gameLayout');
+      }else{
+        Router.go('/rooms');
+      }
     }else{
       Router.go('/login');
     }
   },
-
 });
+
+
+
+Router.route('/rooms', function () {
+  if(Meteor.userId()){
+    this.render('rooms');
+    this.layout('roomLayout');
+  }else{
+    Router.go('/login');
+  }
+});
+
 
 
 Router.route('/company', function () {

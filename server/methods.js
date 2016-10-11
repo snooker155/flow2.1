@@ -45,6 +45,7 @@
         company_activities: company.company_activities,
         company_history: company.company_history,
         company_team: company.company_team,
+        status: company.status,
       });
     },
 

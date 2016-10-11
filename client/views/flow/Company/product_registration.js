@@ -44,6 +44,12 @@ Template.product_registration.onCreated(function(){
 
 
 
+Template.product_registration.onRendered(function(){
+
+    $('#product_color').colorpicker();
+
+});
+
 
 
 // var feature_description_name = new ReactiveVar("Choose");

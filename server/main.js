@@ -1190,10 +1190,7 @@ Meteor.startup(() => {
 			if(company.company_balance <= 0){
 				company.status = 'bankrupt';
 			}
-		});
 
-
-		Companies.find({}).fetch().forEach(function (company) {
 			company.setCompaniesHistory(game);
 			Meteor.call('updateCompany', company);
 		});

@@ -84,7 +84,7 @@ Template.world_map.onRendered(function(){
 
 	selected_region.set(null);
 
-	var game = Games.findOne({});
+	var game = Games.findOne({_id: Session.get("game")});
 
 	d3.select(window).on("resize", resize);
 
@@ -175,7 +175,7 @@ Template.world_map.onRendered(function(){
     Tracker.autorun(function (c) {
     	self.c = c;
     	//console.log("I am on WorldMap");
-    	var game = Games.findOne({});
+    	var game = Games.findOne({_id: Session.get("game")});
 
 	    sets.forEach(function (set) {
 
@@ -352,7 +352,7 @@ Template.world_map.onRendered(function(){
 Template.world_map.helpers({
 
 	selected_region(){
-		var game = Games.findOne({});
+		var game = Games.findOne({_id: Session.get("game")});
 		if(selected_region.get()){
 			// var region_conservatism = 0;
 			// var customer_count = 0;
@@ -434,7 +434,7 @@ Template.world_map.helpers({
 
 
 	products(){
-		var game = Games.findOne({});
+		var game = Games.findOne({_id: Session.get("game")});
 		// var products = [];
 		// game.products.forEach(function (product) {
 		// 	if(product.product_status != "In production"){
@@ -492,7 +492,7 @@ Template.world_map.helpers({
 	// },
 
 	avg_income(){
-		var game = Games.findOne({})
+		var game = Games.findOne({_id: Session.get("game")})
 	// 	var total_income = 0;
 	// 	var total_customers = 0;
 	// 	var customers = Games.findOne({}).customers;
@@ -516,7 +516,7 @@ Template.world_map.helpers({
 	},
 
 	active_people_number(){
-		var game = Games.findOne({})
+		var game = Games.findOne({_id: Session.get("game")})
 	// 	var total_active = 0;
 	// 	var customers = Games.findOne({}).customers;
 	// 	customers.forEach(function (customer) {
@@ -541,7 +541,7 @@ Template.world_map.helpers({
 	},
 
 	total_people_number(){
-		var game = Games.findOne({})
+		var game = Games.findOne({_id: Session.get("game")})
 	// 	if(selected_region.get()){
 	// 		var count = 0;
 	// 		Games.findOne({}).customers.forEach(function (customer) {
@@ -564,7 +564,7 @@ Template.world_map.helpers({
 	// 	var count_rich = 0, count_middle = 0, count_poor = 0;
 	// 	var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
 	// 	var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
-	var game = Games.findOne({});
+	var game = Games.findOne({_id: Session.get("game")});
 	// 	game.customers.forEach(function (customer) {
 	// 		if(customer.getIncomeGroup(game) == "rich"){
 	// 			if(selected_region.get()){
@@ -644,7 +644,7 @@ Template.world_map.helpers({
 	},
 
 	prop_pop(){
-	 	var game = Games.findOne({});
+	 	var game = Games.findOne({_id: Session.get("game")});
 	// 	var count_prop_needed = 0;
 	// 	var j = 0;
 	// 	var prop_arr = [];

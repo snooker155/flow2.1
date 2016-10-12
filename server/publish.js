@@ -28,4 +28,7 @@
   // Meteor.publish("customers", function() {
   //   return Customers.find();
   // });
+  Meteor.publish("rooms", function() {
+    return Rooms.find();
+  });
 

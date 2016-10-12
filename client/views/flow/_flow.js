@@ -10,10 +10,11 @@ if (Meteor.isClient) {
   Meteor.subscribe("products");
   Meteor.subscribe("features");
   Meteor.subscribe("generations");
+  Meteor.subscribe("rooms");
 
   // Meteor.subscribe("customers");
 
-  //Meteor.subscribe("games");
+  Meteor.subscribe("games");
 
 }
 

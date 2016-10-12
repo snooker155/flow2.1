@@ -2,18 +2,52 @@
 	<div class="wrapper wrapper-content" style="padding-bottom:0px; padding-top:10px;">
 
 		<div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-8 col-lg-offset-2">
 				<div class="ibox">
+					<div class="ibox-title">
+						<div class="row">
+							<div class="col-sm-4">
+								<h2>Games</h2>
+							</div>
+							<div class="col-sm-8 pull-right">
+								<form class="form-inline" id="game_form">
+									<div class="form-group">
+		                        	    <label>Game name</label>
+		                        	    <input id="game_name" name="game_name" type="text" class="form-control required" aria-required="true" placeholder="Game name" minlength="5">
+		                            </div>
+		                            <div class="form-group">
+		                        	    <label>Players number</label>
+		                        	    <input id="players_number" name="players_number" type="text" class="form-control required" aria-required="true" placeholder="Players number">
+		                            </div>
+		                            <div class="form-group">
+		                        	    <button id="create" type="submit" class="btn btn-primary" minlength="5">Create</button>
+		                            </div>
+								</form>
+							</div>
+						</div>
+					</div>
 					<div class="ibox-content">
-						<h2>Hello</h2>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Players</th>
+									<th class="pull-right">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{#each rooms}}
+									<tr>
+										<td><h3>{{name}}</h3></td>
+										<td><h3>{{current_players}} / {{players}}</h3></td>
+										<td><button class="btn btn-lg btn-primary pull-right" id="participate">Participate</button></td>
+									</tr>
+								{{/each}}
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
-
-
-			<div class="col-lg-6">
-
-	        </div>
 	    </div>
 
     </div>

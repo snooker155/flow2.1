@@ -842,6 +842,8 @@ Meteor.startup(() => {
 
 
 
+
+
  //    var game = Games.findOne({});
     
  //    var n = 1;
@@ -960,11 +962,14 @@ Meteor.startup(() => {
 
 
 
+
+
+
 	var interval = Meteor.setInterval(function(){
 
-		Games.find().fetch().forEach(function (game) {
+		Games.find({status: "process"}).fetch().forEach(function (game) {
 
-			console.log(game.customers);
+			//console.log(game.customers);
 
 
 	   	console.log("-----------------------------  START  --------------------------------");
@@ -977,7 +982,6 @@ Meteor.startup(() => {
 	   	}
 
 	   	game.customers.forEach(function (customer) {
-	  		
 	  		customer.changeActivity(game);
 	   		customer.updateProductSelection(game);
 
@@ -1104,6 +1108,9 @@ Meteor.startup(() => {
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
 	   	///////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 	   	for (var region in game.regions){

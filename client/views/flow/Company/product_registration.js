@@ -259,7 +259,7 @@ Template.product_registration.events({
 
     "click #create": function(event, template){
         event.preventDefault();
-        var game = Games.findOne({});
+        var game = Games.findOne({_id: Session.get("game")});
         var company = Companies.findOne({owner: Meteor.user().username});
         var product = {};
         var prop = [];
@@ -350,7 +350,7 @@ Template.product_registration.events({
                     comments: "Product "+product_name+" has gone in production.",
                 });
 
-                Meteor.call('createProduct', product);
+                Meteor.call('createProduct', product, game._id);
 
                 Meteor.call('updateCompany', company);
 

@@ -3,6 +3,7 @@
   });
   Meteor.publish("games", function() {
     return Games.find({}, {fields: {'customers': 0}});
+    //return Games.find({});
   });
   Meteor.publish("regions", function() {
     return Regions.find();

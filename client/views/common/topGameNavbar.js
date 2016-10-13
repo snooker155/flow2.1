@@ -60,12 +60,7 @@ Template.topGameNavbar.events({
 
     'click #leave': function(event){
         event.preventDefault();
-        if(!Rooms.findOne({_id: Session.get("room")})){
-            Session.set("room", null);
-            Session.set("game", null);
-            Router.go("/");
-        }else{
-            Router.go("/room");
-        }
+        Session.set("game", null);
+        Router.go("/");
     },
 });

@@ -38,9 +38,23 @@
 							<tbody>
 								{{#each rooms}}
 									<tr>
-										<td><h3>{{name}}</h3></td>
-										<td><h3>{{current_players}} / {{players}}</h3></td>
-										<td><button class="btn btn-lg btn-primary pull-right" id="participate">Participate</button></td>
+										<td><h3 style="margin-top: 10px;">{{name}}</h3></td>
+										<td>
+											<h3 style="display: inline; float:left; margin-top: 15px;">{{current_players}} / {{players}}</h3>
+											<div class="spiner-example" style="padding-top:0px; height:15px; float: left; margin-left: 50px; display:{{display}}">
+				                        	    <div class="sk-spinner sk-spinner-chasing-dots">
+				                        	        <div class="sk-dot1"></div>
+				                        	        <div class="sk-dot2"></div>
+				                        	    </div>
+				                        	</div>
+				                        </td>
+										<td>
+											{{#if loading}}
+												<button class="btn btn-lg pull-right disabled" id="loading">Loading ...</button>
+											{{else}}
+												<button class="btn btn-lg btn-primary pull-right" id="participate">Participate</button>
+											{{/if}}
+										</td>
 									</tr>
 								{{/each}}
 							</tbody>

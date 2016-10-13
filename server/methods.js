@@ -275,11 +275,128 @@
             customers_history: [],
             avg_price_history: [],
             products: products,
-            status: "process",
+            status: "start",
             time_period: 0,
         });
 
         return game_id;
+    },
+
+
+
+    initGame: function(game_id){
+        
+        var game = Games.findOne({_id: game_id});
+
+        var n = 1;
+
+        console.log('Initializing: Relations --- Start');
+        console.log('Initializing: Conservatism --- Start');
+        game.customers.forEach(function (customer) {
+                
+            customer.makeRelations();
+
+            customer.setInitConservatism();
+
+            console.log('Initializing: Relations:' + n +' of '+ game.customers.length);
+            n++;
+
+        });
+        console.log('Initializing: Relations --- End');
+        console.log('Initializing: Conservatism --- End');
+
+
+        for (var region in game.regions){
+         var count_rich = 0, count_middle = 0, count_poor = 0;
+         var avg_income_rich = 0, avg_income_middle = 0, avg_income_poor = 0;
+         var count_active_rich = 0, count_active_middle = 0, count_active_poor = 0;
+         var region_conserv = 0;
+         game.customers.forEach(function (customer) {
+             if(customer.customer_region == game.regions[region].region_id){
+                 for (var conserv in customer.customer_product_conservatism){
+                     region_conserv += customer.customer_conservatism * customer.customer_product_conservatism[conserv];     
+                 }
+             }
+
+             if(customer.getIncomeGroup(game) == "rich"){
+                 if(customer.customer_region == game.regions[region].region_id){
+                     count_rich++;
+                     avg_income_rich += customer.customer_income;
+                     if(customer.customer_activity == 1){
+                         count_active_rich++;
+                     }
+                 }
+             }else if(customer.getIncomeGroup(game) == "middle"){
+                 if(customer.customer_region == game.regions[region].region_id){
+                     count_middle++;
+                     avg_income_middle += customer.customer_income;
+                     if(customer.customer_activity == 1){
+                         count_active_middle++;
+                     }
+                 }
+             }else if(customer.getIncomeGroup(game) == "poor"){
+                 if(customer.customer_region == game.regions[region].region_id){
+                     count_poor++;
+                     avg_income_poor += customer.customer_income;
+                     if(customer.customer_activity == 1){
+                         count_active_poor++;
+                     }
+                 }
+             }
+         });
+         region_conserv = parseFloat((region_conserv / game.regions[region].region_people_number).toFixed(4));
+         game.regions[region].region_conserv = region_conserv;
+
+         var region_income_groups = [{
+             people_group: "rich",
+             people_count: count_rich,
+             people_average_income:  parseFloat((avg_income_rich / count_rich).toFixed(2)) >= 0 ? parseFloat((avg_income_rich / count_rich).toFixed(2)) : 0,
+             people_active_number: count_active_rich,
+         },{
+             people_group: "middle",
+             people_count: count_middle,
+             people_average_income:  parseFloat((avg_income_middle / count_middle).toFixed(2)) >= 0 ? parseFloat((avg_income_middle / count_middle).toFixed(2)) : 0,
+             people_active_number: count_active_middle,
+         },{
+             people_group: "poor",
+             people_count: count_poor,
+             people_average_income:  parseFloat((avg_income_poor / count_poor).toFixed(2)) >= 0 ? parseFloat((avg_income_poor / count_poor).toFixed(2)) : 0,
+             people_active_number: count_active_poor,
+         }];
+
+         game.regions[region].region_income_groups = region_income_groups;
+        }
+
+
+
+
+
+        console.log('Initializing: History --- Start');
+
+        game.setPriceHistory();   
+        game.setCustomersHistory();
+
+        console.log('Initializing: History --- End');
+
+
+        Games.update(game._id,{
+         players: game.players,
+         customers: game.customers,
+         //customers_data: game.customers_data,
+         customers_history: game.customers_history,
+         avg_price_history: game.avg_price_history,
+         news: game.news,
+         features: game.features,
+         companies: game.companies,
+         products: game.products,
+         regions: game.regions,
+         game_name: game.game_name,
+         status: "process",
+         //status: game.status,
+         time_period: game.time_period,
+        });
+
+        return game._id;
     },
 
     updateGame: function(game){
@@ -349,19 +466,25 @@
 
     
 
-    createProduct: function(product){
-      Products.insert({
-        product_id: product.product_id,
-        product_name: product.product_name,
-        product_price: product.product_price,
-        product_color: product.product_color,
-        prop: product.prop,
-        product_quantity: product.product_quantity,
-        product_creator: product.product_creator,
-        product_status: product.product_status,
-        product_regions: product.product_regions,
-        product_editable: product.product_editable,
-      });
+    createProduct: function(product, game_id){
+        Products.insert({
+          product_id: product.product_id,
+          product_name: product.product_name,
+          product_price: product.product_price,
+          product_color: product.product_color,
+          prop: product.prop,
+          product_quantity: product.product_quantity,
+          product_creator: product.product_creator,
+          product_status: product.product_status,
+          product_regions: product.product_regions,
+          product_editable: product.product_editable,
+        });
+
+        var game = Games.findOne({_id: game_id});
+        game.customers.forEach(function (customer) {
+            customer.makeProductConservatism(product)
+        });
+        Meteor.call('updateGame', game);
     },
 
 
@@ -398,6 +521,21 @@
             current_players: current_players,
             created: new Date(),
             owner: Meteor.user().username,
+            game_id: null,
+            status: "waiting",
+        });
+    },
+
+
+    updateRoom: function(room){
+        Rooms.update(room._id, {
+            name: room.name,
+            players: room.players,
+            current_players: room.current_players,
+            created: room.created,
+            owner: room.owner,
+            game_id: room.game_id,
+            status: room.status,
         });
     },
 

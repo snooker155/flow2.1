@@ -1191,7 +1191,7 @@ Template.region.helpers({
 
 
 Template.world_map.onDestroyed(function(){
-    var self = this;
-    self.c.stop();
+    // var self = this;
+    // self.c.stop();
 });
 

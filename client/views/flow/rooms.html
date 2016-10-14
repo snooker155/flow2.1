@@ -52,7 +52,14 @@
 											{{#if loading}}
 												<button class="btn btn-lg pull-right disabled" id="loading">Loading ...</button>
 											{{else}}
-												<button class="btn btn-lg btn-primary pull-right" id="participate">Participate</button>
+												{{#if participating}}
+													<button class="btn btn-lg btn-warning pull-right" id="leave">Leave</button>
+													{{#if in_game}}
+														<button class="btn btn-lg btn-success pull-right" id="reconnect">Reconnect</button>
+													{{/if}}
+												{{else}}
+													<button class="btn btn-lg btn-primary pull-right" id="participate">Participate</button>
+												{{/if}}
 											{{/if}}
 										</td>
 									</tr>

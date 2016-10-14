@@ -976,10 +976,10 @@ Meteor.startup(() => {
 
 	   	//var game = Games.findOne({_id});
 
-	   	if(game.status == 'finished'){
-	   		Meteor.clearInterval(interval);
-	   		console.log("------------------------  GAME ENDED  --------------------------");
-	   	}
+	   	// if(game.status == 'finished'){
+	   	// 	Meteor.clearInterval(interval);
+	   	// 	console.log("------------------------  GAME ENDED  --------------------------");
+	   	// }
 
 	   	game.customers.forEach(function (customer) {
 	  		customer.changeActivity(game);
@@ -1277,9 +1277,18 @@ Meteor.startup(() => {
 		});
 
 
+
 		console.log("---------------------------   "+ game.time_period +"   -------------------------------");
 
 	   	//game.time_period += 1;
+
+
+	   	var room = Rooms.findOne({game_id: game._id});
+	   	if(room){
+	   		game.players = room.current_players;
+	   		room.status = "running";
+	   		Meteor.call('updateRoom', room);
+	   	}
 
 
 		Games.update(game._id,{
@@ -1299,8 +1308,12 @@ Meteor.startup(() => {
 	   	});
 
 
-	   	console.log("-----------------------------   END   --------------------------------");
+	   	if(_.size(game.players) == 0){
+		   	Games.remove(game._id);
+		}
 
+
+	   	console.log("-----------------------------   END   --------------------------------");
 
 
 	   	});

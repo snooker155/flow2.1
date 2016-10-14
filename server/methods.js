@@ -207,7 +207,7 @@
             if(notselected_count > 0){
                 increment += parseFloat((notselected_count / region.region_people_number * 100).toFixed(2));
                 map_data.push({
-                    color: "lightblue",
+                    color: "#fff",
                     offset: increment + "%",
                 });
             }

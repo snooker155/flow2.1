@@ -118,6 +118,6 @@ Template.company_stat.helpers({
 
 
 Template.company_stat.onDestroyed(function() {
-    var self = this;
-    self.c.stop();
+    // var self = this;
+    // self.c.stop();
 });

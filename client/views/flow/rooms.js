@@ -1,6 +1,13 @@
 Template.rooms.helpers({
 	rooms: function () {
-		return Rooms.find();
+		var rooms = []
+		Rooms.find().fetch().forEach(function (room) {
+			var game = Games.findOne({_id: room.game_id});
+			if(!game || (game && game.status != "finished" && room.players > _.size(room.current_players)) || room.current_players[Meteor.user().username]){
+				rooms.push(room);
+			}
+		});
+		return rooms;
 	},
 
 	current_players(){
@@ -50,35 +57,40 @@ Template.rooms.helpers({
 			return false;
 		}
 	},
+
 });
 
 
 Template.rooms.events({
-	"submit #game_form": function (event) {
+	"submit #game_form": function (event, template) {
 		event.preventDefault();
 
-		var name = event.target.game_name.value;
-		var players = event.target.players_number.value;
+		var form = template.$("#game_form");
 
-		//var current_players = [Meteor.user()];
-		var current_players= {};
-		current_players[Meteor.user().username] = Meteor.user();
-		current_players[Meteor.user().username].status = "wait";
+		if (form.valid()){
+			var name = event.target.game_name.value;
+			var players = event.target.players_number.value;
 
-		Rooms.find().fetch().forEach(function (room) {
-			if(room.current_players[Meteor.user().username]){
-				delete room.current_players[Meteor.user().username];
-				Meteor.call("updateRoom", room);
-			}
-		});
+			//var current_players = [Meteor.user()];
+			var current_players= {};
+			current_players[Meteor.user().username] = Meteor.user();
+			current_players[Meteor.user().username].status = "wait";
 
-		Meteor.call('createRoom', name, players, current_players);
+			Rooms.find().fetch().forEach(function (room) {
+				if(room.current_players[Meteor.user().username]){
+					delete room.current_players[Meteor.user().username];
+					Meteor.call("updateRoom", room);
+				}
+			});
+
+			Meteor.call('createRoom', name, players, current_players);
+		}
 	},
 
 	"click #participate": function(){
 		var self = this;
 
-		if(self.players > _.size(self.current_players) + 1){
+		if(self.players >= _.size(self.current_players) + 1){
 
 			Rooms.find().fetch().forEach(function (room) {
 				if(room.current_players[Meteor.user().username]){

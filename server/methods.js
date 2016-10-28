@@ -179,6 +179,7 @@
                     product_name: product.product_name,
                     product_color: product.product_color,
                     product_price: product.product_price,
+                    product_creator: product.product_creator,
                     product_customers_number: count,
                     product_income: product.product_price * count,
                 });

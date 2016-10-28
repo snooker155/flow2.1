@@ -63,7 +63,7 @@ function drawPlotGraph(data1, data2){
                 },
                 yaxes: [{
                     position: "left",
-                    max: 50000,
+                    max: 200000,
                     color: "#d5d5d5",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
@@ -149,6 +149,7 @@ Template.company_profile.helpers({
     },
 
     company_name: function(){
+        console.log(Companies.findOne({owner: Meteor.user().username}).getUsers());
         return Companies.findOne({owner: Meteor.user().username}).company_name;
     },
 

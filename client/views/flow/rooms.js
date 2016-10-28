@@ -76,6 +76,10 @@ Template.rooms.events({
 			current_players[Meteor.user().username] = Meteor.user();
 			current_players[Meteor.user().username].status = "wait";
 
+			if(self.players == _.size(self.current_players)){
+				
+			}
+
 			Rooms.find().fetch().forEach(function (room) {
 				if(room.current_players[Meteor.user().username]){
 					delete room.current_players[Meteor.user().username];

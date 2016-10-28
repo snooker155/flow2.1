@@ -136,7 +136,7 @@ var getSunburstData = function(game){
 		// 	});
 		// }
 	}
-	//console.log(regions_state1);
+	console.log(regions_state1);
 	return regions_state1;
 }
 

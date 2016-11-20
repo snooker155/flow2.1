@@ -515,16 +515,17 @@
 ////////// Rooms methods ///////////////
 
 
-    createRoom: function(name, players, current_players){
-        Rooms.insert({
+    createRoom: function(name, players, current_players, status){
+        var room_id = Rooms.insert({
             name: name,
             players: players,
             current_players: current_players,
             created: new Date(),
             owner: Meteor.user().username,
             game_id: null,
-            status: "waiting",
+            status: status,
         });
+        return room_id;
     },
 
 

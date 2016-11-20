@@ -1,8 +1,19 @@
 Template.news.helpers({
 	news(){
 		var game = Games.findOne({});
-		//console.log(game.news.slice(game.news.length-4).sort(function(a, b){return b.time_period - a.time_period}));
+		//return _.filter(game.news, function(news){return news.time_period == (game.time_period - 1);});
 		return game.news.slice(game.news.length-4).sort(function(a, b){return b.time_period - a.time_period});
+	},
+
+	time_period(){
+		var game = Games.findOne({});
+		return game.time_period - 1;
+	},
+
+	type(){
+		var game = Games.findOne({});
+		var news = _.find(game.news, function(news){return news.time_period == (game.time_period - 1);});
+		return news.type;
 	},
 
 	conserv_color(){

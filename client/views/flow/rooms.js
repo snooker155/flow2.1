@@ -71,14 +71,12 @@ Template.rooms.events({
 			var name = event.target.game_name.value;
 			var players = event.target.players_number.value;
 
+			var status = "waiting";
+
 			//var current_players = [Meteor.user()];
 			var current_players= {};
 			current_players[Meteor.user().username] = Meteor.user();
 			current_players[Meteor.user().username].status = "wait";
-
-			if(self.players == _.size(self.current_players)){
-				
-			}
 
 			Rooms.find().fetch().forEach(function (room) {
 				if(room.current_players[Meteor.user().username]){
@@ -87,7 +85,23 @@ Template.rooms.events({
 				}
 			});
 
-			Meteor.call('createRoom', name, players, current_players);
+			Meteor.call('createRoom', name, players, current_players, status, function (error, result){
+				var room = Rooms.findOne({_id: result});
+				if(room.players == _.size(room.current_players)){
+					Meteor.call('createGame', room.name, room.current_players, function (error, result) {
+						room.game_id = result;
+						room.status = "loading";
+						Meteor.call("updateRoom", room);
+						Meteor.call('initGame', result, function (error, result) {
+							room.status = "loaded";
+							for (var player in room.current_players){
+								room.current_players[player].status = "in_game";
+							}
+							Meteor.call("updateRoom", room);
+						});
+					});
+				}
+			});
 		}
 	},
 

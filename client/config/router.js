@@ -160,10 +160,10 @@ Router.route('/login', function(){
 });
 
 
-Router.route('/register', function(){
-   this.render('register');
-   this.layout('blankLayout');
-});
+// Router.route('/register', function(){
+//    this.render('register');
+//    this.layout('blankLayout');
+// });
 
 
 
